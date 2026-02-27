@@ -14,11 +14,11 @@ export interface SubmissionCardData {
   authorDisplay: string;
   createdAt: Date | string;
   costToNicolasResults: CostToNicolasResults | null;
+  ministryTag: string | null;
 }
 
 export interface SubmissionDetailData extends SubmissionCardData {
   authorId: string | null;
-  ministryTag: string | null;
   consequenceText: string | null;
   tweetUrl: string | null;
   ogImageUrl: string | null;

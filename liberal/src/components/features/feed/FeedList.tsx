@@ -48,8 +48,8 @@ export function FeedList({ initialData, sort, timeWindow }: FeedListProps) {
 
   return (
     <div className="flex flex-col gap-3 md:gap-4">
-      {allSubmissions.map((submission) => (
-        <SubmissionCard key={submission.id} submission={submission} />
+      {allSubmissions.map((submission, index) => (
+        <SubmissionCard key={submission.id} submission={submission} index={index} />
       ))}
 
       {isFetchingNextPage && <FeedSkeleton count={3} />}
