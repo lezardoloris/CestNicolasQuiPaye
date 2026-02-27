@@ -1,0 +1,102 @@
+# generated: 2026-02-27
+# project: LIBÉRAL
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-27
+project: LIBÉRAL
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Project Foundation & User Identity
+  epic-1: done
+  1-1-project-scaffold-and-design-system-foundation: done
+  1-2-email-password-registration-and-login-with-auth-js-v5: done
+  1-3-display-name-selection-and-anonymous-identity: done
+  1-4-user-profile-with-submission-and-vote-history: done
+  1-5-account-deletion-and-gdpr-right-to-erasure: done
+  epic-1-retrospective: optional
+
+  # Epic 2: Waste Submission & Cost to Nicolas Engine
+  epic-2: done
+  2-1-waste-submission-form: done
+  2-2-denominator-data-pipeline-and-cache: done
+  2-3-cost-to-nicolas-calculation-engine: done
+  2-4-data-status-page-and-denominator-transparency: done
+  2-5-calculation-methodology-page: done
+  2-6-tweet-url-detection-and-embedded-preview: done
+  epic-2-retrospective: optional
+
+  # Epic 3: Community Feed & Voting
+  epic-3: done
+  3-1-submission-feed-with-sort-tabs-and-pagination: done
+  3-2-submission-detail-page: done
+  3-3-upvote-downvote-mechanics-with-optimistic-ui: done
+  3-4-score-calculation-and-feed-ranking-algorithm: done
+  3-5-feed-accessibility-and-mobile-optimization: done
+  epic-3-retrospective: optional
+
+  # Epic 4: Social Sharing & Virality
+  epic-4: done
+  4-1-auto-generated-shareable-image-og-image: done
+  4-2-social-share-buttons: done
+  4-3-open-graph-and-twitter-card-metadata: done
+  4-4-share-analytics-and-viral-loop-tracking: done
+  epic-4-retrospective: optional
+
+  # Epic 5: Comments & Community Discussion
+  epic-5: done
+  5-1-comment-submission-and-threading: done
+  5-2-comment-voting: done
+  5-3-comment-display-and-pagination: done
+  5-4-comment-accessibility-and-mobile-layout: done
+  epic-5-retrospective: optional
+
+  # Epic 6: Moderation & Administration
+  epic-6: done
+  6-1-moderation-queue-and-submission-review: done
+  6-2-published-submission-removal: done
+  6-3-user-flagging-and-flagged-content-queue: done
+  6-4-twitter-x-broadcast-tool: done
+  6-5-admin-dashboard-overview: done
+  epic-6-retrospective: optional
+
+  # Epic 7: Community Feature Voting & Platform Democracy
+  epic-7: done
+  7-1-feature-proposal-display-and-voting: done
+  7-2-feature-proposal-submission: done
+  7-3-admin-feature-voting-results-and-management: done
+  7-4-feature-voting-accessibility-and-mobile-experience: done
+  epic-7-retrospective: optional
