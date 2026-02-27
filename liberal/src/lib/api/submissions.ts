@@ -74,6 +74,7 @@ async function getHotFeed({
 
   const conditions = [
     eq(submissions.status, 'published'),
+    eq(submissions.moderationStatus, 'approved'),
     or(
       gt(submissions.createdAt, staleThreshold),
       gte(
@@ -108,7 +109,10 @@ async function getNewFeed({
   cursor: CursorPayload | null;
   limit: number;
 }) {
-  const conditions = [eq(submissions.status, 'published')];
+  const conditions = [
+    eq(submissions.status, 'published'),
+    eq(submissions.moderationStatus, 'approved'),
+  ];
 
   if (cursor) {
     conditions.push(
@@ -137,7 +141,10 @@ async function getTopFeed({
   limit: number;
   timeWindow: string;
 }) {
-  const conditions = [eq(submissions.status, 'published')];
+  const conditions = [
+    eq(submissions.status, 'published'),
+    eq(submissions.moderationStatus, 'approved'),
+  ];
 
   const windowMs = TIME_WINDOW_MS[timeWindow];
   if (windowMs) {

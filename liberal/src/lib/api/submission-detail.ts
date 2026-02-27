@@ -7,6 +7,7 @@ export async function getSubmissionById(
   id: string,
   currentUserId?: string,
   ipHash?: string,
+  viewerRole?: string,
 ) {
   if (!isValidUUID(id)) return null;
 
@@ -28,6 +29,15 @@ export async function getSubmissionById(
   if (!result.length) return null;
 
   const row = result[0];
+
+  // Visibility check: only approved submissions are public
+  if (row.submission.moderationStatus !== 'approved') {
+    const isAuthor = currentUserId && row.submission.authorId === currentUserId;
+    const isModerator = viewerRole === 'admin' || viewerRole === 'moderator';
+    if (!isAuthor && !isModerator) {
+      return null;
+    }
+  }
 
   // Fetch current vote: user-based if authenticated, IP-based otherwise
   let userVote: 'up' | 'down' | null = null;

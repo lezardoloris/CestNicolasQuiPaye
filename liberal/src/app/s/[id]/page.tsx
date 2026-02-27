@@ -85,7 +85,12 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
     ?? headersList.get('x-real-ip')
     ?? '127.0.0.1';
   const ipHash = !session?.user?.id ? hashIp(clientIp) : undefined;
-  const submission = await getSubmissionById(id, session?.user?.id, ipHash);
+  const submission = await getSubmissionById(
+    id,
+    session?.user?.id,
+    ipHash,
+    (session?.user as { role?: string } | undefined)?.role,
+  );
 
   if (!submission) {
     notFound();

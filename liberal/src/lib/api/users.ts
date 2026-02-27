@@ -56,9 +56,14 @@ export async function getUserSubmissions(
   userId: string,
   cursor?: string,
   limit = 20,
+  showOnlyApproved = true,
 ): Promise<{ items: UserSubmission[]; hasMore: boolean; nextCursor?: string }> {
   try {
     const conditions = [eq(submissions.authorId, userId)];
+
+    if (showOnlyApproved) {
+      conditions.push(eq(submissions.moderationStatus, 'approved'));
+    }
 
     if (cursor) {
       const cursorSubmission = await db.query.submissions.findFirst({

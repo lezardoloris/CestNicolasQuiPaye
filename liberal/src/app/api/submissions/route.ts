@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
     const authorId = session?.user?.id ?? null;
     const authorDisplay = session?.user?.name ?? 'Citoyen Anonyme';
 
-    // Anonymous submissions go to moderation; authenticated ones are auto-approved
-    const moderationStatus = session?.user?.id ? 'approved' : 'pending';
+    // All submissions go to moderation before publication
+    const moderationStatus = 'pending';
 
     const [submission] = await db
       .insert(submissions)

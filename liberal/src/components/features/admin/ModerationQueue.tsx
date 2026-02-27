@@ -10,12 +10,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   CheckCircle,
   XCircle,
-  Edit,
+  Pencil,
   Trash2,
   ExternalLink,
   Loader2,
 } from 'lucide-react';
 import { formatRelativeTime, formatEUR } from '@/lib/utils/format';
+import { EditSubmissionDialog } from '@/components/features/submissions/EditSubmissionDialog';
 import { toast } from 'sonner';
 
 interface SubmissionItem {
@@ -26,6 +27,7 @@ interface SubmissionItem {
   sourceUrl: string;
   authorDisplay: string;
   moderationStatus: string;
+  ministryTag: string | null;
   createdAt: string;
 }
 
@@ -39,7 +41,7 @@ export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
   const { data, isLoading } = useQuery({
     queryKey: ['moderation-queue'],
     queryFn: async () => {
-      const res = await fetch('/api/feed?sort=new&limit=50&moderationStatus=pending');
+      const res = await fetch('/api/admin/submissions?moderationStatus=pending&limit=50');
       if (!res.ok) throw new Error('Erreur de chargement');
       const json = await res.json();
       return json.data as SubmissionItem[];
@@ -107,6 +109,7 @@ function ModerationCard({
 }) {
   const [reason, setReason] = useState('');
   const [expandedAction, setExpandedAction] = useState<string | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async ({ action, reason }: { action: string; reason?: string }) => {
@@ -175,17 +178,22 @@ function ModerationCard({
           {submission.description}
         </p>
 
-        {/* Source link */}
-        <a
-          href={submission.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-xs text-info hover:underline"
-          aria-label="Voir la source"
-        >
-          <ExternalLink className="h-3 w-3" aria-hidden="true" />
-          Voir la source
-        </a>
+        {/* Source verification */}
+        <div className="rounded-md border border-border-default/50 bg-surface-secondary p-3">
+          <p className="mb-1 text-xs font-medium text-text-muted">
+            Source a verifier
+          </p>
+          <a
+            href={submission.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm text-info hover:underline break-all"
+            aria-label="Ouvrir la source dans un nouvel onglet"
+          >
+            <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            {submission.sourceUrl}
+          </a>
+        </div>
 
         {/* Reason input (when expanded) */}
         {expandedAction && (
@@ -256,12 +264,12 @@ function ModerationCard({
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleAction('request_edit')}
+              onClick={() => setEditOpen(true)}
               disabled={mutation.isPending}
               className="min-h-10 gap-1.5"
-              aria-label="Demander une modification"
+              aria-label="Modifier cette soumission"
             >
-              <Edit className="h-4 w-4" aria-hidden="true" />
+              <Pencil className="h-4 w-4" aria-hidden="true" />
               Modifier
             </Button>
             {isAdmin && (
@@ -279,6 +287,23 @@ function ModerationCard({
             )}
           </div>
         )}
+
+        {/* Edit dialog */}
+        <EditSubmissionDialog
+          submission={{
+            id: submission.id,
+            title: submission.title,
+            description: submission.description,
+            sourceUrl: submission.sourceUrl,
+            amount: submission.amount,
+            ministryTag: submission.ministryTag,
+          }}
+          open={editOpen}
+          onOpenChange={(open) => {
+            setEditOpen(open);
+            if (!open) onActionComplete();
+          }}
+        />
       </CardContent>
     </Card>
   );

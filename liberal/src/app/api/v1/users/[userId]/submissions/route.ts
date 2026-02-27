@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { getUserSubmissions } from '@/lib/api/users';
 import { apiSuccess, apiError } from '@/lib/api/response';
+import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
@@ -12,7 +13,10 @@ export async function GET(
     const cursor = searchParams.get('cursor') ?? undefined;
     const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 50);
 
-    const result = await getUserSubmissions(userId, cursor, limit);
+    const session = await auth();
+    const isOwner = session?.user?.id === userId;
+
+    const result = await getUserSubmissions(userId, cursor, limit, !isOwner);
 
     return apiSuccess(result.items, {
       cursor: result.nextCursor,
