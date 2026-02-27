@@ -146,6 +146,16 @@
   }
 }
 
+@layer components {
+  .card-hover-lift {
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .card-hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.35);
+  }
+}
+
 /* ─── Reduced Motion (RGAA AA / NFR17) ─────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,

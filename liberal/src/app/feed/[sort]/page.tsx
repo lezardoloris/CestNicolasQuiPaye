@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import { FeedSortTabs } from '@/components/features/feed/FeedSortTabs';
-import { FeedList } from '@/components/features/feed/FeedList';
 import { TopTimeFilter } from '@/components/features/feed/TopTimeFilter';
+import { HeroSection } from '@/components/features/feed/HeroSection';
+import { FeedPageClient } from '@/components/features/feed/FeedPageClient';
 import { getSubmissions } from '@/lib/api/submissions';
 import { isValidSort } from '@/lib/utils/validation';
 import type { Metadata } from 'next';
@@ -72,12 +73,14 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
 
   return (
     <main id="main-content" className="mx-auto max-w-3xl px-4 pb-20 md:pb-6">
+      <HeroSection />
+
       <FeedSortTabs activeSort={sort} />
 
       {sort === 'top' && <TopTimeFilter activeWindow={validTimeWindow} />}
 
       <div className="mt-4">
-        <FeedList
+        <FeedPageClient
           initialData={submissions}
           sort={sort}
           timeWindow={sort === 'top' ? validTimeWindow : undefined}

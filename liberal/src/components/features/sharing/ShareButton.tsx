@@ -65,6 +65,9 @@ export function ShareButton({
         >
           <Share2 className="h-4 w-4" aria-hidden="true" />
           {variant === 'default' && <span>Partager</span>}
+          {variant === 'compact' && (
+            <span className="hidden sm:inline">Partager</span>
+          )}
         </Button>
       </DropdownMenuTrigger>
 

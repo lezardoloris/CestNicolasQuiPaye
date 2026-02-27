@@ -11,9 +11,11 @@ interface FeedListProps {
   initialData: FeedResponse;
   sort: string;
   timeWindow?: string;
+  /** When set, only cards matching this ministryTag are shown. null = show all */
+  activeCategory?: string | null;
 }
 
-export function FeedList({ initialData, sort, timeWindow }: FeedListProps) {
+export function FeedList({ initialData, sort, timeWindow, activeCategory = null }: FeedListProps) {
   const { data, isFetchingNextPage, sentinelRef, hasNextPage } =
     useInfiniteScroll({
       sort,
@@ -26,6 +28,15 @@ export function FeedList({ initialData, sort, timeWindow }: FeedListProps) {
     [data],
   );
 
+  // Client-side category filtering
+  const filteredSubmissions = useMemo<SubmissionCardData[]>(
+    () =>
+      activeCategory
+        ? allSubmissions.filter((s) => s.ministryTag === activeCategory)
+        : allSubmissions,
+    [allSubmissions, activeCategory],
+  );
+
   // Hydrate vote state for all visible submissions
   const submissionIds = useMemo(
     () => allSubmissions.map((s) => s.id),
@@ -33,35 +44,39 @@ export function FeedList({ initialData, sort, timeWindow }: FeedListProps) {
   );
   useVoteHydration(submissionIds);
 
-  if (allSubmissions.length === 0) {
+  if (filteredSubmissions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <p className="text-lg text-text-secondary">
-          Aucun signalement pour le moment.
+          {activeCategory
+            ? 'Aucun signalement dans cette catégorie.'
+            : 'Aucun signalement pour le moment.'}
         </p>
         <p className="mt-2 text-sm text-text-muted">
-          Soyez le premier Nicolas a manier la tronconneuse.
+          {activeCategory
+            ? 'Essayez une autre catégorie ou signalez une dépense.'
+            : 'Soyez le premier Nicolas à manier la tronçonneuse.'}
         </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3 md:gap-4">
-      {allSubmissions.map((submission, index) => (
+    <div id="main-feed" className="flex flex-col gap-3 md:gap-4">
+      {filteredSubmissions.map((submission, index) => (
         <SubmissionCard key={submission.id} submission={submission} index={index} />
       ))}
 
       {isFetchingNextPage && <FeedSkeleton count={3} />}
 
       {/* Infinite scroll sentinel */}
-      {hasNextPage && (
+      {hasNextPage && !activeCategory && (
         <div ref={sentinelRef} className="h-1" aria-hidden="true" />
       )}
 
-      {!hasNextPage && allSubmissions.length > 0 && (
+      {!hasNextPage && filteredSubmissions.length > 0 && (
         <p className="py-8 text-center text-sm text-text-muted">
-          Vous avez tout vu. Revenez bientot.
+          Vous avez tout vu. Revenez bientôt.
         </p>
       )}
     </div>

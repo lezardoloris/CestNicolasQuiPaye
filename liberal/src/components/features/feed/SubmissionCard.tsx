@@ -46,6 +46,7 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
         'group rounded-lg border border-border-default bg-surface-secondary',
         'transition-all duration-200 hover:bg-surface-elevated hover:border-border-default/80',
         'border-l-4',
+        'card-hover-lift',
         getOutrageTierBorderColor(submission.costPerTaxpayer),
       )}
     >
