@@ -1,9 +1,11 @@
 import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { castVote, removeVote } from '@/lib/api/votes';
+import { castIpVote, removeIpVote } from '@/lib/api/ip-votes';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { voteSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
+import { getHashedIp } from '@/lib/utils/ip-hash';
 import { db } from '@/lib/db';
 import { submissions } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -13,11 +15,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return apiError('UNAUTHORIZED', 'Connectez-vous pour voter', 401);
-  }
 
-  // Rate limiting
+  // Rate limiting (always by IP)
   const ip = getClientIp(request.headers);
   const rateLimitError = await checkRateLimit('vote', ip);
   if (rateLimitError) {
@@ -39,9 +38,15 @@ export async function POST(
   const { voteType } = parsed.data;
 
   try {
-    const result = await castVote(session.user.id, submissionId, voteType);
+    let result;
 
-    // Fetch fresh counts from DB for accuracy
+    if (session?.user?.id) {
+      result = await castVote(session.user.id, submissionId, voteType);
+    } else {
+      const ipHash = getHashedIp(request);
+      result = await castIpVote(ipHash, submissionId, voteType);
+    }
+
     const [submission] = await db
       .select({
         upvoteCount: submissions.upvoteCount,
@@ -71,10 +76,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
-  if (!session?.user?.id) {
-    return apiError('UNAUTHORIZED', 'Connectez-vous pour voter', 401);
-  }
-
   const { id: submissionId } = await params;
 
   if (!isValidUUID(submissionId)) {
@@ -82,7 +83,12 @@ export async function DELETE(
   }
 
   try {
-    await removeVote(session.user.id, submissionId);
+    if (session?.user?.id) {
+      await removeVote(session.user.id, submissionId);
+    } else {
+      const ipHash = getHashedIp(request);
+      await removeIpVote(ipHash, submissionId);
+    }
 
     const [submission] = await db
       .select({

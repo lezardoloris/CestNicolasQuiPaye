@@ -17,6 +17,7 @@ import { resolveDisplayName } from '@/lib/utils/user-display';
 const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
   { href: '/submit', label: 'Signaler' },
+  { href: '/contribuer', label: 'Contribuer' },
 ];
 
 export default function DesktopNav() {

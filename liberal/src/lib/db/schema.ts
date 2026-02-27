@@ -110,6 +110,7 @@ export const submissions = pgTable('submissions', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
+  isSeeded: integer('is_seeded').notNull().default(0),
 });
 
 // ─── Votes ──────────────────────────────────────────────────────────
@@ -127,6 +128,66 @@ export const votes = pgTable(
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (table) => [uniqueIndex('votes_user_submission_idx').on(table.userId, table.submissionId)],
+);
+
+// ─── IP Votes (anonymous voting by IP hash) ────────────────────────
+export const ipVotes = pgTable(
+  'ip_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ipHash: varchar('ip_hash', { length: 64 }).notNull(),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    voteType: voteType('vote_type').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('ip_votes_hash_submission_idx').on(table.ipHash, table.submissionId),
+    index('idx_ip_votes_submission').on(table.submissionId),
+  ]
+);
+
+// ─── Solutions ──────────────────────────────────────────────────────
+export const solutions = pgTable(
+  'solutions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    authorId: uuid('author_id').references(() => users.id, { onDelete: 'set null' }),
+    authorDisplay: varchar('author_display', { length: 100 }).notNull().default('Citoyen Anonyme'),
+    body: text('body').notNull(),
+    upvoteCount: integer('upvote_count').notNull().default(0),
+    downvoteCount: integer('downvote_count').notNull().default(0),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (table) => [
+    index('idx_solutions_submission').on(table.submissionId),
+  ]
+);
+
+// ─── Solution Votes ─────────────────────────────────────────────────
+export const solutionVotes = pgTable(
+  'solution_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    solutionId: uuid('solution_id')
+      .notNull()
+      .references(() => solutions.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
+    ipHash: varchar('ip_hash', { length: 64 }),
+    voteType: voteType('vote_type').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('solution_votes_user_idx').on(table.userId, table.solutionId),
+    uniqueIndex('solution_votes_ip_idx').on(table.ipHash, table.solutionId),
+    index('idx_solution_votes_solution').on(table.solutionId),
+  ]
 );
 
 // ─── Comments ───────────────────────────────────────────────────────
@@ -163,7 +224,9 @@ export const submissionsRelations = relations(submissions, ({ one, many }) => ({
     references: [users.id],
   }),
   votes: many(votes),
+  ipVotes: many(ipVotes),
   comments: many(comments),
+  solutions: many(solutions),
 }));
 
 export const votesRelations = relations(votes, ({ one }) => ({
@@ -187,6 +250,36 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
     references: [submissions.id],
   }),
   commentVotes: many(commentVotes),
+}));
+
+export const ipVotesRelations = relations(ipVotes, ({ one }) => ({
+  submission: one(submissions, {
+    fields: [ipVotes.submissionId],
+    references: [submissions.id],
+  }),
+}));
+
+export const solutionsRelations = relations(solutions, ({ one, many }) => ({
+  submission: one(submissions, {
+    fields: [solutions.submissionId],
+    references: [submissions.id],
+  }),
+  author: one(users, {
+    fields: [solutions.authorId],
+    references: [users.id],
+  }),
+  solutionVotes: many(solutionVotes),
+}));
+
+export const solutionVotesRelations = relations(solutionVotes, ({ one }) => ({
+  solution: one(solutions, {
+    fields: [solutionVotes.solutionId],
+    references: [solutions.id],
+  }),
+  user: one(users, {
+    fields: [solutionVotes.userId],
+    references: [users.id],
+  }),
 }));
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -520,3 +613,9 @@ export type Flag = typeof flags.$inferSelect;
 export type Broadcast = typeof broadcasts.$inferSelect;
 export type FeatureVote = typeof featureVotes.$inferSelect;
 export type FeatureVoteBallot = typeof featureVoteBallots.$inferSelect;
+export type IpVote = typeof ipVotes.$inferSelect;
+export type NewIpVote = typeof ipVotes.$inferInsert;
+export type Solution = typeof solutions.$inferSelect;
+export type NewSolution = typeof solutions.$inferInsert;
+export type SolutionVote = typeof solutionVotes.$inferSelect;
+export type NewSolutionVote = typeof solutionVotes.$inferInsert;

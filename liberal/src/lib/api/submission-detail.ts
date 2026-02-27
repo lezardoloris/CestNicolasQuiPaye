@@ -1,10 +1,13 @@
 import { db } from '@/lib/db';
-import { submissions, users, costCalculations, votes } from '@/lib/db/schema';
+import { submissions, users, costCalculations, votes, ipVotes } from '@/lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { isValidUUID } from '@/lib/utils/validation';
 
-export async function getSubmissionById(id: string, currentUserId?: string) {
-  // Validate UUID format
+export async function getSubmissionById(
+  id: string,
+  currentUserId?: string,
+  ipHash?: string,
+) {
   if (!isValidUUID(id)) return null;
 
   const result = await db
@@ -26,7 +29,7 @@ export async function getSubmissionById(id: string, currentUserId?: string) {
 
   const row = result[0];
 
-  // Fetch current user's vote if authenticated
+  // Fetch current vote: user-based if authenticated, IP-based otherwise
   let userVote: 'up' | 'down' | null = null;
   if (currentUserId) {
     const voteResult = await db
@@ -35,6 +38,13 @@ export async function getSubmissionById(id: string, currentUserId?: string) {
       .where(and(eq(votes.userId, currentUserId), eq(votes.submissionId, id)))
       .limit(1);
     userVote = (voteResult[0]?.voteType as 'up' | 'down') ?? null;
+  } else if (ipHash) {
+    const ipVoteResult = await db
+      .select({ voteType: ipVotes.voteType })
+      .from(ipVotes)
+      .where(and(eq(ipVotes.ipHash, ipHash), eq(ipVotes.submissionId, id)))
+      .limit(1);
+    userVote = (ipVoteResult[0]?.voteType as 'up' | 'down') ?? null;
   }
 
   return {

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Home, PlusCircle, User } from 'lucide-react';
+import { Home, PlusCircle, User, Heart } from 'lucide-react';
 
 export default function MobileTabBar() {
   const pathname = usePathname();
@@ -15,6 +15,7 @@ export default function MobileTabBar() {
   const tabs = [
     { href: '/feed/hot', label: 'Feed', icon: Home },
     { href: '/submit', label: 'Signaler', icon: PlusCircle },
+    { href: '/contribuer', label: 'Contribuer', icon: Heart },
     { href: profileHref, label: 'Profil', icon: User },
   ];
 

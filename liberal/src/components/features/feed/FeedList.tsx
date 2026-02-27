@@ -1,6 +1,8 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { useVoteHydration } from '@/hooks/useVoteHydration';
 import { SubmissionCard } from '@/components/features/feed/SubmissionCard';
 import { FeedSkeleton } from '@/components/features/feed/FeedSkeleton';
 import type { FeedResponse, SubmissionCardData } from '@/types/submission';
@@ -19,8 +21,17 @@ export function FeedList({ initialData, sort, timeWindow }: FeedListProps) {
       initialData,
     });
 
-  const allSubmissions: SubmissionCardData[] =
-    data?.pages.flatMap((page) => page.data) ?? [];
+  const allSubmissions = useMemo<SubmissionCardData[]>(
+    () => data?.pages.flatMap((page) => page.data) ?? [],
+    [data],
+  );
+
+  // Hydrate vote state for all visible submissions
+  const submissionIds = useMemo(
+    () => allSubmissions.map((s) => s.id),
+    [allSubmissions],
+  );
+  useVoteHydration(submissionIds);
 
   if (allSubmissions.length === 0) {
     return (

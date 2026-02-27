@@ -1,0 +1,37 @@
+name: Bug Report
+description: Signaler un bug
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du bug
+      description: Decrivez clairement le probleme
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Etapes pour reproduire
+      description: Comment reproduire le bug ?
+      value: |
+        1. Aller sur '...'
+        2. Cliquer sur '...'
+        3. Le bug apparait
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Qu'est-ce qui aurait du se passer ?
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Si applicable, ajoutez des captures d'ecran
+    validations:
+      required: false

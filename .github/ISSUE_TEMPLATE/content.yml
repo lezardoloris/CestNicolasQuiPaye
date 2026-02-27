@@ -1,0 +1,37 @@
+name: Contenu
+description: Proposer ou corriger du contenu (depenses, chiffres, sources)
+title: "[Contenu] "
+labels: ["content"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type de contribution
+      options:
+        - Nouvelle depense publique
+        - Correction de chiffres
+        - Ajout de source
+        - Contenu educatif
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Decrivez le contenu a ajouter ou corriger
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Liens vers les sources officielles (Cour des comptes, INSEE, IFRAP, etc.)
+    validations:
+      required: true
+  - type: textarea
+    id: amount
+    attributes:
+      label: Montant (si applicable)
+      description: Cout annuel en EUR avec la source
+    validations:
+      required: false

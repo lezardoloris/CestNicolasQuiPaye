@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { getSubmissionById } from '@/lib/api/submission-detail';
 import { SubmissionDetail } from '@/components/features/submissions/SubmissionDetail';
 import { ConsequenceCard } from '@/components/features/consequences/ConsequenceCard';
@@ -6,8 +7,10 @@ import { ConsequenceLoader } from '@/components/features/consequences/Consequenc
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { CommentSection } from '@/components/features/comments/CommentSection';
 import { FlagButton } from '@/components/features/submissions/FlagButton';
+import { SolutionSection } from '@/components/features/solutions/SolutionSection';
 import { auth } from '@/lib/auth';
 import { isValidUUID } from '@/lib/utils/validation';
+import { hashIp } from '@/lib/utils/ip-hash';
 import { SITE_URL, SITE_NAME, TWITTER_HANDLE } from '@/lib/metadata';
 import type { Metadata } from 'next';
 import type { CostToNicolasResults } from '@/types/submission';
@@ -77,7 +80,12 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
   }
 
   const session = await auth();
-  const submission = await getSubmissionById(id, session?.user?.id);
+  const headersList = await headers();
+  const clientIp = headersList.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? headersList.get('x-real-ip')
+    ?? '127.0.0.1';
+  const ipHash = !session?.user?.id ? hashIp(clientIp) : undefined;
+  const submission = await getSubmissionById(id, session?.user?.id, ipHash);
 
   if (!submission) {
     notFound();
@@ -114,6 +122,9 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
           amount={submission.amount}
         />
       )}
+
+      {/* Solutions section */}
+      <SolutionSection submissionId={submission.id} />
 
       {/* Comments section */}
       <section className="mt-8" aria-label="Commentaires">

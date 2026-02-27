@@ -217,6 +217,17 @@ export const featureVoteStatusUpdateSchema = z
 
 export type FeatureVoteStatusUpdateData = z.infer<typeof featureVoteStatusUpdateSchema>;
 
+// ─── Solution Validation ──────────────────────────────────────────
+export const createSolutionSchema = z.object({
+  body: z
+    .string()
+    .min(10, 'La solution doit contenir au moins 10 caracteres')
+    .max(2000, 'La solution ne doit pas depasser 2000 caracteres')
+    .transform((val) => val.trim()),
+});
+
+export type CreateSolutionData = z.infer<typeof createSolutionSchema>;
+
 export const featureVoteQuerySchema = z.object({
   sortBy: z.enum(['votes', 'date']).default('votes'),
   status: z.string().optional(),

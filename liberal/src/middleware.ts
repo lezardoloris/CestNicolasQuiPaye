@@ -11,10 +11,7 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/feed/hot', req.url));
   }
 
-  // Protected routes -- require authentication
-  if (pathname.startsWith('/submit') && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+  // /submit is open to everyone (anonymous submissions allowed)
 
   if (pathname === '/profile' && !isAuthenticated) {
     return NextResponse.redirect(new URL('/login', req.url));
@@ -28,5 +25,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ['/admin/:path*', '/submit', '/profile', '/profile/settings/:path*'],
+  matcher: ['/admin/:path*', '/profile', '/profile/settings/:path*'],
 };

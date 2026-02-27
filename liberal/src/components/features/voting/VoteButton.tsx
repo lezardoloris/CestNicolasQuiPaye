@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useVote } from '@/hooks/useVote';
 import { formatScore } from '@/lib/utils/format';
@@ -37,17 +37,18 @@ export function VoteButton({
           vote('up');
         }}
         disabled={isLoading}
-        aria-label={`Voter pour: ${counts.up} votes positifs`}
+        title="Tronconner"
+        aria-label={`Tronconner: ${counts.up} votes`}
         aria-pressed={activeVote === 'up'}
         className={cn(
           'min-h-12 min-w-12 rounded-md p-2 transition-colors',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
           activeVote === 'up'
-            ? 'text-chainsaw-red'
-            : 'text-text-muted hover:text-text-secondary',
+            ? 'text-success'
+            : 'text-text-muted hover:text-success/60',
         )}
       >
-        <ChevronUp className="h-6 w-6" aria-hidden="true" />
+        <ArrowUp className="h-6 w-6" aria-hidden="true" />
       </button>
 
       <span
@@ -55,8 +56,8 @@ export function VoteButton({
         aria-atomic="true"
         className={cn(
           'text-sm font-semibold tabular-nums',
-          activeVote === 'up' && 'text-chainsaw-red',
-          activeVote === 'down' && 'text-info',
+          activeVote === 'up' && 'text-success',
+          activeVote === 'down' && 'text-chainsaw-red',
           !activeVote && 'text-text-secondary',
         )}
       >
@@ -70,17 +71,18 @@ export function VoteButton({
           vote('down');
         }}
         disabled={isLoading}
-        aria-label={`Voter contre: ${counts.down} votes negatifs`}
+        title="Garder le gaspillage"
+        aria-label={`Garder: ${counts.down} votes`}
         aria-pressed={activeVote === 'down'}
         className={cn(
           'min-h-12 min-w-12 rounded-md p-2 transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
           activeVote === 'down'
-            ? 'text-info'
-            : 'text-text-muted hover:text-text-secondary',
+            ? 'text-chainsaw-red'
+            : 'text-text-muted hover:text-chainsaw-red/60',
         )}
       >
-        <ChevronDown className="h-6 w-6" aria-hidden="true" />
+        <ArrowDown className="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
   );
