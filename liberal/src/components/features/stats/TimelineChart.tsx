@@ -1,7 +1,7 @@
 'use client';
 
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { formatEUR } from '@/lib/utils/format';
+import { formatEUR, formatCompactEUR } from '@/lib/utils/format';
 
 interface TimelineChartProps {
   data: Array<{
@@ -35,11 +35,11 @@ export function TimelineChart({ data }: TimelineChartProps) {
             tickLine={false}
           />
           <YAxis
-            tickFormatter={(v: number) => formatEUR(v)}
+            tickFormatter={(v: number) => formatCompactEUR(v)}
             tick={{ fill: 'var(--color-text-muted)', fontSize: 10 }}
             axisLine={false}
             tickLine={false}
-            width={80}
+            width={90}
           />
           <Tooltip
             contentStyle={{
@@ -60,6 +60,7 @@ export function TimelineChart({ data }: TimelineChartProps) {
             stroke="#ef4444"
             strokeWidth={2}
             fill="url(#colorAmount)"
+            dot={data.length < 4}
           />
         </AreaChart>
       </ResponsiveContainer>

@@ -1,7 +1,7 @@
 'use client';
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { formatEUR, truncate } from '@/lib/utils/format';
+import { formatEUR, formatCompactEUR, truncate } from '@/lib/utils/format';
 
 interface Top10BarChartProps {
   data: Array<{
@@ -17,7 +17,7 @@ export function Top10BarChart({ data }: Top10BarChartProps) {
 
   const chartData = data.map((item) => ({
     ...item,
-    shortTitle: truncate(item.title, 25),
+    shortTitle: truncate(item.title, 20),
   }));
 
   return (
@@ -26,10 +26,10 @@ export function Top10BarChart({ data }: Top10BarChartProps) {
         Top 10 — Plus gros montants
       </h2>
       <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 10 }}>
+        <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 10 }}>
           <XAxis
             type="number"
-            tickFormatter={(v: number) => formatEUR(v)}
+            tickFormatter={(v: number) => formatCompactEUR(v)}
             tick={{ fill: 'var(--color-text-muted)', fontSize: 10 }}
             axisLine={false}
             tickLine={false}
@@ -37,8 +37,8 @@ export function Top10BarChart({ data }: Top10BarChartProps) {
           <YAxis
             type="category"
             dataKey="shortTitle"
-            width={120}
-            tick={{ fill: 'var(--color-text-secondary)', fontSize: 10 }}
+            width={130}
+            tick={{ fill: 'var(--color-text-secondary)', fontSize: 9 }}
             axisLine={false}
             tickLine={false}
           />

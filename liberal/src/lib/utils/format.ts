@@ -118,6 +118,21 @@ export function formatCompactNumber(n: number): string {
 }
 
 /**
+ * Format EUR compactly for chart axes.
+ * e.g. 1500000000 -> "1,5 Md €", 45000000 -> "45 M €"
+ */
+export function formatCompactEUR(n: number): string {
+  if (Math.abs(n) < 1000) return `${n} €`;
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: 1,
+  }).format(n);
+}
+
+/**
  * Format a date in French locale (dd/MM/yyyy)
  */
 export function formatDateFr(date: Date | string): string {

@@ -1,6 +1,6 @@
 'use client';
 
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatEUR } from '@/lib/utils/format';
 
 interface CategoryPieChartProps {
@@ -21,25 +21,38 @@ const COLORS = [
 export function CategoryPieChart({ data }: CategoryPieChartProps) {
   if (data.length === 0) return null;
 
+  // Sort by amount descending and take top 8, merge rest into "Autres"
+  const sorted = [...data].sort((a, b) => b.totalAmount - a.totalAmount);
+  const top = sorted.slice(0, 8);
+  const rest = sorted.slice(8);
+  const chartData = rest.length > 0
+    ? [...top, { category: 'Autres', count: rest.reduce((s, r) => s + r.count, 0), totalAmount: rest.reduce((s, r) => s + r.totalAmount, 0) }]
+    : top;
+
   return (
     <div className="rounded-xl border border-border-default bg-surface-secondary p-4">
       <h2 className="mb-4 text-base font-semibold text-text-primary">
         Repartition par categorie
       </h2>
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
-            data={data}
+            data={chartData}
             dataKey="totalAmount"
             nameKey="category"
             cx="50%"
-            cy="50%"
-            innerRadius={50}
-            outerRadius={90}
+            cy="45%"
+            innerRadius={55}
+            outerRadius={100}
             paddingAngle={2}
-            stroke="none"
+            stroke="var(--color-surface-secondary)"
+            strokeWidth={2}
+            label={({ name, percent }: { name?: string; percent?: number }) =>
+              (percent ?? 0) > 0.05 ? `${name ?? ''} ${((percent ?? 0) * 100).toFixed(0)}%` : ''
+            }
+            labelLine={false}
           >
-            {data.map((_, index) => (
+            {chartData.map((_, index) => (
               <Cell key={index} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
@@ -52,9 +65,6 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
               fontSize: '12px',
             }}
             formatter={(value) => formatEUR(Number(value))}
-          />
-          <Legend
-            wrapperStyle={{ fontSize: '11px', color: 'var(--color-text-muted)' }}
           />
         </PieChart>
       </ResponsiveContainer>
