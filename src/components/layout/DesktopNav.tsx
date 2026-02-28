@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, Settings, LogOut, Shield } from 'lucide-react';
 import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
 import { StreakBadge } from '@/components/features/gamification/StreakBadge';
@@ -100,6 +100,12 @@ export default function DesktopNav() {
               <Link href="/profile/settings" className="cursor-pointer">
                 <Settings className="mr-2 size-4" />
                 Paramètres
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/feed/review" className="cursor-pointer">
+                <Shield className="mr-2 size-4" />
+                Valider des signalements
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

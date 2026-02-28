@@ -10,8 +10,10 @@ import { SignupCTA } from '@/components/features/auth/SignupCTA';
 import { getSubmissions } from '@/lib/api/submissions';
 import { getPlatformStats } from '@/lib/api/stats';
 import { getTopLeaderboard } from '@/lib/api/leaderboard';
+import { getPendingSubmissionCount } from '@/lib/api/pending-count';
 import { isValidSort } from '@/lib/utils/validation';
 import { auth } from '@/lib/auth';
+import { PendingReviewCard } from '@/components/features/submissions/PendingReviewCard';
 import type { Metadata } from 'next';
 
 // ISR revalidation: base 60s (hot default)
@@ -73,11 +75,12 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
       ? (timeWindow as 'today' | 'week' | 'month' | 'all')
       : 'week';
 
-  const [submissions, stats, leaderboard, session] = await Promise.all([
+  const [submissions, stats, leaderboard, session, pendingCount] = await Promise.all([
     getSubmissions({ sort, timeWindow: validTimeWindow }),
     getPlatformStats(),
     getTopLeaderboard(5),
     auth(),
+    getPendingSubmissionCount(),
   ]);
 
   const isLoggedOut = !session?.user;
@@ -113,6 +116,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
         <aside className="hidden w-[280px] shrink-0 lg:block">
           <div className="sticky top-20 space-y-4">
             <MiniLeaderboard entries={leaderboard} variant="sidebar" />
+            {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
             {isLoggedOut && (
               <>
                 <GamificationTeaser />

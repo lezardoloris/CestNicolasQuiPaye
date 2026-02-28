@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CheckCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle, ArrowLeft, Shield, Users, FileCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
@@ -33,14 +33,36 @@ export default async function ConfirmationPage({
       </h1>
 
       <p className="mb-8 text-lg text-text-secondary">
-        Votre signalement a été soumis et sera examiné par nos modérateurs.
+        Votre signalement est en attente de validation par la communauté.
       </p>
 
       <div className="mb-8 rounded-lg border border-border-default bg-surface-secondary p-6 text-left">
-        <p className="mb-2 text-sm text-text-muted">
-          Référence de votre signalement
-        </p>
-        <p className="font-mono text-sm text-text-secondary">{id}</p>
+        <p className="mb-3 text-sm font-semibold text-text-primary">Comment ça marche ?</p>
+        <div className="space-y-3">
+          <div className="flex items-start gap-3">
+            <Shield className="mt-0.5 h-4 w-4 shrink-0 text-chainsaw-red" />
+            <p className="text-sm text-text-secondary">
+              Les citoyens de niveau 2+ examinent votre signalement
+            </p>
+          </div>
+          <div className="flex items-start gap-3">
+            <Users className="mt-0.5 h-4 w-4 shrink-0 text-chainsaw-red" />
+            <p className="text-sm text-text-secondary">
+              Ils vérifient les sources et votent pour approuver ou rejeter
+            </p>
+          </div>
+          <div className="flex items-start gap-3">
+            <FileCheck className="mt-0.5 h-4 w-4 shrink-0 text-chainsaw-red" />
+            <p className="text-sm text-text-secondary">
+              Une fois validé, il apparaît dans le fil public
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 border-t border-border-default pt-3">
+          <p className="text-xs text-text-muted">
+            Référence : <span className="font-mono">{id}</span>
+          </p>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
