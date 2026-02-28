@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "drizzle-kit push && next start",
+    "start": "drizzle-kit push --force --verbose && next start",
     "lint": "eslint src/",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
