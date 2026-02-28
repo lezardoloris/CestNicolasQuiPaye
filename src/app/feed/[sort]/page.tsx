@@ -3,6 +3,7 @@ import { FeedSortTabs } from '@/components/features/feed/FeedSortTabs';
 import { TopTimeFilter } from '@/components/features/feed/TopTimeFilter';
 import { HeroSection } from '@/components/features/feed/HeroSection';
 import { FeedPageClient } from '@/components/features/feed/FeedPageClient';
+import { MobileFeedFAB } from '@/components/features/feed/MobileFeedFAB';
 import { getSubmissions } from '@/lib/api/submissions';
 import { getPlatformStats } from '@/lib/api/stats';
 import { isValidSort } from '@/lib/utils/validation';
@@ -87,6 +88,8 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
           timeWindow={sort === 'top' ? validTimeWindow : undefined}
         />
       </div>
+
+      <MobileFeedFAB />
     </main>
   );
 }

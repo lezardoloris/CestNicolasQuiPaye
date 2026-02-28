@@ -1,16 +1,23 @@
 import { db } from '@/lib/db';
 import { submissions, votes, ipVotes } from '@/lib/db/schema';
-import { eq, sql, desc } from 'drizzle-orm';
+import { eq, sql, desc, gte, and } from 'drizzle-orm';
 import type { StatsData } from '@/types/stats';
+
+const TAXPAYER_COUNT = 40_000_000;
 
 export interface PlatformStats {
   totalSubmissions: number;
   totalAmountEur: number;
   totalUniqueVoters: number;
+  costPerTaxpayer: number;
+  submissionsThisWeek: number;
 }
 
 export async function getPlatformStats(): Promise<PlatformStats> {
-  const [submissionStats, authVoters, anonVoters] = await Promise.all([
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+  const [submissionStats, authVoters, anonVoters, recentStats] = await Promise.all([
     db
       .select({
         count: sql<number>`count(*)`,
@@ -30,25 +37,28 @@ export async function getPlatformStats(): Promise<PlatformStats> {
         count: sql<number>`count(distinct ${ipVotes.ipHash})`,
       })
       .from(ipVotes),
+
+    db
+      .select({
+        count: sql<number>`count(*)`,
+      })
+      .from(submissions)
+      .where(and(eq(submissions.status, 'published'), gte(submissions.createdAt, oneWeekAgo))),
   ]);
+
+  const totalAmountEur = Number(submissionStats[0]?.totalAmount) || 0;
 
   return {
     totalSubmissions: Number(submissionStats[0]?.count) || 0,
-    totalAmountEur: Number(submissionStats[0]?.totalAmount) || 0,
-    totalUniqueVoters:
-      (Number(authVoters[0]?.count) || 0) + (Number(anonVoters[0]?.count) || 0),
+    totalAmountEur,
+    totalUniqueVoters: (Number(authVoters[0]?.count) || 0) + (Number(anonVoters[0]?.count) || 0),
+    costPerTaxpayer: totalAmountEur / TAXPAYER_COUNT,
+    submissionsThisWeek: Number(recentStats[0]?.count) || 0,
   };
 }
 
 export async function getFullStats(): Promise<StatsData> {
-  const [
-    totalsRow,
-    authVoters,
-    anonVoters,
-    byCategory,
-    top10,
-    overTime,
-  ] = await Promise.all([
+  const [totalsRow, authVoters, anonVoters, byCategory, top10, overTime] = await Promise.all([
     // Totals
     db
       .select({
@@ -60,14 +70,10 @@ export async function getFullStats(): Promise<StatsData> {
       .where(eq(submissions.status, 'published')),
 
     // Auth voters
-    db
-      .select({ count: sql<number>`count(distinct ${votes.userId})` })
-      .from(votes),
+    db.select({ count: sql<number>`count(distinct ${votes.userId})` }).from(votes),
 
     // Anon voters
-    db
-      .select({ count: sql<number>`count(distinct ${ipVotes.ipHash})` })
-      .from(ipVotes),
+    db.select({ count: sql<number>`count(distinct ${ipVotes.ipHash})` }).from(ipVotes),
 
     // By category
     db
@@ -128,8 +134,17 @@ export async function getFullStats(): Promise<StatsData> {
       totalUpvotes: n(totalsRow[0]?.totalUpvotes),
       uniqueVoters: n(authVoters[0]?.count) + n(anonVoters[0]?.count),
     },
-    byCategory: byCategory.map((r) => ({ category: r.category, count: n(r.count), totalAmount: n(r.totalAmount) })),
-    top10: top10.map((r) => ({ id: r.id, title: r.title, amount: n(r.amount), ministryTag: r.ministryTag })),
+    byCategory: byCategory.map((r) => ({
+      category: r.category,
+      count: n(r.count),
+      totalAmount: n(r.totalAmount),
+    })),
+    top10: top10.map((r) => ({
+      id: r.id,
+      title: r.title,
+      amount: n(r.amount),
+      ministryTag: r.ministryTag,
+    })),
     overTime: timelineData,
   };
 }
