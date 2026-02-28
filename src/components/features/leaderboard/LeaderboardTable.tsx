@@ -1,21 +1,18 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { LevelBadge } from '@/components/features/gamification/LevelBadge';
+import { Flame, Zap } from 'lucide-react';
 
 export interface LeaderboardEntry {
   rank: number;
   displayName: string;
   avatarUrl: string | null;
-  karma: number;
+  totalXp: number;
+  level: number;
+  levelTitle: string;
+  streak: number;
   submissionCount: number;
-  voteCount: number;
-  sourceCount: number;
-  noteCount: number;
-  tier: {
-    label: string;
-    emoji: string;
-    color: string;
-  };
 }
 
 interface LeaderboardTableProps {
@@ -32,12 +29,10 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
           <tr className="border-b border-border-default bg-surface-primary/50 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
             <th className="px-4 py-3 text-center w-12">#</th>
             <th className="px-4 py-3">Contributeur</th>
-            <th className="px-4 py-3 text-center hidden sm:table-cell">Tier</th>
-            <th className="px-4 py-3 text-right">Karma</th>
+            <th className="px-4 py-3 text-center hidden sm:table-cell">Niveau</th>
+            <th className="px-4 py-3 text-right">XP</th>
+            <th className="px-4 py-3 text-center hidden md:table-cell">Serie</th>
             <th className="px-4 py-3 text-right hidden md:table-cell">Signalements</th>
-            <th className="px-4 py-3 text-right hidden md:table-cell">Votes</th>
-            <th className="px-4 py-3 text-right hidden lg:table-cell">Sources</th>
-            <th className="px-4 py-3 text-right hidden lg:table-cell">Notes</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-border-default">
@@ -65,35 +60,41 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                   <span className="font-medium text-text-primary truncate max-w-[150px] sm:max-w-[200px]">
                     {entry.displayName}
                   </span>
-                  <span className="sm:hidden text-xs" title={entry.tier.label}>
-                    {entry.tier.emoji}
+                  <span className="sm:hidden">
+                    <LevelBadge level={entry.level} title={entry.levelTitle} size="sm" />
                   </span>
                 </div>
               </td>
               <td className="px-4 py-3 text-center hidden sm:table-cell">
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
-                    entry.tier.color,
-                  )}
-                >
-                  {entry.tier.emoji} {entry.tier.label}
-                </span>
+                <LevelBadge level={entry.level} title={entry.levelTitle} size="md" />
               </td>
               <td className="px-4 py-3 text-right font-bold tabular-nums text-chainsaw-red">
-                {entry.karma.toLocaleString('fr-FR')}
+                <span className="inline-flex items-center gap-1">
+                  <Zap className="size-3" />
+                  {entry.totalXp.toLocaleString('fr-FR')}
+                </span>
+              </td>
+              <td className="px-4 py-3 text-center hidden md:table-cell">
+                {entry.streak > 0 ? (
+                  <span className="inline-flex items-center gap-1 text-xs">
+                    <Flame
+                      className={cn(
+                        'size-3.5',
+                        entry.streak >= 30
+                          ? 'text-orange-400'
+                          : entry.streak >= 7
+                            ? 'text-yellow-400'
+                            : 'text-text-muted',
+                      )}
+                    />
+                    <span className="tabular-nums">{entry.streak}j</span>
+                  </span>
+                ) : (
+                  <span className="text-text-muted">&mdash;</span>
+                )}
               </td>
               <td className="px-4 py-3 text-right tabular-nums text-text-secondary hidden md:table-cell">
                 {entry.submissionCount}
-              </td>
-              <td className="px-4 py-3 text-right tabular-nums text-text-secondary hidden md:table-cell">
-                {entry.voteCount}
-              </td>
-              <td className="px-4 py-3 text-right tabular-nums text-text-secondary hidden lg:table-cell">
-                {entry.sourceCount}
-              </td>
-              <td className="px-4 py-3 text-right tabular-nums text-text-secondary hidden lg:table-cell">
-                {entry.noteCount}
               </td>
             </tr>
           ))}

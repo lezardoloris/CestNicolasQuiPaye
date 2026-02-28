@@ -77,5 +77,11 @@ export async function POST(
     })
     .returning();
 
-  return apiSuccess(note, {}, 201);
+  // Award XP for writing a community note
+  const { awardXp } = await import('@/lib/gamification/xp-engine');
+  const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+  const xpResult = await awardXp(session.user.id, 'community_note_written', note.id, 'community_note');
+  const xp = formatXpResponse(xpResult);
+
+  return apiSuccess({ ...note, xp }, {}, 201);
 }

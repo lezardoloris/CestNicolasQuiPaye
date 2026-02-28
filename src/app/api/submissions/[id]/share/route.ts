@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { shareEventSchema } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
+import { auth } from '@/lib/auth';
 
 export async function POST(
   request: NextRequest,
@@ -45,7 +46,17 @@ export async function POST(
       platform: parsed.data.platform,
     });
 
-    return apiSuccess({ ok: true }, {}, 201);
+    // Award XP for sharing (authenticated only)
+    let xp = null;
+    const session = await auth();
+    if (session?.user?.id) {
+      const { awardXp } = await import('@/lib/gamification/xp-engine');
+      const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+      const xpResult = await awardXp(session.user.id, 'share', id, 'submission');
+      xp = formatXpResponse(xpResult);
+    }
+
+    return apiSuccess({ ok: true, xp }, {}, 201);
   } catch {
     return apiError('INTERNAL_ERROR', 'Erreur interne', 500);
   }

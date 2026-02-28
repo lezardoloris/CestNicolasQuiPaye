@@ -15,6 +15,21 @@ export interface UserProfile {
     emoji: string;
     color: string;
   };
+  // Gamification
+  totalXp: number;
+  level: number;
+  levelTitle: string;
+  progressPercent: number;
+  currentStreak: number;
+  longestStreak: number;
+  streakFreezeCount: number;
+  badges: Array<{
+    slug: string;
+    name: string;
+    description: string;
+    category: string;
+    earnedAt: string;
+  }>;
 }
 
 export interface UserSubmission {

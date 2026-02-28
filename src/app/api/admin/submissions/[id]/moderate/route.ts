@@ -72,12 +72,26 @@ export async function POST(
       .where(eq(submissions.id, id));
 
     // Insert moderation action
-    await db.insert(moderationActions).values({
+    const [modAction] = await db.insert(moderationActions).values({
       submissionId: id,
       adminUserId: session.user.id!,
       action: parsed.data.action,
       reason: parsed.data.reason ?? null,
-    });
+    }).returning();
+
+    // Award XP for moderation action
+    const { awardXp, clawbackXp } = await import('@/lib/gamification/xp-engine');
+    await awardXp(session.user.id!, 'moderation_action', modAction.id, 'moderation');
+
+    // Award XP to submission author when approved
+    if (parsed.data.action === 'approve' && submission.authorId) {
+      await awardXp(submission.authorId, 'submission_published', id, 'submission');
+    }
+
+    // Clawback XP when rejected/removed
+    if ((parsed.data.action === 'reject' || parsed.data.action === 'remove') && submission.authorId) {
+      await clawbackXp(submission.authorId, id, 'submission');
+    }
 
     return apiSuccess({
       id,

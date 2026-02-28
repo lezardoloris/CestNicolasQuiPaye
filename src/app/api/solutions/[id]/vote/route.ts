@@ -95,6 +95,14 @@ export async function POST(
         await db.update(solutions).set({
           upvoteCount: sql`${solutions.upvoteCount} + 1`,
         }).where(eq(solutions.id, solutionId));
+        // Award XP to solution author for upvote (not self-vote)
+        if (userId) {
+          const sol = await db.select({ authorId: solutions.authorId }).from(solutions).where(eq(solutions.id, solutionId)).limit(1);
+          if (sol[0]?.authorId && sol[0].authorId !== userId) {
+            const { awardXp } = await import('@/lib/gamification/xp-engine');
+            await awardXp(sol[0].authorId, 'solution_upvoted', solutionId, 'solution');
+          }
+        }
       } else {
         await db.update(solutions).set({
           downvoteCount: sql`${solutions.downvoteCount} + 1`,

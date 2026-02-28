@@ -56,10 +56,31 @@ export async function POST(
       .where(eq(submissions.id, submissionId))
       .limit(1);
 
+    // Award XP (authenticated only)
+    let xp = null;
+    if (session?.user?.id) {
+      const { awardXp } = await import('@/lib/gamification/xp-engine');
+      const xpResult = await awardXp(session.user.id, 'vote_cast', submissionId, 'submission');
+      xp = xpResult.awarded ? { amount: xpResult.xpAmount + (xpResult.dailyBonusAwarded ? xpResult.dailyBonusXp : 0), total: xpResult.totalXp, leveledUp: xpResult.leveledUp, newLevel: xpResult.newLevel, newLevelTitle: xpResult.newLevelTitle, streak: xpResult.currentStreak } : null;
+
+      // Award author XP on upvote (no self-vote)
+      if (voteType === 'up') {
+        const [sub] = await db
+          .select({ authorId: submissions.authorId })
+          .from(submissions)
+          .where(eq(submissions.id, submissionId))
+          .limit(1);
+        if (sub?.authorId && sub.authorId !== session.user.id) {
+          await awardXp(sub.authorId, 'upvote_received', submissionId, 'submission');
+        }
+      }
+    }
+
     return apiSuccess({
       upvoteCount: submission?.upvoteCount ?? 0,
       downvoteCount: submission?.downvoteCount ?? 0,
       userVote: result.userVote,
+      xp,
     });
   } catch (error) {
     console.error('Vote error:', error);

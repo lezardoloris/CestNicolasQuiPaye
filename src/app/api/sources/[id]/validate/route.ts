@@ -100,6 +100,15 @@ export async function POST(
         await db.update(submissionSources).set({
           validationCount: sql`${submissionSources.validationCount} + 1`,
         }).where(eq(submissionSources.id, sourceId));
+
+        // Award XP for positive validation to the source contributor
+        if (userId) {
+          const source = await db.select({ addedBy: submissionSources.addedBy }).from(submissionSources).where(eq(submissionSources.id, sourceId)).limit(1);
+          if (source[0]?.addedBy && source[0].addedBy !== userId) {
+            const { awardXp } = await import('@/lib/gamification/xp-engine');
+            await awardXp(source[0].addedBy, 'source_validated', sourceId, 'source');
+          }
+        }
       } else {
         await db.update(submissionSources).set({
           invalidationCount: sql`${submissionSources.invalidationCount} + 1`,

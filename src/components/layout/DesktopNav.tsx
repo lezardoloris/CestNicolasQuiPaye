@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut } from 'lucide-react';
 import { resolveDisplayName } from '@/lib/utils/user-display';
+import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
+import { StreakBadge } from '@/components/features/gamification/StreakBadge';
 
 const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
@@ -65,6 +67,9 @@ export default function DesktopNav() {
       </nav>
 
       {isAuthenticated ? (
+        <div className="flex items-center gap-3">
+          <XpProgressBar />
+          <StreakBadge />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -102,6 +107,7 @@ export default function DesktopNav() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        </div>
       ) : (
         <Button variant="outline" size="sm" asChild>
           <Link href="/login">Se connecter</Link>

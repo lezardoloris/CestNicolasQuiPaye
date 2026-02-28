@@ -9,6 +9,7 @@ import MobileHeader from '@/components/layout/MobileHeader';
 import Footer from '@/components/layout/Footer';
 import WelcomePromptWrapper from '@/components/features/auth/WelcomePromptWrapper';
 import FlashMessage from '@/components/features/common/FlashMessage';
+import { GamificationProvider } from '@/components/features/gamification/GamificationProvider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -78,6 +79,7 @@ export default function RootLayout({
           <MobileTabBar />
           <WelcomePromptWrapper />
           <FlashMessage />
+          <GamificationProvider />
         </Providers>
       </body>
     </html>

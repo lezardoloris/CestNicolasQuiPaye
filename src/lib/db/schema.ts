@@ -10,6 +10,8 @@ import {
   uniqueIndex,
   index,
   jsonb,
+  boolean,
+  date,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -43,6 +45,14 @@ export const users = pgTable('users', {
   bio: text('bio'),
   submissionCount: integer('submission_count').notNull().default(0),
   karmaScore: integer('karma_score').notNull().default(0),
+  // ─── Gamification fields ───
+  totalXp: integer('total_xp').notNull().default(0),
+  currentStreak: integer('current_streak').notNull().default(0),
+  longestStreak: integer('longest_streak').notNull().default(0),
+  lastActiveDate: date('last_active_date'),
+  streakFreezeCount: integer('streak_freeze_count').notNull().default(0),
+  dailyGoal: integer('daily_goal').notNull().default(20),
+  leagueOptOut: boolean('league_opt_out').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
@@ -216,6 +226,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   comments: many(comments),
   accounts: many(accounts),
   sessions: many(sessions),
+  xpEvents: many(xpEvents),
+  badges: many(userBadges),
 }));
 
 export const submissionsRelations = relations(submissions, ({ one, many }) => ({
@@ -743,6 +755,111 @@ export const featureVoteBallotsRelations = relations(featureVoteBallots, ({ one 
   }),
 }));
 
+// ─── Gamification: XP Events ────────────────────────────────────────
+export const xpActionType = pgEnum('xp_action_type', [
+  'submission_published',
+  'source_added',
+  'cross_reference_bonus',
+  'source_validated',
+  'vote_cast',
+  'upvote_received',
+  'comment_posted',
+  'comment_upvoted',
+  'community_note_written',
+  'community_note_pinned',
+  'solution_proposed',
+  'solution_upvoted',
+  'share',
+  'moderation_action',
+  'price_correction',
+  'daily_bonus',
+  'admin_manual',
+  'clawback',
+]);
+
+export const xpEvents = pgTable(
+  'xp_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    actionType: xpActionType('action_type').notNull(),
+    xpAmount: integer('xp_amount').notNull(),
+    relatedEntityId: uuid('related_entity_id'),
+    relatedEntityType: varchar('related_entity_type', { length: 50 }),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    index('idx_xp_events_user_id').on(table.userId),
+    index('idx_xp_events_user_action_entity').on(table.userId, table.actionType, table.relatedEntityId),
+    index('idx_xp_events_created_at').on(table.createdAt),
+  ]
+);
+
+export const xpEventsRelations = relations(xpEvents, ({ one }) => ({
+  user: one(users, {
+    fields: [xpEvents.userId],
+    references: [users.id],
+  }),
+}));
+
+// ─── Gamification: Badge Definitions ────────────────────────────────
+export const badgeCategory = pgEnum('badge_category', [
+  'streak',
+  'contribution',
+  'quality',
+  'social',
+  'moderation',
+  'code',
+  'special',
+]);
+
+export const badgeDefinitions = pgTable('badge_definitions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: varchar('slug', { length: 100 }).notNull().unique(),
+  name: varchar('name', { length: 200 }).notNull(),
+  description: text('description').notNull(),
+  category: badgeCategory('category').notNull(),
+  criteria: jsonb('criteria').notNull(),
+  iconUrl: varchar('icon_url', { length: 500 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const userBadges = pgTable(
+  'user_badges',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    badgeDefinitionId: uuid('badge_definition_id')
+      .notNull()
+      .references(() => badgeDefinitions.id, { onDelete: 'cascade' }),
+    earnedAt: timestamp('earned_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('idx_user_badges_unique').on(table.userId, table.badgeDefinitionId),
+    index('idx_user_badges_user').on(table.userId),
+  ]
+);
+
+export const badgeDefinitionsRelations = relations(badgeDefinitions, ({ many }) => ({
+  userBadges: many(userBadges),
+}));
+
+export const userBadgesRelations = relations(userBadges, ({ one }) => ({
+  user: one(users, {
+    fields: [userBadges.userId],
+    references: [users.id],
+  }),
+  badge: one(badgeDefinitions, {
+    fields: [userBadges.badgeDefinitionId],
+    references: [badgeDefinitions.id],
+  }),
+}));
+
 // ─── Type Exports ──────────────────────────────────────────────────
 export type Submission = typeof submissions.$inferSelect;
 export type NewSubmission = typeof submissions.$inferInsert;
@@ -771,3 +888,7 @@ export type SourceValidation = typeof sourceValidations.$inferSelect;
 export type CommunityNote = typeof communityNotes.$inferSelect;
 export type NewCommunityNote = typeof communityNotes.$inferInsert;
 export type CommunityNoteVote = typeof communityNoteVotes.$inferSelect;
+export type XpEvent = typeof xpEvents.$inferSelect;
+export type NewXpEvent = typeof xpEvents.$inferInsert;
+export type BadgeDefinition = typeof badgeDefinitions.$inferSelect;
+export type UserBadge = typeof userBadges.$inferSelect;

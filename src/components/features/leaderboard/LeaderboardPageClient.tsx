@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { PodiumCards } from './PodiumCards';
 import { LeaderboardTable, type LeaderboardEntry } from './LeaderboardTable';
-import { Trophy } from 'lucide-react';
+import { Trophy, Zap } from 'lucide-react';
 
 export function LeaderboardPageClient() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -32,7 +32,7 @@ export function LeaderboardPageClient() {
         </h1>
         <p className="text-sm text-text-muted max-w-lg mx-auto">
           Classement des citoyens les plus actifs dans la traque aux gaspillages.
-          Soumettez, votez, sourcez et grimpez au classement.
+          Gagnez de l&apos;XP, montez en niveau et grimpez au classement.
         </p>
       </div>
 
@@ -69,35 +69,48 @@ export function LeaderboardPageClient() {
             <LeaderboardTable entries={rest} />
           )}
 
-          {/* Scoring explanation */}
+          {/* XP explanation */}
           <div className="rounded-lg border border-border-default bg-surface-secondary p-6">
             <h2 className="text-lg font-bold text-text-primary mb-3">
-              Comment monter au classement ?
+              <Zap className="inline size-5 text-chainsaw-red mr-1 -mt-0.5" />
+              Comment gagner de l&apos;XP ?
             </h2>
             <div className="grid gap-3 sm:grid-cols-2 text-sm text-text-secondary">
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
-                  +10
+                  +50
                 </span>
-                <span>Soumettre un signalement</span>
+                <span>Signalement publie</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-info/10 text-xs font-bold text-info">
-                  +5
+                  +20
                 </span>
-                <span>Ajouter une source officielle</span>
+                <span>Source ajoutee</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-warning/10 text-xs font-bold text-warning">
-                  +3
+                  +15
                 </span>
-                <span>Rediger une note de communaute</span>
+                <span>Note de communaute</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex size-8 items-center justify-center rounded-full bg-purple-500/10 text-xs font-bold text-purple-400">
+                  +10
+                </span>
+                <span>Bonus quotidien (serie)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex size-8 items-center justify-center rounded-full bg-green-500/10 text-xs font-bold text-green-400">
+                  +5
+                </span>
+                <span>Commentaire ou partage</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-surface-elevated text-xs font-bold text-text-muted">
-                  +1
+                  +2
                 </span>
-                <span>Voter sur un signalement</span>
+                <span>Vote donne ou recu</span>
               </div>
             </div>
           </div>

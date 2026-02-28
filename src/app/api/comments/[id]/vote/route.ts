@@ -115,12 +115,24 @@ export async function POST(
       ),
     });
 
+    // Award XP: upvote on a comment = author gets +3 XP (new vote, upvote direction, not self-vote)
+    let xp = null;
+    if (!existingVote && direction === 'up' && comment.authorId && comment.authorId !== userId) {
+      const { awardXp } = await import('@/lib/gamification/xp-engine');
+      const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+      await awardXp(comment.authorId, 'comment_upvoted', commentId, 'comment');
+      // Also award vote XP to the voter
+      const xpResult = await awardXp(userId, 'vote_cast', commentId, 'comment_vote');
+      xp = formatXpResponse(xpResult);
+    }
+
     return apiSuccess({
       commentId,
       direction: currentVote?.direction ?? null,
       score: up - down,
       upvoteCount: up,
       downvoteCount: down,
+      xp,
     });
   } catch {
     return apiError('INTERNAL_ERROR', 'Erreur interne', 500);

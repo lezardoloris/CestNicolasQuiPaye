@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { XpProgressBarCompact } from '@/components/features/gamification/XpProgressBar';
 
 export default function MobileHeader() {
   return (
@@ -18,18 +19,21 @@ export default function MobileHeader() {
           priority
         />
       </Link>
-      <Link
-        href="/submit"
-        aria-label="Signaler une dépense"
-        className={cn(
-          'bg-chainsaw-red inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
-          'text-xs font-semibold text-white',
-          'hover:bg-chainsaw-red-hover transition-all duration-150 active:scale-95',
-        )}
-      >
-        <PlusCircle className="size-3.5" aria-hidden="true" />
-        Signaler
-      </Link>
+      <div className="flex items-center gap-2">
+        <XpProgressBarCompact />
+        <Link
+          href="/submit"
+          aria-label="Signaler une dépense"
+          className={cn(
+            'bg-chainsaw-red inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
+            'text-xs font-semibold text-white',
+            'hover:bg-chainsaw-red-hover transition-all duration-150 active:scale-95',
+          )}
+        >
+          <PlusCircle className="size-3.5" aria-hidden="true" />
+          Signaler
+        </Link>
+      </div>
     </header>
   );
 }

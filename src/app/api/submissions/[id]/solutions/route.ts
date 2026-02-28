@@ -71,5 +71,14 @@ export async function POST(
     })
     .returning();
 
-  return apiSuccess(solution, {}, 201);
+  // Award XP for proposing a solution (authenticated only)
+  let xp = null;
+  if (authorId) {
+    const { awardXp } = await import('@/lib/gamification/xp-engine');
+    const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+    const xpResult = await awardXp(authorId, 'solution_proposed', solution.id, 'solution');
+    xp = formatXpResponse(xpResult);
+  }
+
+  return apiSuccess({ ...solution, xp }, {}, 201);
 }

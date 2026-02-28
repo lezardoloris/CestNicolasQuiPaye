@@ -1,6 +1,8 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { Zap, Flame } from 'lucide-react';
+import { LevelBadge } from '@/components/features/gamification/LevelBadge';
 import type { LeaderboardEntry } from './LeaderboardTable';
 
 interface PodiumCardsProps {
@@ -51,7 +53,7 @@ export function PodiumCards({ top3 }: PodiumCardsProps) {
               entry.rank === 1 && style.glow,
             )}
           >
-            <div className="text-3xl">{entry.tier.emoji}</div>
+            <LevelBadge level={entry.level} title={entry.levelTitle} size="md" />
 
             {entry.avatarUrl ? (
               <img
@@ -77,20 +79,22 @@ export function PodiumCards({ top3 }: PodiumCardsProps) {
               <p className="font-semibold text-text-primary truncate max-w-[200px]">
                 {entry.displayName}
               </p>
-              <p className={cn('text-xs font-semibold', entry.tier.color)}>
-                {entry.tier.label}
-              </p>
             </div>
 
             <p className="text-2xl font-black tabular-nums text-chainsaw-red">
-              {entry.karma.toLocaleString('fr-FR')}
-              <span className="ml-1 text-xs font-medium text-text-muted">pts</span>
+              <Zap className="inline size-5 -mt-0.5" />
+              {entry.totalXp.toLocaleString('fr-FR')}
+              <span className="ml-1 text-xs font-medium text-text-muted">XP</span>
             </p>
 
             <div className="flex gap-3 text-[10px] text-text-muted">
               <span>{entry.submissionCount} signal.</span>
-              <span>{entry.voteCount} votes</span>
-              <span>{entry.sourceCount} sources</span>
+              {entry.streak > 0 && (
+                <span className="inline-flex items-center gap-0.5">
+                  <Flame className="size-3 text-yellow-400" />
+                  {entry.streak}j
+                </span>
+              )}
             </div>
           </div>
         );

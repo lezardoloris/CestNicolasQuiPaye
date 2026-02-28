@@ -72,7 +72,35 @@ export async function POST(
       })
       .returning();
 
-    return apiSuccess(source, {}, 201);
+    // Award XP for adding a source (authenticated only)
+    let xp = null;
+    if (addedBy) {
+      const { awardXp } = await import('@/lib/gamification/xp-engine');
+      const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+      const xpResult = await awardXp(addedBy, 'source_added', source.id, 'source');
+      xp = formatXpResponse(xpResult);
+
+      // Check cross-reference bonus: 2+ distinct source types on this submission
+      const allSources = await db
+        .select({ sourceType: submissionSources.sourceType })
+        .from(submissionSources)
+        .where(eq(submissionSources.submissionId, submissionId));
+      const distinctTypes = new Set(allSources.map((s) => s.sourceType));
+      if (distinctTypes.size >= 2) {
+        // Award cross-reference bonus to the submission author
+        const { submissions } = await import('@/lib/db/schema');
+        const [sub] = await db
+          .select({ authorId: submissions.authorId })
+          .from(submissions)
+          .where(eq(submissions.id, submissionId))
+          .limit(1);
+        if (sub?.authorId) {
+          await awardXp(sub.authorId, 'cross_reference_bonus', submissionId, 'submission');
+        }
+      }
+    }
+
+    return apiSuccess({ ...source, xp }, {}, 201);
   } catch (error: unknown) {
     if (
       error instanceof Error &&

@@ -130,6 +130,12 @@ export async function POST(
           isPinned: 1,
           pinnedAt: new Date(),
         }).where(eq(communityNotes.id, noteId));
+        // Award pin bonus XP to the note author
+        const noteData = await db.select({ authorId: communityNotes.authorId }).from(communityNotes).where(eq(communityNotes.id, noteId)).limit(1);
+        if (noteData[0]?.authorId) {
+          const { awardXp } = await import('@/lib/gamification/xp-engine');
+          await awardXp(noteData[0].authorId, 'community_note_pinned', noteId, 'community_note');
+        }
       } else if (!shouldPin && updatedNote.isPinned) {
         await db.update(communityNotes).set({
           isPinned: 0,

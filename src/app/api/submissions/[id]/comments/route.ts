@@ -190,7 +190,14 @@ export async function POST(
       .set({ commentCount: sql`${submissions.commentCount} + 1` })
       .where(eq(submissions.id, id));
 
-    return apiSuccess(newComment, {}, 201);
+    // Award XP for commenting
+    let xp = null;
+    const { awardXp } = await import('@/lib/gamification/xp-engine');
+    const { formatXpResponse } = await import('@/lib/gamification/xp-response');
+    const xpResult = await awardXp(session.user.id!, 'comment_posted', newComment.id, 'comment');
+    xp = formatXpResponse(xpResult);
+
+    return apiSuccess({ ...newComment, xp }, {}, 201);
   } catch {
     return apiError('INTERNAL_ERROR', 'Erreur interne', 500);
   }

@@ -3,6 +3,8 @@ import { users, submissions, votes, submissionSources, communityNotes } from '@/
 import { eq, and, isNull, desc, lt, count } from 'drizzle-orm';
 import { resolveDisplayName, maskEmail } from '@/lib/utils/user-display';
 import { calculateKarma, getKarmaTier } from '@/lib/utils/karma';
+import { getLevelProgress } from '@/lib/gamification/xp-config';
+import { userBadges, badgeDefinitions } from '@/lib/db/schema';
 import type { UserProfile, UserSubmission, UserVote } from '@/types/user';
 
 export async function getUserById(userId: string) {
@@ -71,6 +73,31 @@ export async function getUserProfile(
 
   const tier = rank <= 100 ? getKarmaTier(rank) : undefined;
 
+  // Gamification data
+  const totalXp = user.totalXp ?? 0;
+  const levelProgress = getLevelProgress(totalXp);
+
+  let earnedBadges: Array<{ slug: string; name: string; description: string; category: string; earnedAt: string }> = [];
+  try {
+    const rawBadges = await db
+      .select({
+        slug: badgeDefinitions.slug,
+        name: badgeDefinitions.name,
+        description: badgeDefinitions.description,
+        category: badgeDefinitions.category,
+        earnedAt: userBadges.earnedAt,
+      })
+      .from(userBadges)
+      .innerJoin(badgeDefinitions, eq(userBadges.badgeDefinitionId, badgeDefinitions.id))
+      .where(eq(userBadges.userId, userId));
+    earnedBadges = rawBadges.map((b) => ({
+      ...b,
+      earnedAt: b.earnedAt.toISOString(),
+    }));
+  } catch {
+    // Tables may not exist yet
+  }
+
   const profile: UserProfile = {
     id: user.id,
     displayName: user.displayName,
@@ -83,6 +110,14 @@ export async function getUserProfile(
     bio: user.bio,
     karma,
     karmaTier: tier ? { label: tier.label, emoji: tier.emoji, color: tier.color } : undefined,
+    totalXp,
+    level: levelProgress.current.level,
+    levelTitle: levelProgress.current.title,
+    progressPercent: levelProgress.progressPercent,
+    currentStreak: user.currentStreak ?? 0,
+    longestStreak: user.longestStreak ?? 0,
+    streakFreezeCount: user.streakFreezeCount ?? 0,
+    badges: earnedBadges,
   };
 
   if (isOwnProfile) {
