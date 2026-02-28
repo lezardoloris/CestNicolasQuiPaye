@@ -10,7 +10,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user) {
-      return apiError('UNAUTHORIZED', 'Non authentifie', 401);
+      return apiError('UNAUTHORIZED', 'Non authentifié', 401);
     }
 
     const body = await request.json();
@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest) {
     // Validate display name
     const parsed = displayNameSchema.safeParse(body);
     if (!parsed.success) {
-      return apiError('VALIDATION_ERROR', 'Donnees invalides', 400, {
+      return apiError('VALIDATION_ERROR', 'Données invalides', 400, {
         fields: parsed.error.flatten().fieldErrors,
       });
     }
@@ -44,7 +44,7 @@ export async function PATCH(request: NextRequest) {
     if (existing && existing.id !== session.user.id) {
       return apiError(
         'CONFLICT',
-        'Ce pseudonyme est deja utilise',
+        'Ce pseudonyme est déjà utilisé',
         409,
       );
     }

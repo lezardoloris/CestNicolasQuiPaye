@@ -37,8 +37,8 @@ export function VoteButton({
           vote('up');
         }}
         disabled={isLoading}
-        title="Tronconner"
-        aria-label={`Tronconner: ${counts.up} votes`}
+        title="Tronçonner"
+        aria-label={`Tronçonner: ${counts.up} votes`}
         aria-pressed={activeVote === 'up'}
         className={cn(
           'min-h-12 min-w-12 rounded-md p-2 transition-colors',

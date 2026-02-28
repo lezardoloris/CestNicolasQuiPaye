@@ -29,7 +29,7 @@ export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps
       </div>
 
       <p className="text-xs text-text-muted">
-        Apportez du contexte factuel et source pour aider la communaute a comprendre cette depense.
+        Apportez du contexte factuel et sourcé pour aider la communauté à comprendre cette dépense.
       </p>
 
       <CommunityNoteForm onSubmit={createNote} isSubmitting={isCreating} />
@@ -41,7 +41,7 @@ export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps
         </div>
       ) : notes.length === 0 ? (
         <p className="py-4 text-center text-sm text-text-muted">
-          Aucune note de contexte. Soyez le premier a apporter du contexte !
+          Aucune note de contexte. Soyez le premier à apporter du contexte !
         </p>
       ) : (
         <div className="space-y-2">

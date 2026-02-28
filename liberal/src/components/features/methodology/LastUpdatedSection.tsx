@@ -14,11 +14,11 @@ export default function LastUpdatedSection({
   return (
     <section className="mt-12 mb-8">
       <h2 className="font-display text-2xl font-bold text-text-primary mb-4">
-        Derniere mise a jour des donnees
+        Dernière mise à jour des données
       </h2>
       <p className="text-text-secondary mb-6">
-        Chaque donnee est mise a jour selon un calendrier defini. Voici
-        l&apos;etat actuel de chaque source.
+        Chaque donnée est mise à jour selon un calendrier défini. Voici
+        l&apos;état actuel de chaque source.
       </p>
 
       <div className="space-y-3">
@@ -39,7 +39,7 @@ export default function LastUpdatedSection({
                   {labelInfo?.label || denom.key}
                 </p>
                 <p className="text-sm text-text-muted">
-                  Mis a jour le {formatFrenchDate(denom.last_updated)}
+                  Mis à jour le {formatFrenchDate(denom.last_updated)}
                 </p>
               </div>
               <FreshnessBadge
@@ -56,7 +56,7 @@ export default function LastUpdatedSection({
           href="/data-status"
           className="text-sm text-chainsaw-red hover:underline"
         >
-          Voir le statut complet des donnees
+          Voir le statut complet des données
         </a>
       </div>
     </section>

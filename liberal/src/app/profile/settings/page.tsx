@@ -9,7 +9,7 @@ import DeleteAccountSection from '@/components/features/profile/DeleteAccountSec
 import { Separator } from '@/components/ui/separator';
 
 export const metadata: Metadata = {
-  title: 'Parametres du profil',
+  title: 'Paramètres du profil',
 };
 
 export default async function ProfileSettingsPage() {
@@ -30,7 +30,7 @@ export default async function ProfileSettingsPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <h1 className="mb-8 font-display text-2xl font-bold text-text-primary">
-        Parametres du profil
+        Paramètres du profil
       </h1>
 
       <DisplayNameForm

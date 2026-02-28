@@ -44,8 +44,8 @@ export function VoteButtonInline({
           vote('up');
         }}
         disabled={isLoading}
-        title="Tronconner"
-        aria-label={`Tronconner: ${counts.up} votes`}
+        title="Tronçonner"
+        aria-label={`Tronçonner: ${counts.up} votes`}
         aria-pressed={activeVote === 'up'}
         className={cn(
           'inline-flex items-center justify-center rounded-full p-1.5',

@@ -20,17 +20,17 @@ const SORT_META: Record<string, { title: string; description: string }> = {
   hot: {
     title: 'Tendances',
     description:
-      'Les gaspillages publics les plus signales en ce moment sur NICOLAS PAYE.',
+      'Les gaspillages publics les plus signalés en ce moment sur NICOLAS PAYE.',
   },
   new: {
-    title: 'Recent',
+    title: 'Récent',
     description:
       'Les derniers signalements de gaspillage public soumis par les citoyens.',
   },
   top: {
     title: 'Top',
     description:
-      'Les gaspillages publics les plus votes de tous les temps sur NICOLAS PAYE.',
+      'Les gaspillages publics les plus votés de tous les temps sur NICOLAS PAYE.',
   },
 };
 

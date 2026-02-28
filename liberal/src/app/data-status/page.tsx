@@ -5,9 +5,9 @@ import DataStatusTable from '@/components/features/data-status/DataStatusTable';
 import { getCachedDenominators } from '@/lib/api/cost-cache';
 
 export const metadata: Metadata = {
-  title: 'Statut des donnees',
+  title: 'Statut des données',
   description:
-    'Transparence des donnees utilisees pour les calculs Cout pour Nicolas. Sources officielles, dates de mise a jour et fraicheur des donnees.',
+    'Transparence des données utilisées pour les calculs Coût pour Nicolas. Sources officielles, dates de mise à jour et fraîcheur des données.',
 };
 
 export const revalidate = 3600; // ISR: 1 hour
@@ -18,12 +18,12 @@ export default async function DataStatusPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <h1 className="mb-2 font-display text-3xl font-bold text-text-primary">
-        Statut des donnees
+        Statut des données
       </h1>
       <p className="mb-8 text-text-secondary">
-        Toutes les donnees utilisees pour calculer le Cout pour Nicolas
-        proviennent de sources officielles. Cette page vous permet de verifier
-        la fraicheur et l&apos;origine de chaque donnee.
+        Toutes les données utilisées pour calculer le Coût pour Nicolas
+        proviennent de sources officielles. Cette page vous permet de vérifier
+        la fraîcheur et l&apos;origine de chaque donnée.
       </p>
 
       <DataStatusTable denominators={denominators} />
@@ -35,22 +35,22 @@ export default async function DataStatusPage() {
         <ul className="list-disc pl-5 space-y-2 text-text-secondary">
           <li>
             <strong className="text-text-primary">Valeur actuelle</strong> :
-            la derniere valeur connue de la donnee, mise en cache localement.
+            la dernière valeur connue de la donnée, mise en cache localement.
           </li>
           <li>
             <strong className="text-text-primary">Source</strong> : lien
-            direct vers la publication officielle. Cliquez pour verifier
-            vous-meme.
+            direct vers la publication officielle. Cliquez pour vérifier
+            vous-même.
           </li>
           <li>
-            <strong className="text-text-primary">Statut &quot;A jour&quot;</strong> :
-            la donnee a ete mise a jour dans les 6 derniers mois.
+            <strong className="text-text-primary">Statut &quot;À jour&quot;</strong> :
+            la donnée a été mise à jour dans les 6 derniers mois.
           </li>
           <li>
             <strong className="text-text-primary">
-              Statut &quot;Donnee potentiellement obsolete&quot;
+              Statut &quot;Donnée potentiellement obsolète&quot;
             </strong>{' '}
-            : la donnee n&apos;a pas ete mise a jour depuis plus de 6 mois. Le
+            : la donnée n&apos;a pas été mise à jour depuis plus de 6 mois. Le
             calcul reste valide mais utilise une valeur plus ancienne.
           </li>
         </ul>
@@ -62,7 +62,7 @@ export default async function DataStatusPage() {
           className="inline-flex items-center gap-2 text-chainsaw-red hover:underline"
         >
           <BookOpen className="h-4 w-4" />
-          Methodologie de calcul
+          Méthodologie de calcul
         </Link>
         <Link
           href="/feed/hot"

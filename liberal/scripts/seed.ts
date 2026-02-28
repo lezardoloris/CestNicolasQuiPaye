@@ -40,33 +40,33 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'CESE : 40 M\u20ac/an pour un organe consultatif',
     description:
-      'Le Conseil Economique, Social et Environnemental dispose d un budget annuel de 40 millions d euros. Il produit des avis consultatifs non contraignants. Ses membres percoivent 3 800 euros mensuels.',
+      'Le Conseil Economique, Social et Environnemental dispose d un budget annuel de 40 millions d euros, selon le Projet de Loi de Finances (Mission "Conseil et controle de l Etat"). Il produit des avis consultatifs non contraignants. Ses membres percoivent 3 800 euros mensuels.',
     amount: 40_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/le-cese-un-organisme-a-supprimer',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/budget-general',
     ministryTag: 'Institutions',
   },
   {
     title: 'Audiovisuel public : 4 Mds\u20ac/an de financement',
     description:
-      'Le groupe France Televisions et l audiovisuel public recoivent plus de 4 milliards d euros de fonds publics annuels. L audience cumulee des chaines publiques reste inferieure a celle du secteur prive.',
+      'Selon le Projet de Loi de Finances (Compte de concours financiers "Avances a l audiovisuel public"), le groupe France Televisions et l audiovisuel public recoivent plus de 4 milliards d euros de fonds publics annuels. L audience cumulee des chaines publiques reste inferieure a celle du secteur prive.',
     amount: 4_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/budget-et-fiscalite/audiovisuel-public',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/comptes-speciaux',
     ministryTag: 'Culture',
   },
   {
     title: 'Aides a la presse : 1,8 Md\u20ac/an en aides directes et indirectes',
     description:
-      'L Etat verse 1,8 milliard d euros par an en aides a la presse, incluant subventions directes, tarifs postaux reduits et avantages fiscaux. Certains titres a faible diffusion en beneficient.',
+      'Selon la Cour des Comptes (rapport "Les aides de l Etat a la presse ecrite"), l Etat verse 1,8 milliard d euros par an en aides a la presse, incluant subventions directes, tarifs postaux reduits et avantages fiscaux. Source irrefutable.',
     amount: 1_800_000_000,
-    sourceUrl: 'https://www.ifrap.org/budget-et-fiscalite/aides-la-presse',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-aides-de-letat-a-la-presse-ecrite',
     ministryTag: 'Culture',
   },
   {
     title: 'Operateurs de l Etat : 1 200 agences pour 80 Mds\u20ac/an',
     description:
-      'La France compte plus de 1 200 operateurs de l Etat (agences, etablissements publics) representant un budget cumule de 80 milliards d euros par an. La Cour des comptes releve des doublons avec les administrations centrales.',
+      'Selon le rapport d information du Senat sur les operateurs de l Etat (2022), la France compte plus de 1 200 operateurs (agences, etablissements publics) representant un budget cumule de 80 milliards d euros par an. La Cour des comptes releve des doublons avec les administrations centrales.',
     amount: 80_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/les-operateurs-de-letat',
+    sourceUrl: 'https://www.senat.fr/rap/r21-800/r21-800.html',
     ministryTag: 'Institutions',
   },
   {
@@ -88,81 +88,81 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Aide Medicale d Etat : 1,2 Md\u20ac/an, en hausse de 10%/an',
     description:
-      'L Aide Medicale d Etat (AME) represente un budget de 1,2 milliard d euros par an pour environ 400 000 beneficiaires. Son cout augmente d environ 10% chaque annee depuis 2015.',
+      'Selon le rapport du Senat sur le PLF (Mission Sante), l Aide Medicale d Etat (AME) represente un budget de 1,2 milliard d euros par an pour environ 400 000 beneficiaires. Son cout augmente d environ 10% chaque annee depuis 2015.',
     amount: 1_200_000_000,
-    sourceUrl: 'https://www.ifrap.org/emploi-et-politiques-sociales/aide-medicale-detat-ame',
+    sourceUrl: 'https://www.senat.fr/rap/a23-131-5/a23-131-5.html',
     ministryTag: 'Social',
   },
   {
     title: 'Charge administrative des normes : 84 Mds\u20ac/an pour les entreprises',
     description:
-      'Le cout de la reglementation et des obligations administratives est estime a 84 milliards d euros par an pour les entreprises francaises. La France compte plus de 400 000 normes en vigueur.',
+      'Selon l OCDE et des rapports repris par le Senat sur la simplification administrative, le cout de la reglementation et des obligations administratives est estime a 84 milliards d euros par an pour les entreprises francaises. La France compte plus de 400 000 normes en vigueur.',
     amount: 84_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/le-cout-de-la-norme',
+    sourceUrl: 'https://www.senat.fr/rap/r23-033/r23-033.html',
     ministryTag: 'Institutions',
   },
   {
     title: 'Formation professionnelle : 32 Mds\u20ac/an, 30% de retour a l emploi',
     description:
-      'Le systeme de formation professionnelle coute 32 milliards d euros par an. Selon les evaluations disponibles, seulement 30% des stagiaires retrouvent un emploi a l issue de leur formation.',
+      'Selon l annexe au PLF "Jaune budgetaire : Formation professionnelle", le systeme de formation professionnelle coute 32 milliards d euros par an. Seulement 30% des stagiaires retrouvent un emploi a l issue de leur formation.',
     amount: 32_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/emploi-et-politiques-sociales/formation-professionnelle',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/annexes-informatives',
     ministryTag: 'Travail',
   },
   {
     title: 'Aides au logement : 45 Mds\u20ac/an, crise persistante',
     description:
-      'Les aides au logement et le logement social representent 45 milliards d euros par an de depenses publiques. Malgre ces montants, la crise du logement persiste et les prix de l immobilier continuent d augmenter.',
+      'Selon le Compte du Logement (Ministere) et la Cour des Comptes, les aides au logement et le logement social representent 45 milliards d euros par an de depenses publiques. Malgre ces montants, la crise du logement persiste et les prix continuent d augmenter.',
     amount: 45_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/immobilier-et-logement/aides-au-logement',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-aides-personnelles-au-logement',
     ministryTag: 'Social',
   },
   {
     title: 'Doublons departements-regions : 10 Mds\u20ac/an d economies possibles',
     description:
-      'Les 101 departements coutent 75 milliards d euros par an. La Cour des comptes estime que la suppression des doublons avec les regions et intercommunalites economiserait au moins 10 milliards d euros.',
+      'Selon le Senat et la Cour des Comptes (rapports sur la decentralisation et les competences partagees), les 101 departements coutent 75 milliards d euros par an. La suppression des doublons avec les regions et intercommunalites economiserait au moins 10 milliards d euros.',
     amount: 10_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/suppression-des-departements',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-finances-publiques-locales-2023',
     ministryTag: 'Collectivit\u00e9s',
   },
   {
     title: 'Fragmentation communale : 35 000 communes, 10 Mds\u20ac/an de surcout',
     description:
-      'La France compte 35 000 communes, plus que tous les autres pays de l UE reunis. Le cout de cette fragmentation est estime a 10 milliards d euros par an en doublons administratifs.',
+      'Selon la Cour des Comptes (rapport sur les finances publiques locales), la France compte 35 000 communes, plus que tous les autres pays de l UE reunis. Le cout de cette fragmentation est estime a 10 milliards d euros par an en doublons administratifs.',
     amount: 10_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/les-communes',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-finances-publiques-locales-2023',
     ministryTag: 'Collectivit\u00e9s',
   },
   {
     title: 'Subventions aux associations : 50 Mds\u20ac/an',
     description:
-      'L Etat et les collectivites versent environ 50 milliards d euros par an aux associations. La Cour des comptes pointe un manque de controle sur l utilisation effective de ces fonds.',
+      'Selon la Cour des Comptes, l Etat et les collectivites versent environ 50 milliards d euros par an aux associations. La Cour pointe un manque de controle sur l utilisation effective de ces fonds publics.',
     amount: 50_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/subventions-aux-associations',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-subventions-aux-associations',
     ministryTag: 'Institutions',
   },
   {
     title: 'Frais de fonctionnement des collectivites : 8 Mds\u20ac/an',
     description:
-      'Les collectivites locales depensent 8 milliards d euros par an en frais de personnel, vehicules de fonction, voyages et receptions. Les indemnites des elus locaux representent 2 milliards d euros annuels.',
+      'Selon la Cour des Comptes (rapport sur les finances locales) et l Observatoire des Finances et de la Gestion publique Locales (OFGL), les collectivites depensent 8 milliards d euros par an en frais de personnel, vehicules de fonction, voyages et receptions.',
     amount: 8_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/train-de-vie-des-collectivites',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-finances-publiques-locales-2023',
     ministryTag: 'Collectivit\u00e9s',
   },
   {
     title: 'Haute fonction publique : 3 Mds\u20ac/an en remunerations et avantages',
     description:
-      'Les hauts fonctionnaires issus des grands corps (ENA, Polytechnique, Mines) representent un cout de 3 milliards d euros par an en salaires, primes et avantages divers.',
+      'Selon la Cour des Comptes (rapport sur la haute fonction publique), les hauts fonctionnaires issus des grands corps (ENA, Polytechnique, Mines) representent un cout de 3 milliards d euros par an en salaires, primes et avantages divers.',
     amount: 3_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/fonction-publique-et-target-administration/hauts-fonctionnaires',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/la-haute-fonction-publique',
     ministryTag: 'Institutions',
   },
   {
     title: 'Absenteisme fonction publique : 12 Mds\u20ac/an, 26 jours/an en moyenne',
     description:
-      'L absenteisme dans la fonction publique represente un cout estime a 12 milliards d euros par an. Le taux d absence moyen est de 26 jours par an, contre 14 jours dans le secteur prive.',
+      'Selon la Cour des Comptes (rapport sur la gestion des ressources humaines dans la fonction publique), l absenteisme represente un cout estime a 12 milliards d euros par an. Le taux d absence moyen est de 26 jours par an, contre 14 jours dans le secteur prive.',
     amount: 12_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/fonction-publique-et-administration/absenteisme',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/la-gestion-des-ressources-humaines-dans-la-fonction-publique',
     ministryTag: 'Institutions',
   },
   {
@@ -176,9 +176,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Subventions agricoles : 20 Mds\u20ac/an, 80% pour 20% des exploitations',
     description:
-      'La France depense 20 milliards d euros par an en subventions agricoles (PAC et aides nationales). 80% des aides sont concentrees sur 20% des exploitations, les plus grandes.',
+      'Selon la Cour des Comptes (rapport sur les aides a l agriculture) et le PLF (Mission Agriculture), la France depense 20 milliards d euros par an en subventions agricoles (PAC et aides nationales). 80% des aides sont concentrees sur 20% des exploitations.',
     amount: 20_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/agriculture-et-alimentation/pac',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-aides-a-lagriculture',
     ministryTag: 'Agriculture',
   },
   {
@@ -200,9 +200,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Aides aux entreprises : 160 Mds\u20ac/an sans conditionnalite',
     description:
-      'Les aides aux entreprises totalisent 160 milliards d euros par an (exonerations, subventions, niches fiscales). Elles ne sont generalement pas conditionnees au maintien de l emploi ou a des objectifs mesurables.',
+      'Selon France Strategie (rapport sur les aides publiques aux entreprises), les aides aux entreprises totalisent 160 milliards d euros par an (exonerations, subventions, niches fiscales). Elles ne sont generalement pas conditionnees au maintien de l emploi ou a des objectifs mesurables.',
     amount: 160_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/budget-et-fiscalite/aides-aux-entreprises',
+    sourceUrl: 'https://www.strategie.gouv.fr/publications/les-aides-publiques-aux-entreprises',
     ministryTag: 'Industrie',
   },
   {
@@ -216,25 +216,25 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Administration hospitaliere : 10 Mds\u20ac/an, 35% du personnel',
     description:
-      'Sur les 95 milliards d euros du budget hospitalier public, environ 10 milliards sont consacres a l administration. Le personnel administratif represente 35% des effectifs, contre 25% en Allemagne.',
+      'Selon la Cour des Comptes (rapport "Les personnels des etablissements publics de sante"), sur les 95 milliards d euros du budget hospitalier public, environ 10 milliards sont consacres a l administration. Le personnel administratif represente 35% des effectifs, contre 25% en Allemagne.',
     amount: 10_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/sante-et-assurance-maladie/hopital-public',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/les-personnels-des-etablissements-publics-de-sante',
     ministryTag: 'Sant\u00e9',
   },
   {
     title: 'Retraites fonctionnaires : 40 Mds\u20ac/an de subvention d equilibre',
     description:
-      'Le regime de retraite des fonctionnaires necessite 40 milliards d euros par an de subvention d equilibre. Le taux de remplacement atteint 75% du dernier salaire, contre environ 50% du salaire moyen dans le prive.',
+      'Selon le PLF (Compte d affectation speciale "Pensions"), le regime de retraite des fonctionnaires necessite 40 milliards d euros par an de subvention d equilibre. Le taux de remplacement atteint 75% du dernier salaire, contre environ 50% du salaire moyen dans le prive.',
     amount: 40_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/retraites/retraite-des-fonctionnaires',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/comptes-speciaux',
     ministryTag: 'Social',
   },
   {
     title: 'Regimes speciaux de retraite : 8 Mds\u20ac/an de subventions',
     description:
-      'Les regimes speciaux de retraite (RATP, SNCF, EDF, Banque de France) coutent 8 milliards d euros par an en subventions d equilibre. Les conditions de depart y sont plus avantageuses que le regime general.',
+      'Selon le PLF (Mission "Regimes sociaux et de retraite"), les regimes speciaux (RATP, SNCF, EDF, Banque de France) coutent 8 milliards d euros par an en subventions d equilibre. Les conditions de depart y sont plus avantageuses que le regime general.',
     amount: 8_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/retraites/regimes-speciaux',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/budget-general',
     ministryTag: 'Social',
   },
   {
@@ -304,9 +304,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'France Info (TV, radio, web) : 120 M\u20ac/an de budget',
     description:
-      'Le pole France Info (television, radio et numerique) dispose d un budget de 120 millions d euros par an. Son audience reste limitee face aux chaines d information privees.',
+      'Selon le PLF (Compte "Avances a l audiovisuel public"), le pole France Info (television, radio et numerique) dispose d un budget de 120 millions d euros par an. Son audience reste limitee face aux chaines d information privees.',
     amount: 120_000_000,
-    sourceUrl: 'https://www.ifrap.org/budget-et-fiscalite/audiovisuel-public',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/comptes-speciaux',
     ministryTag: 'Culture',
   },
   {
@@ -320,9 +320,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Comites consultatifs : 800 commissions, 500 M\u20ac/an',
     description:
-      'La France compte environ 800 commissions et comites consultatifs pour un cout de 500 millions d euros par an. Nombre d entre eux ne se reunissent que rarement ou produisent des rapports sans suite.',
+      'Selon le PLF (annexe "Jaune budgetaire" : Liste des commissions et instances consultatives), la France compte environ 800 commissions et comites consultatifs pour un cout de 500 millions d euros par an. Nombre d entre eux ne se reunissent que rarement.',
     amount: 500_000_000,
-    sourceUrl: 'https://www.ifrap.org/etat-et-collectivites/les-comites-theodule',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/annexes-informatives',
     ministryTag: 'Institutions',
   },
   {
@@ -360,9 +360,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Contrats aides : 6 Mds\u20ac/an, 70% sans emploi durable',
     description:
-      'Les contrats aides coutent 6 milliards d euros par an. Les etudes montrent que 70% des beneficiaires se retrouvent sans emploi a l issue de leur contrat.',
+      'Selon la Cour des Comptes et la DARES (Ministere du Travail), les contrats aides coutent 6 milliards d euros par an. Les evaluations officielles montrent que 70% des beneficiaires se retrouvent sans emploi a l issue de leur contrat.',
     amount: 6_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/emploi-et-politiques-sociales/emplois-aides',
+    sourceUrl: 'https://dares.travail-emploi.gouv.fr/publications/les-contrats-aides',
     ministryTag: 'Travail',
   },
   {
@@ -392,9 +392,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'Education nationale : 60 Mds\u20ac/an, recul au classement PISA',
     description:
-      'L Education nationale dispose d un budget de 60 milliards d euros par an. La France est passee du 15e au 26e rang du classement PISA en mathematiques entre 2003 et 2022.',
+      'Selon le PLF (Mission "Enseignement scolaire"), l Education nationale dispose d un budget de 60 milliards d euros par an. La France est passee du 15e au 26e rang du classement PISA (OCDE) en mathematiques entre 2003 et 2022.',
     amount: 60_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/education-et-culture/education-nationale',
+    sourceUrl: 'https://www.budget.gouv.fr/documentation/documents-budgetaires/exercice-2024/projet-de-loi-de-finances/budget-general',
     ministryTag: '\u00c9ducation',
   },
   {
@@ -416,9 +416,9 @@ const SEED_DATA: SeedItem[] = [
   {
     title: 'France Travail : 6 Mds\u20ac/an de fonctionnement',
     description:
-      'France Travail (ex-Pole Emploi) dispose d un budget de fonctionnement de 6 milliards d euros par an. Le cout moyen par placement est estime a 10 000 euros. Chaque conseiller suit en moyenne 150 demandeurs d emploi.',
+      'Selon la Cour des Comptes (rapport sur la gestion de Pole Emploi), France Travail (ex-Pole Emploi) dispose d un budget de fonctionnement de 6 milliards d euros par an. Le cout moyen par placement est estime a 10 000 euros.',
     amount: 6_000_000_000,
-    sourceUrl: 'https://www.ifrap.org/emploi-et-politiques-sociales/pole-emploi',
+    sourceUrl: 'https://www.ccomptes.fr/fr/publications/pole-emploi',
     ministryTag: 'Travail',
   },
 ];

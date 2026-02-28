@@ -25,11 +25,11 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'NICOLAS PAYE - La communaute open source pour tronconner les depenses publiques',
+    default: 'NICOLAS PAYE - La communauté open source pour tronçonner les dépenses publiques',
     template: '%s | NICOLAS PAYE',
   },
   description:
-    'Plateforme citoyenne collaborative pour identifier, documenter et voter sur les depenses publiques a reduire. Transparence, donnees officielles et participation democratique.',
+    'Plateforme citoyenne collaborative pour identifier, documenter et voter sur les dépenses publiques à réduire. Transparence, données officielles et participation démocratique.',
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
         url: '/og-default.png',
         width: 1200,
         height: 630,
-        alt: 'NICOLAS PAYE - La communaute open source pour tronconner les depenses publiques',
+        alt: 'NICOLAS PAYE - La communauté open source pour tronçonner les dépenses publiques',
       },
     ],
   },

@@ -43,7 +43,7 @@ export default function DesktopNav() {
           alt="C'est Nicolas qui paie"
           width={180}
           height={32}
-          className="h-7 w-auto brightness-0 invert"
+          className="h-7 w-auto"
           priority
         />
       </Link>
@@ -88,7 +88,7 @@ export default function DesktopNav() {
             <DropdownMenuItem asChild>
               <Link href="/profile/settings" className="cursor-pointer">
                 <Settings className="mr-2 size-4" />
-                Parametres
+                Paramètres
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -97,7 +97,7 @@ export default function DesktopNav() {
               className="cursor-pointer text-chainsaw-red focus:text-chainsaw-red"
             >
               <LogOut className="mr-2 size-4" />
-              Se deconnecter
+              Se déconnecter
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

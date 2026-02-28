@@ -52,19 +52,19 @@ export default async function AdminDashboardPage() {
       {/* Metric cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <DashboardMetricCard
-          label="En attente de moderation"
+          label="En attente de modération"
           value={data?.pendingCount ?? 0}
           icon={Clock}
           variant="warning"
         />
         <DashboardMetricCard
-          label="Contenus signales"
+          label="Contenus signalés"
           value={data?.flagsCount ?? 0}
           icon={Flag}
           variant="warning"
         />
         <DashboardMetricCard
-          label="Soumissions approuvees"
+          label="Soumissions approuvées"
           value={data?.approvedCount ?? 0}
           icon={CheckCircle}
           variant="success"

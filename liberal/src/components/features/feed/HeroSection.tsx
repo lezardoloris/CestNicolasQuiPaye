@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { ChevronDown, X, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { formatEUR, formatCompactNumber } from '@/lib/utils/format';
+import { formatCompactEUR, formatCompactNumber } from '@/lib/utils/format';
 import type { PlatformStats } from '@/lib/api/stats';
 
 const STORAGE_KEY = 'np_hero_dismissed';
@@ -52,8 +52,8 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         'transition-colors hover:bg-surface-elevated hover:text-text-secondary',
                     )}
                 >
-                    <Image src="/logo.png" alt="" width={100} height={16} className="h-3 w-auto brightness-0 invert opacity-60" />
-                    <span>Tronçonnons les depenses publiques.</span>
+                    <Image src="/logo.png" alt="" width={100} height={16} className="h-3 w-auto opacity-60" />
+                    <span>Tronçonnons les dépenses publiques.</span>
                     <ChevronDown className="size-3" aria-hidden="true" />
                 </button>
             </div>
@@ -101,7 +101,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                                 alt="C'est Nicolas qui paie"
                                 width={140}
                                 height={24}
-                                className="h-5 w-auto brightness-0 invert opacity-60"
+                                className="h-5 w-auto opacity-60"
                             />
                             <div className="flex items-center gap-1">
                                 <button
@@ -124,12 +124,12 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         {/* Headline */}
                         <h1 className="font-display text-4xl font-black leading-[0.95] tracking-tight text-text-primary sm:text-5xl md:text-6xl">
                             TRONÇONNONS LES{' '}
-                            <span className="text-chainsaw-red">DEPENSES PUBLIQUES.</span>
+                            <span className="text-chainsaw-red">DÉPENSES PUBLIQUES.</span>
                         </h1>
                         <p className="mt-4 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
                             La plateforme citoyenne qui traque, documente et{' '}
                             <span className="font-semibold text-text-primary">chiffre chaque gaspillage</span>{' '}
-                            de vos impots. Sources verifiees, montants par contribuable.
+                            de vos impôts. Sources vérifiées, montants par contribuable.
                         </p>
 
                         {/* CTAs */}
@@ -169,12 +169,12 @@ export function HeroSection({ stats }: HeroSectionProps) {
                                     {stats ? formatCompactNumber(stats.totalSubmissions) : '--'}
                                 </p>
                                 <p className="text-[11px] text-text-muted sm:text-xs">
-                                    depenses signalees
+                                    dépenses signalées
                                 </p>
                             </div>
                             <div>
                                 <p className="font-display text-xl font-bold tabular-nums text-warning sm:text-2xl">
-                                    {stats ? formatEUR(stats.totalAmountEur) : '--'}
+                                    {stats ? formatCompactEUR(stats.totalAmountEur) : '--'}
                                 </p>
                                 <p className="text-[11px] text-text-muted sm:text-xs">
                                     de gaspillages
@@ -185,7 +185,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                                     {stats ? formatCompactNumber(stats.totalUniqueVoters) : '--'}
                                 </p>
                                 <p className="text-[11px] text-text-muted sm:text-xs">
-                                    citoyens mobilises
+                                    citoyens mobilisés
                                 </p>
                             </div>
                         </div>
@@ -210,8 +210,8 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         )}
                     >
                         <span className="flex items-center gap-2">
-                            <Image src="/logo.png" alt="" width={120} height={20} className="h-4 w-auto brightness-0 invert opacity-60" />
-                            <span className="font-medium">Tronçonnons les depenses publiques.</span>
+                            <Image src="/logo.png" alt="" width={120} height={20} className="h-4 w-auto opacity-60" />
+                            <span className="font-medium">Tronçonnons les dépenses publiques.</span>
                             <span className="hidden text-text-muted sm:inline">
                                 — Chaque euro compte. Chaque citoyen aussi.
                             </span>

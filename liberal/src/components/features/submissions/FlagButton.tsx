@@ -21,9 +21,9 @@ interface FlagButtonProps {
 }
 
 const FLAG_REASONS = [
-  { value: 'inaccurate', label: 'Donnees inexactes' },
+  { value: 'inaccurate', label: 'Données inexactes' },
   { value: 'spam', label: 'Spam / Contenu non pertinent' },
-  { value: 'inappropriate', label: 'Contenu inapproprie' },
+  { value: 'inappropriate', label: 'Contenu inapproprié' },
 ] as const;
 
 export function FlagButton({ submissionId, className }: FlagButtonProps) {
@@ -71,7 +71,7 @@ export function FlagButton({ submissionId, className }: FlagButtonProps) {
         if (error?.error?.code === 'CONFLICT') {
           setHasFlagged(true);
           setOpen(false);
-          toast.info('Vous avez deja signale ce contenu');
+          toast.info('Vous avez déjà signalé ce contenu');
         } else {
           toast.error(error?.error?.message || 'Erreur lors du signalement');
         }
@@ -91,13 +91,13 @@ export function FlagButton({ submissionId, className }: FlagButtonProps) {
         onClick={() => setOpen(true)}
         disabled={hasFlagged}
         className={cn('min-h-12 gap-2 text-text-muted hover:text-warning', className)}
-        aria-label={hasFlagged ? 'Contenu signale' : 'Signaler ce contenu'}
+        aria-label={hasFlagged ? 'Contenu signalé' : 'Signaler ce contenu'}
       >
         <Flag
           className={cn('h-4 w-4', hasFlagged && 'fill-warning text-warning')}
           aria-hidden="true"
         />
-        {hasFlagged ? 'Signale' : 'Signaler'}
+        {hasFlagged ? 'Signalé' : 'Signaler'}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -105,7 +105,7 @@ export function FlagButton({ submissionId, className }: FlagButtonProps) {
           <DialogHeader>
             <DialogTitle>Signaler ce contenu</DialogTitle>
             <DialogDescription>
-              Indiquez la raison de votre signalement. Nos moderateurs examineront
+              Indiquez la raison de votre signalement. Nos modérateurs examineront
               votre demande.
             </DialogDescription>
           </DialogHeader>
@@ -155,16 +155,16 @@ export function FlagButton({ submissionId, className }: FlagButtonProps) {
                 htmlFor="flag-details"
                 className="mb-1 block text-sm font-medium text-text-primary"
               >
-                Details (optionnel)
+                Détails (optionnel)
               </label>
               <Textarea
                 id="flag-details"
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                placeholder="Precisez votre signalement..."
+                placeholder="Précisez votre signalement..."
                 rows={3}
                 maxLength={500}
-                aria-label="Details supplementaires"
+                aria-label="Détails supplémentaires"
               />
             </div>
           </div>

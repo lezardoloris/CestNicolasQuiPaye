@@ -32,9 +32,9 @@ interface FlaggedSubmission {
 }
 
 const REASON_LABELS: Record<string, string> = {
-  inaccurate: 'Donnees inexactes',
+  inaccurate: 'Données inexactes',
   spam: 'Spam',
-  inappropriate: 'Inapproprie',
+  inappropriate: 'Inapproprié',
 };
 
 interface FlaggedContentQueueProps {
@@ -67,7 +67,7 @@ export function FlaggedContentQueue({ isAdmin }: FlaggedContentQueueProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action,
-          reason: action === 'approve' ? undefined : 'Contenu signale par la communaute',
+          reason: action === 'approve' ? undefined : 'Contenu signalé par la communauté',
         }),
       });
       if (!res.ok) {
@@ -77,7 +77,7 @@ export function FlaggedContentQueue({ isAdmin }: FlaggedContentQueueProps) {
       return res.json();
     },
     onSuccess: () => {
-      toast.success('Action effectuee');
+      toast.success('Action effectuée');
       queryClient.invalidateQueries({ queryKey: ['flagged-content'] });
     },
     onError: (err: Error) => {
@@ -109,10 +109,10 @@ export function FlaggedContentQueue({ isAdmin }: FlaggedContentQueueProps) {
         <CardContent className="py-12 text-center">
           <Flag className="mx-auto h-12 w-12 text-text-muted" aria-hidden="true" />
           <p className="mt-4 text-lg font-medium text-text-primary">
-            Aucun contenu signale
+            Aucun contenu signalé
           </p>
           <p className="mt-1 text-sm text-text-muted">
-            Aucun signalement a traiter pour le moment.
+            Aucun signalement à traiter pour le moment.
           </p>
         </CardContent>
       </Card>
@@ -120,7 +120,7 @@ export function FlaggedContentQueue({ isAdmin }: FlaggedContentQueueProps) {
   }
 
   return (
-    <div className="space-y-4" role="list" aria-label="Contenus signales">
+    <div className="space-y-4" role="list" aria-label="Contenus signalés">
       {items.map((item) => (
         <Card
           key={item.submissionId}

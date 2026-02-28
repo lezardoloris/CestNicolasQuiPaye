@@ -30,7 +30,7 @@ export async function POST(
     const parsed = flagSubmissionSchema.safeParse(body);
 
     if (!parsed.success) {
-      return apiError('VALIDATION_ERROR', 'Donnees invalides', 400, {
+      return apiError('VALIDATION_ERROR', 'Données invalides', 400, {
         errors: parsed.error.flatten().fieldErrors,
       });
     }
@@ -62,7 +62,7 @@ export async function POST(
       ) {
         return apiError(
           'CONFLICT',
-          'Vous avez deja signale ce contenu.',
+          'Vous avez déjà signalé ce contenu.',
           409
         );
       }

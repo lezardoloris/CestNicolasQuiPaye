@@ -44,7 +44,7 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
       role="article"
       aria-label={`${submission.title}, score: ${score}, cout: ${formatEUR(submission.amount)}`}
       className={cn(
-        'group rounded-lg border border-border-default',
+        'group relative rounded-lg border border-border-default',
         'bg-surface-secondary',
         outrage.bg,
         'transition-all duration-200 hover:bg-surface-elevated hover:border-border-default/80',
@@ -53,7 +53,15 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
         outrage.border,
       )}
     >
-      <div className="space-y-3 p-4">
+      {/* Stretched link — makes entire card clickable */}
+      <Link
+        href={`/s/${submission.id}`}
+        className="absolute inset-0 z-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary"
+        aria-label={truncate(submission.title, 120)}
+        tabIndex={-1}
+      />
+
+      <div className="relative z-1 space-y-3 p-4 pointer-events-none">
         {/* Row 1: Metadata */}
         <div className="flex items-center gap-2 text-xs text-text-muted">
           {category && (
@@ -86,14 +94,9 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
 
         {/* Row 2: Title + Description */}
         <div>
-          <Link
-            href={`/s/${submission.id}`}
-            className="block rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary"
-          >
-            <h3 className="text-base font-semibold leading-snug text-text-primary line-clamp-2 transition-colors group-hover:text-chainsaw-red md:text-lg">
-              {truncate(submission.title, 120)}
-            </h3>
-          </Link>
+          <h3 className="text-base font-semibold leading-snug text-text-primary line-clamp-2 transition-colors group-hover:text-chainsaw-red md:text-lg">
+            {truncate(submission.title, 120)}
+          </h3>
           {submission.description && (
             <p className="mt-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
               {truncate(submission.description, 200)}
@@ -107,7 +110,7 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
         )}
 
         {/* Row 3: Action Bar (Reddit-style) */}
-        <div className="flex items-center gap-1 pt-1">
+        <div className="flex items-center gap-1 pt-1 pointer-events-auto">
           <VoteButtonInline
             submissionId={submission.id}
             serverCounts={{

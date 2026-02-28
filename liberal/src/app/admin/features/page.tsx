@@ -21,8 +21,8 @@ export default async function AdminFeaturesPage() {
           Gestion des propositions
         </h2>
         <p className="mt-1 text-sm text-text-muted">
-          Gerez les propositions de fonctionnalites soumises par la communaute.
-          Mettez a jour les statuts pour informer les utilisateurs de l&apos;avancement.
+          Gérez les propositions de fonctionnalités soumises par la communauté.
+          Mettez à jour les statuts pour informer les utilisateurs de l&apos;avancement.
         </p>
       </div>
 

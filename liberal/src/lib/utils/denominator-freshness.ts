@@ -39,7 +39,7 @@ export function getDenominatorFreshness(
 
   return {
     status: isStale ? 'stale' : 'fresh',
-    label: isStale ? 'Donnee potentiellement obsolete' : 'A jour',
+    label: isStale ? 'Donnée potentiellement obsolète' : 'À jour',
     nextUpdate: nextUpdateFormatted,
   };
 }

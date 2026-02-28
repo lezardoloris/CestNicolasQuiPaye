@@ -40,7 +40,7 @@ function MetricRow({
         <div className="flex-1">
           <p className="text-sm text-text-muted">{label}</p>
           <Badge variant="outline" className="mt-1 text-text-muted">
-            Donnee indisponible
+            Donnée indisponible
           </Badge>
         </div>
       </div>
@@ -60,9 +60,9 @@ function MetricRow({
         <a
           href={verifyUrl}
           className="text-xs text-text-muted hover:text-chainsaw-red transition-colors"
-          title="Verifier cette donnee"
+          title="Vérifier cette donnée"
         >
-          Verifier
+          Vérifier
         </a>
       )}
     </div>
@@ -77,17 +77,17 @@ export default function ConsequenceCard({
     <Card className={className}>
       <CardHeader>
         <CardTitle className="font-display text-lg">
-          Cout pour Nicolas
+          Coût pour Nicolas
         </CardTitle>
         <p className="text-sm text-text-secondary">
-          Ce que ce gaspillage vous coute personnellement
+          Ce que ce gaspillage vous coûte personnellement
         </p>
       </CardHeader>
       <CardContent>
         <div className="space-y-0">
           <MetricRow
             icon={<Users className="h-5 w-5" />}
-            label="Cout par citoyen"
+            label="Coût par citoyen"
             value={
               result.cost_per_citizen !== null
                 ? formatEUR(result.cost_per_citizen, 4)
@@ -98,7 +98,7 @@ export default function ConsequenceCard({
           />
           <MetricRow
             icon={<Receipt className="h-5 w-5" />}
-            label="Cout par contribuable"
+            label="Coût par contribuable"
             value={
               result.cost_per_taxpayer !== null
                 ? formatEUR(result.cost_per_taxpayer, 4)
@@ -109,7 +109,7 @@ export default function ConsequenceCard({
           />
           <MetricRow
             icon={<Home className="h-5 w-5" />}
-            label="Cout par menage"
+            label="Coût par ménage"
             value={
               result.cost_per_household !== null
                 ? formatEUR(result.cost_per_household, 4)
@@ -120,7 +120,7 @@ export default function ConsequenceCard({
           />
           <MetricRow
             icon={<Clock className="h-5 w-5" />}
-            label="Jours de travail equivalents"
+            label="Jours de travail équivalents"
             value={
               result.days_of_work_equivalent !== null
                 ? formatDays(result.days_of_work_equivalent)
@@ -135,7 +135,7 @@ export default function ConsequenceCard({
         {result.equivalences.length > 0 && (
           <div className="mt-4 pt-4 border-t border-border-default">
             <p className="text-sm font-medium text-text-secondary mb-3">
-              Equivalences concretes
+              Équivalences concrètes
             </p>
             <div className="space-y-0">
               {result.equivalences.map((eq, index) => {
@@ -171,14 +171,14 @@ export default function ConsequenceCard({
             href="/data-status"
             className="text-xs text-text-muted hover:text-chainsaw-red transition-colors"
           >
-            Verifier toutes les donnees utilisees
+            Vérifier toutes les données utilisées
           </a>
           {' | '}
           <a
             href="/methodologie"
             className="text-xs text-text-muted hover:text-chainsaw-red transition-colors"
           >
-            Methodologie de calcul
+            Méthodologie de calcul
           </a>
         </div>
       </CardContent>

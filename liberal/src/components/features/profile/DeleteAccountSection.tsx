@@ -13,8 +13,8 @@ export default function DeleteAccountSection() {
         Zone de danger
       </h2>
       <p className="text-sm text-text-secondary">
-        La suppression de votre compte est definitive. Vos signalements publies
-        seront conserves mais anonymises.
+        La suppression de votre compte est définitive. Vos signalements publiés
+        seront conservés mais anonymisés.
       </p>
       <Button
         variant="outline"

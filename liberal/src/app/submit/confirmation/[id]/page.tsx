@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
   title: 'Signalement soumis',
-  description: 'Votre signalement a ete soumis avec succes.',
+  description: 'Votre signalement a été soumis avec succès.',
 };
 
 interface ConfirmationPageProps {
@@ -33,12 +33,12 @@ export default async function ConfirmationPage({
       </h1>
 
       <p className="mb-8 text-lg text-text-secondary">
-        Votre signalement a ete soumis et sera examine par nos moderateurs.
+        Votre signalement a été soumis et sera examiné par nos modérateurs.
       </p>
 
       <div className="mb-8 rounded-lg border border-border-default bg-surface-secondary p-6 text-left">
         <p className="mb-2 text-sm text-text-muted">
-          Reference de votre signalement
+          Référence de votre signalement
         </p>
         <p className="font-mono text-sm text-text-secondary">{id}</p>
       </div>

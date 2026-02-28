@@ -15,7 +15,7 @@ import { eq, and, sql } from 'drizzle-orm';
 export async function GET(request: NextRequest) {
   const idsParam = request.nextUrl.searchParams.get('ids');
   if (!idsParam) {
-    return apiError('VALIDATION_ERROR', 'Parametre ids requis', 400);
+    return apiError('VALIDATION_ERROR', 'Paramètre ids requis', 400);
   }
 
   const ids = idsParam.split(',').filter(isValidUUID);

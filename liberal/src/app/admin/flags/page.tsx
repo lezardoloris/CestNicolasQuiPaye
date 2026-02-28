@@ -22,10 +22,10 @@ export default async function FlagsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="font-display text-xl font-semibold text-text-primary">
-          Contenus signales
+          Contenus signalés
         </h2>
         <p className="mt-1 text-sm text-text-muted">
-          Examinez les contenus signales par la communaute et prenez les mesures necessaires.
+          Examinez les contenus signalés par la communauté et prenez les mesures nécessaires.
         </p>
       </div>
 

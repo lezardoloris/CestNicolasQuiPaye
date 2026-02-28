@@ -80,7 +80,7 @@ export default function SubmissionForm() {
         if (!res.ok) {
           if (res.status === 429) {
             setServerError(
-              'Trop de soumissions. Reessayez dans quelques minutes.'
+              'Trop de soumissions. Réessayez dans quelques minutes.'
             );
             return;
           }
@@ -89,14 +89,14 @@ export default function SubmissionForm() {
             return;
           }
           setServerError(
-            body.error?.message || 'Une erreur est survenue. Veuillez reessayer.'
+            body.error?.message || 'Une erreur est survenue. Veuillez réessayer.'
           );
           return;
         }
 
         router.push(`/submit/confirmation/${body.data.id}`);
       } catch {
-        setServerError('Une erreur est survenue. Veuillez reessayer.');
+        setServerError('Une erreur est survenue. Veuillez réessayer.');
       }
     });
   }
@@ -130,7 +130,7 @@ export default function SubmissionForm() {
           id="title"
           type="text"
           maxLength={200}
-          placeholder="Ex: Renovation du bureau ministeriel a 500 000 EUR"
+          placeholder="Ex: Rénovation du bureau ministériel à 500 000 EUR"
           value={formData.title}
           onChange={(e) => handleChange('title', e.target.value)}
           aria-required="true"
@@ -164,7 +164,7 @@ export default function SubmissionForm() {
         <Textarea
           id="description"
           maxLength={2000}
-          placeholder="Decrivez le gaspillage en detail..."
+          placeholder="Décrivez le gaspillage en détail..."
           value={formData.description}
           onChange={(e) => handleChange('description', e.target.value)}
           rows={5}
@@ -200,7 +200,7 @@ export default function SubmissionForm() {
           htmlFor="estimatedCostEur"
           className="mb-2 block font-display font-medium text-text-primary"
         >
-          Cout estime (EUR) <span className="text-chainsaw-red">*</span>
+          Coût estimé (EUR) <span className="text-chainsaw-red">*</span>
         </label>
         <div className="relative">
           <Input

@@ -5,13 +5,13 @@ import { Shield, Flag, Megaphone, Lightbulb, ChevronRight } from 'lucide-react';
 const QUICK_LINKS = [
   {
     href: '/admin/moderation',
-    label: 'File de moderation',
+    label: 'File de modération',
     description: 'Approuver ou rejeter les soumissions',
     icon: Shield,
   },
   {
     href: '/admin/flags',
-    label: 'Contenus signales',
+    label: 'Contenus signalés',
     description: 'Examiner les signalements',
     icon: Flag,
   },
@@ -24,7 +24,7 @@ const QUICK_LINKS = [
   {
     href: '/admin/features',
     label: 'Propositions',
-    description: 'Gerer les demandes de fonctionnalites',
+    description: 'Gérer les demandes de fonctionnalités',
     icon: Lightbulb,
   },
 ];
@@ -33,7 +33,7 @@ export function QuickLinksPanel() {
   return (
     <Card className="bg-surface-elevated border-border/50">
       <CardHeader>
-        <CardTitle className="text-base">Acces rapide</CardTitle>
+        <CardTitle className="text-base">Accès rapide</CardTitle>
       </CardHeader>
       <CardContent>
         <nav aria-label="Liens rapides administration">

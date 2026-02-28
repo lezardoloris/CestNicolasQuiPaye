@@ -72,10 +72,10 @@ export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
         <CardContent className="py-12 text-center">
           <CheckCircle className="mx-auto h-12 w-12 text-success" aria-hidden="true" />
           <p className="mt-4 text-lg font-medium text-text-primary">
-            File de moderation vide
+            File de modération vide
           </p>
           <p className="mt-1 text-sm text-text-muted">
-            Toutes les soumissions ont ete traitees.
+            Toutes les soumissions ont été traitées.
           </p>
         </CardContent>
       </Card>
@@ -83,7 +83,7 @@ export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
   }
 
   return (
-    <div className="space-y-4" role="list" aria-label="File de moderation">
+    <div className="space-y-4" role="list" aria-label="File de modération">
       {items.map((item) => (
         <ModerationCard
           key={item.id}
@@ -120,18 +120,18 @@ function ModerationCard({
       });
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err?.error?.message || 'Erreur de moderation');
+        throw new Error(err?.error?.message || 'Erreur de modération');
       }
       return res.json();
     },
     onSuccess: (_data, variables) => {
       const labels: Record<string, string> = {
-        approve: 'Soumission approuvee',
-        reject: 'Soumission rejetee',
-        request_edit: 'Modification demandee',
-        remove: 'Soumission retiree',
+        approve: 'Soumission approuvée',
+        reject: 'Soumission rejetée',
+        request_edit: 'Modification demandée',
+        remove: 'Soumission retirée',
       };
-      toast.success(labels[variables.action] || 'Action effectuee');
+      toast.success(labels[variables.action] || 'Action effectuée');
       onActionComplete();
     },
     onError: (err: Error) => {
@@ -181,7 +181,7 @@ function ModerationCard({
         {/* Source verification */}
         <div className="rounded-md border border-border-default/50 bg-surface-secondary p-3">
           <p className="mb-1 text-xs font-medium text-text-muted">
-            Source a verifier
+            Source à vérifier
           </p>
           <a
             href={submission.sourceUrl}
@@ -204,7 +204,7 @@ function ModerationCard({
               placeholder="Raison de cette action..."
               rows={2}
               maxLength={500}
-              aria-label="Raison de moderation"
+              aria-label="Raison de modération"
               autoFocus
             />
             <div className="flex gap-2">

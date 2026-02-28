@@ -62,20 +62,20 @@ export default function DeleteAccountDialog({
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error?.message ?? 'Une erreur est survenue. Veuillez reessayer.');
+        setError(data.error?.message ?? 'Une erreur est survenue. Veuillez réessayer.');
         setIsDeleting(false);
         return;
       }
 
       // Set flash message cookie
-      document.cookie = `liberal_flash=${encodeURIComponent('Votre compte a ete supprime.')}; path=/; max-age=60`;
+      document.cookie = `liberal_flash=${encodeURIComponent('Votre compte a été supprimé.')}; path=/; max-age=60`;
 
       // Sign out and redirect
       await signOut({ redirect: false });
       router.push('/');
       router.refresh();
     } catch {
-      setError('Une erreur est survenue. Veuillez reessayer.');
+      setError('Une erreur est survenue. Veuillez réessayer.');
       setIsDeleting(false);
     }
   }
@@ -95,8 +95,8 @@ export default function DeleteAccountDialog({
             </DialogTitle>
           </div>
           <DialogDescription className="text-text-secondary">
-            Cette action est irreversible. Toutes vos donnees personnelles seront
-            supprimees. Vos signalements publies seront anonymises.
+            Cette action est irréversible. Toutes vos données personnelles seront
+            supprimées. Vos signalements publiés seront anonymisés.
           </DialogDescription>
         </DialogHeader>
 
@@ -104,23 +104,23 @@ export default function DeleteAccountDialog({
           <ul className="space-y-2 text-sm text-text-secondary">
             <li className="flex items-start gap-2">
               <span className="text-chainsaw-red mt-0.5">&#x2022;</span>
-              Votre email et mot de passe seront supprimes
+              Votre email et mot de passe seront supprimés
             </li>
             <li className="flex items-start gap-2">
               <span className="text-chainsaw-red mt-0.5">&#x2022;</span>
-              Votre pseudonyme sera supprime
+              Votre pseudonyme sera supprimé
             </li>
             <li className="flex items-start gap-2">
               <span className="text-chainsaw-red mt-0.5">&#x2022;</span>
-              Vos votes seront supprimes
+              Vos votes seront supprimés
             </li>
             <li className="flex items-start gap-2">
               <span className="text-chainsaw-red mt-0.5">&#x2022;</span>
-              Vos signalements seront anonymises sous &quot;Utilisateur supprime&quot;
+              Vos signalements seront anonymisés sous &quot;Utilisateur supprimé&quot;
             </li>
             <li className="flex items-start gap-2">
               <span className="text-chainsaw-red mt-0.5">&#x2022;</span>
-              Vos commentaires seront anonymises sous &quot;Utilisateur supprime&quot;
+              Vos commentaires seront anonymisés sous &quot;Utilisateur supprimé&quot;
             </li>
           </ul>
 

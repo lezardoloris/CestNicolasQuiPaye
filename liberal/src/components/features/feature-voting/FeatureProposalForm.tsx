@@ -43,7 +43,7 @@ export function FeatureProposalForm({ onSuccess }: FeatureProposalFormProps) {
       return res.json();
     },
     onSuccess: () => {
-      toast.success('Proposition soumise avec succes');
+      toast.success('Proposition soumise avec succès');
       setTitle('');
       setDescription('');
       setCategory('general');
@@ -66,19 +66,19 @@ export function FeatureProposalForm({ onSuccess }: FeatureProposalFormProps) {
       <Button
         onClick={() => setOpen(true)}
         className="min-h-12 gap-2"
-        aria-label="Proposer une fonctionnalite"
+        aria-label="Proposer une fonctionnalité"
       >
         <Lightbulb className="h-4 w-4" aria-hidden="true" />
-        Proposer une idee
+        Proposer une idée
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Proposer une fonctionnalite</DialogTitle>
+            <DialogTitle>Proposer une fonctionnalité</DialogTitle>
             <DialogDescription>
-              Decrivez votre idee pour ameliorer NICOLAS PAYE. La communaute pourra
-              voter pour les propositions les plus interessantes.
+              Décrivez votre idée pour améliorer NICOLAS PAYE. La communauté pourra
+              voter pour les propositions les plus intéressantes.
             </DialogDescription>
           </DialogHeader>
 
@@ -94,12 +94,12 @@ export function FeatureProposalForm({ onSuccess }: FeatureProposalFormProps) {
                 id="feature-title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Ajouter un filtre par ministere"
+                placeholder="Ex: Ajouter un filtre par ministère"
                 maxLength={200}
                 aria-label="Titre de la proposition"
               />
               <p className="mt-1 text-xs text-text-muted">
-                {title.length}/200 caracteres
+                {title.length}/200 caractères
               </p>
             </div>
 
@@ -114,19 +114,19 @@ export function FeatureProposalForm({ onSuccess }: FeatureProposalFormProps) {
                 id="feature-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Decrivez votre idee en detail..."
+                placeholder="Décrivez votre idée en détail..."
                 rows={4}
                 maxLength={1000}
                 aria-label="Description de la proposition"
               />
               <p className="mt-1 text-xs text-text-muted">
-                {description.length}/1000 caracteres (min. 10)
+                {description.length}/1000 caractères (min. 10)
               </p>
             </div>
 
             <fieldset>
               <legend className="mb-2 text-sm font-medium text-text-primary">
-                Categorie
+                Catégorie
               </legend>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(FEATURE_PROPOSAL_CATEGORIES).map(([key, label]) => (

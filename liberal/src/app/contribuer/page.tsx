@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 export const metadata: Metadata = {
   title: 'Contribuer',
   description:
-    'NICOLAS PAYE est open source. Contribuez du code, du contenu, des solutions ou des idees.',
+    'NICOLAS PAYE est open source. Contribuez du code, du contenu, des solutions ou des idées.',
 };
 
 const GITHUB_URL = 'https://github.com/lezardoloris/liberal';
@@ -32,7 +32,7 @@ const contributions = [
     icon: Code,
     title: 'Contribuer du code',
     description:
-      'Le projet est en Next.js 16, TypeScript, Tailwind CSS et PostgreSQL. Fork le repo, cree une branche et ouvre une PR.',
+      'Le projet est en Next.js 16, TypeScript, Tailwind CSS et PostgreSQL. Fork le repo, crée une branche et ouvre une PR.',
     action: 'Voir le code sur GitHub',
     href: GITHUB_URL,
     external: true,
@@ -40,9 +40,9 @@ const contributions = [
   },
   {
     icon: FileText,
-    title: 'Ajouter une depense publique',
+    title: 'Ajouter une dépense publique',
     description:
-      'Tu connais un gaspillage public ? Soumets-le avec le cout, une source et une description. Pas besoin de compte.',
+      'Tu connais un gaspillage public ? Soumets-le avec le coût, une source et une description. Pas besoin de compte.',
     action: 'Soumettre un gaspillage',
     href: '/submit',
     external: false,
@@ -52,7 +52,7 @@ const contributions = [
     icon: Lightbulb,
     title: 'Proposer des solutions',
     description:
-      'Chaque depense a une section solutions. Propose comment reduire le gaspillage et vote pour les meilleures idees.',
+      'Chaque dépense a une section solutions. Propose comment réduire le gaspillage et vote pour les meilleures idées.',
     action: 'Voir le feed',
     href: '/feed/hot',
     external: false,
@@ -60,9 +60,9 @@ const contributions = [
   },
   {
     icon: GraduationCap,
-    title: 'Contenu educatif',
+    title: 'Contenu éducatif',
     description:
-      'Ecris des articles de vulgarisation, cree des infographies ou explique des mecanismes budgetaires complexes.',
+      'Écris des articles de vulgarisation, crée des infographies ou explique des mécanismes budgétaires complexes.',
     action: 'Proposer du contenu',
     href: `${GITHUB_URL}/issues/new?template=content.yml`,
     external: true,
@@ -72,7 +72,7 @@ const contributions = [
     icon: Bug,
     title: 'Signaler un bug',
     description:
-      'Tu as trouve un bug ? Un chiffre faux ? Un lien casse ? Ouvre une issue sur GitHub.',
+      'Tu as trouvé un bug ? Un chiffre faux ? Un lien cassé ? Ouvre une issue sur GitHub.',
     action: 'Signaler un bug',
     href: `${GITHUB_URL}/issues/new?template=bug_report.yml`,
     external: true,
@@ -82,7 +82,7 @@ const contributions = [
     icon: MessageCircle,
     title: 'Discuter et proposer',
     description:
-      'Des idees de features ? Des suggestions d amelioration ? Rejoins les discussions GitHub.',
+      'Des idées de features ? Des suggestions d\'amélioration ? Rejoins les discussions GitHub.',
     action: 'Ouvrir une discussion',
     href: `${GITHUB_URL}/discussions`,
     external: true,
@@ -91,12 +91,12 @@ const contributions = [
 ];
 
 const goodFirstIssues = [
-  'Ameliorer le responsive sur mobile',
-  'Ajouter des sources a des depenses existantes',
-  'Traduire l interface (anglais, etc.)',
-  'Ameliorer l accessibilite (RGAA AA)',
+  'Améliorer le responsive sur mobile',
+  'Ajouter des sources à des dépenses existantes',
+  'Traduire l\'interface (anglais, etc.)',
+  'Améliorer l\'accessibilité (RGAA AA)',
   'Ajouter des tests unitaires',
-  'Creer des infographies de depenses',
+  'Créer des infographies de dépenses',
 ];
 
 export default function ContribuerPage() {
@@ -107,7 +107,7 @@ export default function ContribuerPage() {
     >
       <div className="mb-8 text-center">
         <h1 className="font-display text-3xl font-bold text-text-primary md:text-4xl">
-          Contribuer a NICOLAS PAYE
+          Contribuer à NICOLAS PAYE
         </h1>
         <p className="mt-3 text-lg text-text-secondary">
           Ce projet est{' '}
@@ -181,7 +181,7 @@ export default function ContribuerPage() {
       {/* Good first issues */}
       <section className="mt-12">
         <h2 className="mb-4 font-display text-xl font-semibold text-text-primary">
-          Par ou commencer ?
+          Par où commencer ?
         </h2>
         <Card className="border-border-default bg-surface-secondary">
           <CardContent className="pt-6">

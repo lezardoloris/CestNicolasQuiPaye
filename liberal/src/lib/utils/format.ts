@@ -118,18 +118,23 @@ export function formatCompactNumber(n: number): string {
 }
 
 /**
- * Format EUR compactly for chart axes.
+ * Format EUR compactly with French abbreviations.
  * e.g. 1500000000 -> "1,5 Md €", 45000000 -> "45 M €"
  */
 export function formatCompactEUR(n: number): string {
-  if (Math.abs(n) < 1000) return `${n} €`;
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    notation: 'compact',
-    compactDisplay: 'short',
-    maximumFractionDigits: 1,
-  }).format(n);
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
+  const fmt = (v: number) =>
+    new Intl.NumberFormat('fr-FR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
+    }).format(v);
+
+  if (abs >= 1_000_000_000_000) return `${sign}${fmt(abs / 1_000_000_000)} Md €`;
+  if (abs >= 1_000_000_000) return `${sign}${fmt(abs / 1_000_000_000)} Md €`;
+  if (abs >= 1_000_000) return `${sign}${fmt(abs / 1_000_000)} M €`;
+  if (abs >= 1_000) return `${sign}${fmt(abs / 1_000)} k €`;
+  return `${sign}${abs} €`;
 }
 
 /**
