@@ -6,14 +6,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { ChevronDown, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { formatCompactEUR, formatCompactNumber } from '@/lib/utils/format';
-import type { PlatformStats } from '@/lib/api/stats';
 
-interface HeroSectionProps {
-  stats?: PlatformStats;
-}
-
-export function HeroSection({ stats }: HeroSectionProps) {
+export function HeroSection() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -61,28 +55,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
               >
                 <ChevronDown className="size-4" aria-hidden="true" />
               </button>
-            </div>
-
-            {/* KPIs row */}
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              <div>
-                <p className="font-display text-chainsaw-red text-xl font-black tabular-nums sm:text-2xl">
-                  {stats ? formatCompactEUR(stats.totalAmountEur) : '--'}
-                </p>
-                <p className="text-text-muted text-[10px] sm:text-xs">documentés</p>
-              </div>
-              <div>
-                <p className="font-display text-chainsaw-red/80 text-xl font-bold tabular-nums sm:text-2xl">
-                  {stats ? formatCompactEUR(stats.costPerTaxpayer) : '--'}
-                </p>
-                <p className="text-text-muted text-[10px] sm:text-xs">par contribuable</p>
-              </div>
-              <div>
-                <p className="font-display text-text-primary text-xl font-bold tabular-nums sm:text-2xl">
-                  {stats ? formatCompactNumber(stats.totalSubmissions) : '--'}
-                </p>
-                <p className="text-text-muted text-[10px] sm:text-xs">dépenses signalées</p>
-              </div>
             </div>
 
             {/* CTA + feedback row */}
