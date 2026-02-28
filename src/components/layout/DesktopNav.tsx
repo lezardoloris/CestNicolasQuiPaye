@@ -42,9 +42,9 @@ export default function DesktopNav() {
         <Image
           src="/logo.png"
           alt="C'est Nicolas qui paie"
-          width={180}
-          height={32}
-          className="h-7 w-auto"
+          width={216}
+          height={38}
+          className="h-[2.1rem] w-auto"
           priority
         />
       </Link>

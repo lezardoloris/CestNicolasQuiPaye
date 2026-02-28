@@ -3,19 +3,13 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
-import {
-  formatEUR,
-  formatEURPrecise,
-  formatRelativeTime,
-  truncate,
-} from '@/lib/utils/format';
+import { formatEUR, formatEURPrecise, formatRelativeTime, truncate } from '@/lib/utils/format';
 import { VoteButtonInline } from '@/components/features/voting/VoteButtonInline';
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { SourceBadge } from '@/components/features/sources/SourceBadge';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Flame } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
-import { useShare } from '@/hooks/use-share';
 import type { SubmissionCardData } from '@/types/submission';
 
 interface SubmissionCardProps {
@@ -23,24 +17,24 @@ interface SubmissionCardProps {
   index?: number;
 }
 
-function getOutrageTier(costPerTaxpayer: string | null): { border: string; bg: string } {
-  if (!costPerTaxpayer) return { border: 'border-l-border-default', bg: '' };
+function getOutrageTier(costPerTaxpayer: string | null): {
+  border: string;
+  bg: string;
+  isExtreme: boolean;
+} {
+  if (!costPerTaxpayer) return { border: 'border-l-border-default', bg: '', isExtreme: false };
   const cost = parseFloat(costPerTaxpayer);
-  if (cost >= 10) return { border: 'border-l-chainsaw-red', bg: 'bg-chainsaw-red/[0.03]' };
-  if (cost >= 1) return { border: 'border-l-warning', bg: 'bg-warning/[0.03]' };
-  if (cost >= 0.1) return { border: 'border-l-info', bg: '' };
-  return { border: 'border-l-text-muted', bg: '' };
+  if (cost >= 10)
+    return { border: 'border-l-chainsaw-red', bg: 'bg-chainsaw-red/[0.03]', isExtreme: true };
+  if (cost >= 1) return { border: 'border-l-warning', bg: 'bg-warning/[0.03]', isExtreme: false };
+  if (cost >= 0.1) return { border: 'border-l-info', bg: 'bg-info/[0.02]', isExtreme: false };
+  return { border: 'border-l-text-muted', bg: 'bg-surface-secondary', isExtreme: false };
 }
 
 export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const score = submission.upvoteCount - submission.downvoteCount;
   const category = getCategoryDef(submission.ministryTag);
   const outrage = getOutrageTier(submission.costPerTaxpayer);
-  const { shareOnTwitter } = useShare({
-    submissionId: submission.id,
-    title: submission.title,
-    costPerTaxpayer: submission.costPerTaxpayer ? parseFloat(submission.costPerTaxpayer) : undefined,
-  });
 
   return (
     <motion.article
@@ -50,10 +44,10 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
       role="article"
       aria-label={`${submission.title}, score: ${score}, cout: ${formatEUR(submission.amount)}`}
       className={cn(
-        'group relative rounded-lg border border-border-default',
+        'group border-border-default relative rounded-lg border',
         'bg-surface-secondary',
         outrage.bg,
-        'transition-all duration-200 hover:bg-surface-elevated hover:border-border-default/80',
+        'hover:bg-surface-elevated hover:border-border-default/80 transition-all duration-200',
         'border-l-[5px]',
         'card-hover-lift',
         outrage.border,
@@ -62,18 +56,18 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
       {/* Stretched link — makes entire card clickable */}
       <Link
         href={`/s/${submission.id}`}
-        className="absolute inset-0 z-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary"
+        className="focus-visible:ring-chainsaw-red focus-visible:ring-offset-surface-secondary absolute inset-0 z-0 rounded-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-label={truncate(submission.title, 120)}
         tabIndex={-1}
       />
 
-      <div className="relative z-1 space-y-3 p-4 pointer-events-none">
-        {/* Row 1: Metadata */}
-        <div className="flex items-center gap-2 text-xs text-text-muted">
+      <div className="pointer-events-none relative z-1 space-y-3 p-4">
+        {/* Row 1: Metadata + Cost per citizen */}
+        <div className="text-text-muted flex flex-wrap items-center gap-2 text-xs">
           {category && (
             <span
               className={cn(
-                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-4',
+                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] leading-4 font-semibold',
                 category.color,
                 category.bgColor,
               )}
@@ -82,10 +76,23 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
               {category.label}
             </span>
           )}
-          <SourceBadge
-            sourceUrl={submission.sourceUrl}
-            sourceCount={submission.sourceCount}
-          />
+          <SourceBadge sourceUrl={submission.sourceUrl} sourceCount={submission.sourceCount} />
+          {submission.costPerTaxpayer && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] leading-4 font-bold tabular-nums',
+                  outrage.isExtreme
+                    ? 'bg-chainsaw-red/15 text-chainsaw-red'
+                    : 'bg-warning/15 text-warning',
+                )}
+              >
+                {outrage.isExtreme && <Flame className="size-3" aria-hidden="true" />}
+                {formatEURPrecise(submission.costPerTaxpayer)}/citoyen
+              </span>
+            </>
+          )}
           <span aria-hidden="true">&middot;</span>
           <time
             dateTime={
@@ -100,23 +107,21 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
 
         {/* Row 2: Title + Description */}
         <div>
-          <h3 className="text-base font-semibold leading-snug text-text-primary line-clamp-2 transition-colors group-hover:text-chainsaw-red md:text-lg">
+          <h3 className="text-text-primary group-hover:text-chainsaw-red line-clamp-2 text-base leading-snug font-semibold transition-colors md:text-lg">
             {truncate(submission.title, 120)}
           </h3>
           {submission.description && (
-            <p className="mt-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
+            <p className="text-text-secondary mt-1 line-clamp-2 text-sm leading-relaxed">
               {truncate(submission.description, 200)}
             </p>
           )}
         </div>
 
         {/* Pinned Community Note */}
-        {submission.pinnedNoteBody && (
-          <PinnedNote body={submission.pinnedNoteBody} />
-        )}
+        {submission.pinnedNoteBody && <PinnedNote body={submission.pinnedNoteBody} />}
 
-        {/* Row 3: Action Bar (Reddit-style) */}
-        <div className="flex items-center gap-1 pt-1 pointer-events-auto">
+        {/* Row 3: Action Bar */}
+        <div className="pointer-events-auto flex items-center gap-1 pt-1">
           <VoteButtonInline
             submissionId={submission.id}
             serverCounts={{
@@ -129,8 +134,8 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             href={`/s/${submission.id}#commentaires`}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
-              'text-xs font-medium text-text-muted',
-              'transition-colors hover:bg-surface-elevated hover:text-text-secondary',
+              'text-text-muted text-xs font-medium',
+              'hover:bg-surface-elevated hover:text-text-secondary transition-colors',
             )}
             aria-label={`${submission.commentCount} commentaires`}
           >
@@ -138,41 +143,19 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             <span>{submission.commentCount}</span>
           </Link>
 
-          <button
-            onClick={shareOnTwitter}
-            aria-label="Partager sur X"
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
-              'text-xs font-medium text-text-muted',
-              'transition-colors hover:bg-surface-elevated hover:text-text-secondary',
-            )}
-          >
-            <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </button>
-
           <ShareButton
             submissionId={submission.id}
             title={submission.title}
             costPerTaxpayer={
-              submission.costPerTaxpayer
-                ? parseFloat(submission.costPerTaxpayer)
-                : undefined
+              submission.costPerTaxpayer ? parseFloat(submission.costPerTaxpayer) : undefined
             }
             variant="compact"
-            className="h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-3 py-1.5 text-xs font-medium text-text-muted shadow-none hover:bg-surface-elevated hover:text-text-secondary"
+            className="text-text-muted hover:bg-surface-elevated hover:text-text-secondary h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-3 py-1.5 text-xs font-medium shadow-none"
           />
 
           <div className="flex-1" />
 
-          {submission.costPerTaxpayer && (
-            <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-1 text-xs font-bold tabular-nums text-warning">
-              {formatEURPrecise(submission.costPerTaxpayer)}/citoyen
-            </span>
-          )}
-
-          <span className="inline-flex items-center rounded-full bg-chainsaw-red/10 px-3 py-1 text-sm font-black tabular-nums text-chainsaw-red">
+          <span className="bg-chainsaw-red/10 text-chainsaw-red inline-flex items-center rounded-full px-3 py-1 text-sm font-black tabular-nums">
             {formatEUR(submission.amount)}
           </span>
         </div>

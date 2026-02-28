@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     'NICOLAS PAYE est open source. Contribuez du code, du contenu, des solutions ou des idées.',
 };
 
-const GITHUB_URL = 'https://github.com/lezardoloris/liberal';
+const GITHUB_URL = 'https://github.com/lezardoloris/CestNicolasQuiPaye';
 
 const contributions = [
   {
@@ -84,7 +84,7 @@ const contributions = [
     description:
       'Des idées de features ? Des suggestions d\'amélioration ? Rejoins les discussions GitHub.',
     action: 'Ouvrir une discussion',
-    href: `${GITHUB_URL}/discussions`,
+    href: `${GITHUB_URL}/issues`,
     external: true,
     color: 'text-text-secondary',
   },

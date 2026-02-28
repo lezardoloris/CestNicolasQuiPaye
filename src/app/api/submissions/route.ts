@@ -34,6 +34,17 @@ export async function POST(request: NextRequest) {
 
     const { title, description, estimatedCostEur, sourceUrl } = result.data;
 
+    // Sanity check: no French public spending exceeds 500 Mds€
+    if (estimatedCostEur > 500_000_000_000) {
+      return apiError('VALIDATION_ERROR', 'Montant irréaliste. Vérifiez le montant saisi.', 400);
+    }
+
+    // Basic content filter
+    const BLOCKED_PATTERNS = /\b(bit[eé]|couilles?|merde|putain|salop[eé]|niqu[eé]|encul[eé][rs]?|pd|fdp|ntm)\b/i;
+    if (BLOCKED_PATTERNS.test(title) || BLOCKED_PATTERNS.test(description)) {
+      return apiError('VALIDATION_ERROR', 'Contenu inapproprié détecté.', 400);
+    }
+
     const tweetUrl = isTweetUrl(sourceUrl)
       ? normalizeTweetUrl(sourceUrl)
       : null;
