@@ -1,0 +1,8 @@
+[build]
+buildCommand = "npm run build"
+
+[build.args]
+NEXT_PUBLIC_APP_URL = "${{NEXT_PUBLIC_APP_URL}}"
+
+[deploy]
+startCommand = "npm run start"
