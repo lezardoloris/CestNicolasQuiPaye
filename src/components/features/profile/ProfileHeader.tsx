@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText, ArrowUpDown } from 'lucide-react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import type { UserProfile } from '@/types/user';
@@ -50,6 +51,19 @@ export default function ProfileHeader({
           <p className="text-sm text-text-secondary">
             Membre depuis {memberSince}
           </p>
+
+          {profile.karmaTier && (
+            <Link href="/leaderboard" className="group/tier">
+              <Badge
+                variant="outline"
+                className={`gap-1 border-border-default ${profile.karmaTier.color} transition-colors group-hover/tier:border-chainsaw-red/30`}
+              >
+                <span>{profile.karmaTier.emoji}</span>
+                {profile.karmaTier.label}
+                <span className="text-text-muted">({profile.karma} pts)</span>
+              </Badge>
+            </Link>
+          )}
 
           <div className="flex gap-3 mt-1">
             <Badge

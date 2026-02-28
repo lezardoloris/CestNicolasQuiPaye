@@ -434,6 +434,8 @@ function generateSlug(title: string): string {
 }
 
 async function main() {
+  const forceReseed = process.argv.includes('--reseed');
+
   console.log('Checking for existing seeded data...');
 
   const existing = await db
@@ -443,9 +445,14 @@ async function main() {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('Database already seeded. Skipping.');
-    await sql.end();
-    return;
+    if (!forceReseed) {
+      console.log('Database already seeded. Use --reseed to replace. Skipping.');
+      await sql.end();
+      return;
+    }
+    console.log('Removing old seeded data...');
+    await db.delete(submissions).where(eq(submissions.isSeeded, 1));
+    console.log('Old seeded data removed.');
   }
 
   console.log(`Seeding ${SEED_DATA.length} submissions...`);
@@ -453,7 +460,10 @@ async function main() {
   const now = new Date();
   const values = SEED_DATA.map((item, index) => {
     // Stagger creation times so hot scores vary (older items get lower scores)
-    const createdAt = new Date(now.getTime() - index * 3600_000); // 1h apart
+    // Spread across ~12 months so the timeline chart shows a meaningful curve
+    const monthsBack = Math.floor((index / SEED_DATA.length) * 12);
+    const dayOffset = index % 28; // vary days within each month
+    const createdAt = new Date(now.getFullYear(), now.getMonth() - monthsBack, Math.max(1, now.getDate() - dayOffset), 10 + (index % 12));
     const hotScore = calculateHotScore(0, 0, createdAt);
 
     return {

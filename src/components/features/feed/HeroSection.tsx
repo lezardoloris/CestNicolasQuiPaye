@@ -189,6 +189,19 @@ export function HeroSection({ stats }: HeroSectionProps) {
                                 </p>
                             </div>
                         </div>
+
+                        {/* Feedback CTA */}
+                        <p className="mt-4 text-xs text-text-muted">
+                            Une idée pour améliorer le site ?{' '}
+                            <a
+                                href="https://github.com/lezardoloris/CestNicolasQuiPaye/discussions"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-info underline decoration-info/30 hover:text-info/80"
+                            >
+                                Proposer une amélioration
+                            </a>
+                        </p>
                     </div>
                 </motion.section>
             ) : (

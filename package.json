@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:seed": "tsx scripts/seed.ts",
+    "db:reseed": "tsx scripts/seed.ts --reseed",
     "db:setup": "drizzle-kit push && tsx scripts/seed.ts"
   },
   "dependencies": {

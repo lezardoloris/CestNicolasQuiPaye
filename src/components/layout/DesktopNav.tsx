@@ -19,6 +19,7 @@ const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
   { href: '/submit', label: 'Signaler' },
   { href: '/stats', label: 'Stats' },
+  { href: '/leaderboard', label: 'Classement' },
   { href: '/contribuer', label: 'Contribuer' },
 ];
 

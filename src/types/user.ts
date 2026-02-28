@@ -9,6 +9,12 @@ export interface UserProfile {
   voteCount: number;
   avatarUrl: string | null;
   bio: string | null;
+  karma: number;
+  karmaTier?: {
+    label: string;
+    emoji: string;
+    color: string;
+  };
 }
 
 export interface UserSubmission {

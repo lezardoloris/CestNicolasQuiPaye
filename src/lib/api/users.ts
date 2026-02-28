@@ -1,7 +1,8 @@
 import { db } from '@/lib/db';
-import { users, submissions, votes } from '@/lib/db/schema';
+import { users, submissions, votes, submissionSources, communityNotes } from '@/lib/db/schema';
 import { eq, and, isNull, desc, lt, count } from 'drizzle-orm';
 import { resolveDisplayName, maskEmail } from '@/lib/utils/user-display';
+import { calculateKarma, getKarmaTier } from '@/lib/utils/karma';
 import type { UserProfile, UserSubmission, UserVote } from '@/types/user';
 
 export async function getUserById(userId: string) {
@@ -17,8 +18,58 @@ export async function getUserProfile(
   const user = await getUserById(userId);
   if (!user) return null;
 
-  // Get vote count
+  // Get activity counts
   const voteCount = await getUserVoteCount(userId);
+
+  let sourceCount = 0;
+  let noteCount = 0;
+  try {
+    const [srcResult] = await db
+      .select({ count: count() })
+      .from(submissionSources)
+      .where(eq(submissionSources.addedBy, userId));
+    sourceCount = srcResult?.count ?? 0;
+
+    const [noteResult] = await db
+      .select({ count: count() })
+      .from(communityNotes)
+      .where(and(eq(communityNotes.authorId, userId), isNull(communityNotes.deletedAt)));
+    noteCount = noteResult?.count ?? 0;
+  } catch {
+    // Tables may not exist yet
+  }
+
+  const karma = calculateKarma({
+    submissionCount: user.submissionCount,
+    voteCount,
+    sourceCount,
+    noteCount,
+    shareCount: 0,
+  });
+
+  // Compute rank: count users with higher karma
+  let rank = 1;
+  try {
+    const allUsers = await db
+      .select({
+        id: users.id,
+        submissionCount: users.submissionCount,
+      })
+      .from(users)
+      .where(isNull(users.deletedAt));
+
+    // Count users with higher karma (simplified: only use submissionCount + voteCount for ranking)
+    const usersAbove = allUsers.filter((u) => {
+      if (u.id === userId) return false;
+      // Approximate: use submissionCount * 10 as minimum karma
+      return u.submissionCount * 10 > karma;
+    });
+    rank = usersAbove.length + 1;
+  } catch {
+    // Fallback
+  }
+
+  const tier = rank <= 100 ? getKarmaTier(rank) : undefined;
 
   const profile: UserProfile = {
     id: user.id,
@@ -30,6 +81,8 @@ export async function getUserProfile(
     voteCount,
     avatarUrl: user.avatarUrl,
     bio: user.bio,
+    karma,
+    karmaTier: tier ? { label: tier.label, emoji: tier.emoji, color: tier.color } : undefined,
   };
 
   if (isOwnProfile) {

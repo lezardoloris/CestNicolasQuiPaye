@@ -15,6 +15,7 @@ import { SourceBadge } from '@/components/features/sources/SourceBadge';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
 import { MessageSquare } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
+import { useShare } from '@/hooks/use-share';
 import type { SubmissionCardData } from '@/types/submission';
 
 interface SubmissionCardProps {
@@ -35,6 +36,11 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const score = submission.upvoteCount - submission.downvoteCount;
   const category = getCategoryDef(submission.ministryTag);
   const outrage = getOutrageTier(submission.costPerTaxpayer);
+  const { shareOnTwitter } = useShare({
+    submissionId: submission.id,
+    title: submission.title,
+    costPerTaxpayer: submission.costPerTaxpayer ? parseFloat(submission.costPerTaxpayer) : undefined,
+  });
 
   return (
     <motion.article
@@ -131,6 +137,20 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             <MessageSquare className="size-4" aria-hidden="true" />
             <span>{submission.commentCount}</span>
           </Link>
+
+          <button
+            onClick={shareOnTwitter}
+            aria-label="Partager sur X"
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
+              'text-xs font-medium text-text-muted',
+              'transition-colors hover:bg-surface-elevated hover:text-text-secondary',
+            )}
+          >
+            <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </button>
 
           <ShareButton
             submissionId={submission.id}
