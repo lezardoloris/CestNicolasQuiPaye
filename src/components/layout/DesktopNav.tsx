@@ -17,6 +17,7 @@ import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
 import { StreakBadge } from '@/components/features/gamification/StreakBadge';
 import { DailyGoalIndicator } from '@/components/features/gamification/DailyGoalIndicator';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
@@ -70,54 +71,57 @@ export default function DesktopNav() {
         ))}
       </nav>
 
-      {isAuthenticated ? (
-        <div className="flex items-center gap-3">
-          <XpProgressBar />
-          <DailyGoalIndicator />
-          <StreakBadge />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-2 text-text-secondary hover:text-text-primary"
-            >
-              <User className="size-4" />
-              <span className="max-w-[150px] truncate">{userName}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56 bg-surface-secondary border-border-default"
-          >
-            <DropdownMenuItem asChild>
-              <Link href="/profile" className="cursor-pointer">
-                <User className="mr-2 size-4" />
-                Mon profil
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/profile/settings" className="cursor-pointer">
-                <Settings className="mr-2 size-4" />
-                Paramètres
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: '/feed/hot' })}
-              className="cursor-pointer text-chainsaw-red focus:text-chainsaw-red"
-            >
-              <LogOut className="mr-2 size-4" />
-              Se déconnecter
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        </div>
-      ) : (
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/login">Se connecter</Link>
-        </Button>
-      )}
+      <div className="flex items-center gap-3">
+        <ThemeToggle />
+        {isAuthenticated ? (
+          <>
+            <XpProgressBar />
+            <DailyGoalIndicator />
+            <StreakBadge />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 text-text-secondary hover:text-text-primary"
+                >
+                  <User className="size-4" />
+                  <span className="max-w-[150px] truncate">{userName}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-56 bg-surface-secondary border-border-default"
+              >
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    <User className="mr-2 size-4" />
+                    Mon profil
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile/settings" className="cursor-pointer">
+                    <Settings className="mr-2 size-4" />
+                    Paramètres
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => signOut({ callbackUrl: '/feed/hot' })}
+                  className="cursor-pointer text-chainsaw-red focus:text-chainsaw-red"
+                >
+                  <LogOut className="mr-2 size-4" />
+                  Se déconnecter
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
+        ) : (
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/login">Se connecter</Link>
+          </Button>
+        )}
+      </div>
     </header>
   );
 }

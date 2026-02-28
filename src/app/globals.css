@@ -50,13 +50,13 @@
   --color-chainsaw-red: #C62828;
   --color-chainsaw-red-hover: #8E1B1B;
   --color-chainsaw-red-light: #FECDD3;
-  --color-surface-primary: #111318;
-  --color-surface-secondary: #1A1D24;
-  --color-surface-elevated: #252830;
-  --color-border-default: #2E3340;
-  --color-text-primary: #F5F5F5;
-  --color-text-secondary: #A3A3A3;
-  --color-text-muted: #737373;
+  --color-surface-primary: var(--np-surface-primary);
+  --color-surface-secondary: var(--np-surface-secondary);
+  --color-surface-elevated: var(--np-surface-elevated);
+  --color-border-default: var(--np-border-default);
+  --color-text-primary: var(--np-text-primary);
+  --color-text-secondary: var(--np-text-secondary);
+  --color-text-muted: var(--np-text-muted);
   --color-success: #C62828;
   --color-warning: #C62828;
   --color-info: #C62828;
@@ -69,6 +69,15 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
+  /* Nicolas Paye — Light mode tokens */
+  --np-surface-primary: #FFFFFF;
+  --np-surface-secondary: #F8FAFC;
+  --np-surface-elevated: #FFFFFF;
+  --np-border-default: #E2E8F0;
+  --np-text-primary: #0F172A;
+  --np-text-secondary: #475569;
+  --np-text-muted: #94A3B8;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -103,6 +112,15 @@
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+
+  /* Nicolas Paye — Dark mode tokens */
+  --np-surface-primary: #111318;
+  --np-surface-secondary: #1A1D24;
+  --np-surface-elevated: #252830;
+  --np-border-default: #2E3340;
+  --np-text-primary: #F5F5F5;
+  --np-text-secondary: #A3A3A3;
+  --np-text-muted: #737373;
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -155,6 +173,9 @@
   }
   .card-hover-lift:hover {
     transform: translateY(-2px);
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.1);
+  }
+  :is(.dark *).card-hover-lift:hover {
     box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.4);
   }
 }

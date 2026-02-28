@@ -60,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} font-body bg-surface-primary text-text-primary antialiased`}
       >
