@@ -74,7 +74,7 @@ export default function RootLayout({
           </a>
           <DesktopNav />
           <MobileHeader />
-          <div className="min-h-[calc(100dvh-3rem)] pb-20 md:min-h-screen md:pb-0">{children}</div>
+          <div className="min-h-[calc(100dvh-3rem)] pb-20 md:min-h-screen md:pb-0 lg:min-h-screen">{children}</div>
           <Footer />
           <MobileTabBar />
           <WelcomePromptWrapper />

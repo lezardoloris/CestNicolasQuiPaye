@@ -13,7 +13,7 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
 
   return (
     <aside className="hidden w-[340px] shrink-0 lg:block">
-      <div className="sticky top-20">
+      <div className="sticky top-4">
         {selectedSubmission ? (
           <SubmissionPreview submission={selectedSubmission} />
         ) : (

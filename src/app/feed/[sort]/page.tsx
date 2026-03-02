@@ -90,7 +90,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
   const isLoggedOut = !session?.user;
 
   return (
-    <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 pb-20 md:pt-6 md:pb-6">
+    <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 pb-20 md:pt-6 md:pb-6 lg:pt-0">
       <div className="lg:flex lg:gap-6">
         {/* Left sidebar — desktop only */}
         <DesktopSidebar>

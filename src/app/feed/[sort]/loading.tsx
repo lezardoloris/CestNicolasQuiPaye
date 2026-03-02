@@ -5,7 +5,7 @@ export default function FeedLoading() {
   return (
     <main className="mx-auto max-w-3xl px-4 pb-20 md:pb-6">
       {/* Sort tabs skeleton */}
-      <div className="sticky top-16 z-10 flex gap-2 bg-surface-primary py-3">
+      <div className="sticky top-16 lg:top-0 z-10 flex gap-2 bg-surface-primary py-3">
         <Skeleton className="h-9 w-24 rounded-full" />
         <Skeleton className="h-9 w-16 rounded-full" />
         <Skeleton className="h-9 w-20 rounded-full" />

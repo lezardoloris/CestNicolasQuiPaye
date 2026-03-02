@@ -36,7 +36,7 @@ export default function DesktopNav() {
     : null;
 
   return (
-    <header className="hidden md:flex sticky top-0 z-50 h-16 items-center justify-between border-b border-border-default bg-surface-primary/80 backdrop-blur-sm px-6">
+    <header className="hidden md:flex lg:hidden sticky top-0 z-50 h-16 items-center justify-between border-b border-border-default bg-surface-primary/80 backdrop-blur-sm px-6">
       <Link
         href="/feed/hot"
         className="flex flex-col items-start gap-0"
