@@ -156,6 +156,22 @@ export function pluralize(count: number, singular: string, plural: string): stri
   return count <= 1 ? singular : plural;
 }
 
+// ─── Budget-specific formatting ────────────────────────────────────
+
+/**
+ * Format a number with 1 decimal max, French locale.
+ * e.g. 4.7 -> "4,7", 15 -> "15"
+ */
+export const fmtDecimal1 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+
+/**
+ * Format a percentage with 1 decimal max, French locale.
+ * e.g. 4.7 -> "4,7%"
+ */
+export function formatPctFr(value: number): string {
+  return `${fmtDecimal1.format(value)}%`;
+}
+
 // ─── Denominator-specific formatting ───────────────────────────────
 
 /**

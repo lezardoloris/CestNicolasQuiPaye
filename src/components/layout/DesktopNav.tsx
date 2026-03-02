@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, Settings, LogOut, Shield } from 'lucide-react';
 import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
 import { StreakBadge } from '@/components/features/gamification/StreakBadge';
@@ -23,7 +23,8 @@ const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
   { href: '/submit', label: 'Signaler' },
   { href: '/stats', label: 'Stats' },
-  { href: '/leaderboard', label: 'Classement' },
+  { href: '/chiffres', label: 'Chiffres' },
+  // { href: '/leaderboard', label: 'Classement' }, // contributions anonymes
   { href: '/contribuer', label: 'Contribuer' },
 ];
 
@@ -122,6 +123,60 @@ export default function DesktopNav() {
           </Button>
         )}
       </div>
+      {isAuthenticated ? (
+        <div className="flex items-center gap-3">
+          <XpProgressBar />
+          <DailyGoalIndicator />
+          <StreakBadge />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-text-secondary hover:text-text-primary"
+            >
+              <User className="size-4" />
+              <span className="max-w-[150px] truncate">{userName}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-56 bg-surface-secondary border-border-default"
+          >
+            <DropdownMenuItem asChild>
+              <Link href="/profile" className="cursor-pointer">
+                <User className="mr-2 size-4" />
+                Mon profil
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/profile/settings" className="cursor-pointer">
+                <Settings className="mr-2 size-4" />
+                Paramètres
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/feed/review" className="cursor-pointer">
+                <Shield className="mr-2 size-4" />
+                Valider des signalements
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: '/feed/hot' })}
+              className="cursor-pointer text-chainsaw-red focus:text-chainsaw-red"
+            >
+              <LogOut className="mr-2 size-4" />
+              Se déconnecter
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        </div>
+      ) : (
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/login">Se connecter</Link>
+        </Button>
+      )}
     </header>
   );
 }
