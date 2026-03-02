@@ -71,6 +71,7 @@ export const ACRONYMS: Record<string, string> = {
   ANRU: 'Agence Nationale pour la Rénovation Urbaine',
   ASP: 'Agence de Services et de Paiement',
   CEREMA: 'Centre d\u2019Études et d\u2019Expertise sur les Risques, la Mobilité et l\u2019Aménagement',
+  ANCT: 'Agence Nationale de la Cohésion des Territoires',
   VNF: 'Voies Navigables de France',
 
   // ─── Géopolitique ─────────────────────────────────────────

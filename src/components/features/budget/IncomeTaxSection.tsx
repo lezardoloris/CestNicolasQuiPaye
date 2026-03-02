@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import { formatCompactEUR } from '@/lib/utils/format';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
 import { BudgetKpiCard } from './BudgetKpiCard';
+import { Abbr } from '@/components/ui/abbr';
 import {
   CHART_TOOLTIP_CONTENT_STYLE,
   CHART_TOOLTIP_LABEL_STYLE,
@@ -72,7 +73,7 @@ export function IncomeTaxSection({
           Qui paye l&apos;impôt sur le revenu ?
         </h3>
         <p className="mb-4 text-xs text-text-muted">
-          Répartition de l&apos;IR par décile de revenu fiscal (DGFiP 2024)
+          Répartition de l&apos;<Abbr a="IR" /> par décile de revenu fiscal (<Abbr a="DGFiP" /> 2024)
         </p>
         <div role="img" aria-label="Graphique de la répartition de l'impôt sur le revenu par décile : les 10% les plus aisés payent 78% de l'IR total">
         <ResponsiveContainer width="100%" height={isMobile ? 200 : 260}>

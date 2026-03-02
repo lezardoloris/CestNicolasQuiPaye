@@ -47,7 +47,7 @@ export default function DesktopNav() {
           alt="C'est Nicolas qui paie"
           width={216}
           height={38}
-          className="h-[2.1rem] w-auto"
+          className="h-[2.1rem] w-auto invert dark:invert-0"
           priority
         />
         <span className="text-[0.6rem] leading-tight tracking-wide text-text-muted pl-0.5">

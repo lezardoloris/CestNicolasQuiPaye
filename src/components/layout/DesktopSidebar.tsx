@@ -49,7 +49,7 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
             alt="C'est Nicolas qui paie"
             width={180}
             height={32}
-            className="h-7 w-auto"
+            className="h-7 w-auto invert dark:invert-0"
             priority
           />
         </Link>

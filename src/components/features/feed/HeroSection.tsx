@@ -112,7 +112,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 alt=""
                 width={120}
                 height={20}
-                className="h-4 w-auto opacity-60"
+                className="h-4 w-auto opacity-60 invert dark:invert-0"
               />
               <span className="font-medium">Tronçonnons les dépenses publiques.</span>
               <span className="text-text-muted hidden sm:inline">

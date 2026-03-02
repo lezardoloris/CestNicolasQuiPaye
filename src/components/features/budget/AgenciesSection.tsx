@@ -1,5 +1,6 @@
 import { formatCompactEUR } from '@/lib/utils/format';
 import type { StateAgency } from '@/lib/constants/budget-2026';
+import { Abbr } from '@/components/ui/abbr';
 import { BudgetKpiCard } from './BudgetKpiCard';
 
 interface AgenciesSectionProps {
@@ -79,7 +80,7 @@ export function AgenciesSection({
       {/* Critiques notables */}
       <div className="space-y-3">
         <h3 className="text-sm font-semibold text-text-primary">
-          Critiques notables (Cour des comptes, IFRAP, Sénat)
+          Critiques notables (Cour des comptes, <Abbr a="IFRAP" />, Sénat)
         </h3>
         <div className="space-y-2">
           {agencies
@@ -101,11 +102,11 @@ export function AgenciesSection({
       {/* IFRAP reform proposals */}
       <div className="rounded-lg border border-warning/20 bg-warning/5 p-4">
         <p className="text-sm font-semibold text-warning">
-          Propositions de rationalisation (IFRAP)
+          Propositions de rationalisation (<Abbr a="IFRAP" />)
         </p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-text-secondary">
           <li>
-            <strong className="text-text-primary">Fusionner</strong> ADEME + CEREMA + ANCT
+            <strong className="text-text-primary">Fusionner</strong> <Abbr a="ADEME" /> + <Abbr a="CEREMA" /> + <Abbr a="ANCT" />
             &rarr; économie estimée 600 M&euro;/an
           </li>
           <li>
@@ -114,23 +115,23 @@ export function AgenciesSection({
           </li>
           <li>
             <strong className="text-text-primary">Rationaliser</strong> les 4 agences de santé
-            (ANSES, ANSM, HAS, SPF) &rarr; économie estimée 400 M&euro;/an
+            (<Abbr a="ANSES" />, <Abbr a="ANSM" />, <Abbr a="HAS" />, <Abbr a="SPF" />) &rarr; économie estimée 400 M&euro;/an
           </li>
           <li>
-            <strong className="text-text-primary">Privatiser</strong> Météo-France et VNF
+            <strong className="text-text-primary">Privatiser</strong> Météo-France et <Abbr a="VNF" />
             &rarr; économie estimée 300 M&euro;/an
           </li>
         </ul>
         <p className="mt-2 text-xs text-text-muted">
-          Total des économies potentielles estimées par l&apos;IFRAP : ~7 Md&euro; d&apos;ici 2029.
+          Total des économies potentielles estimées par l&apos;<Abbr a="IFRAP" /> : ~7 Md&euro; d&apos;ici 2029.
         </p>
       </div>
 
       <p className="text-xs text-text-muted">
-        Sources : PLF 2026 — Jaune budgétaire « Opérateurs de l&apos;État »,
-        FIPECO (fév. 2025), IFRAP, Cour des comptes, Sénat.
+        Sources : <Abbr a="PLF" /> 2026 — Jaune budgétaire « Opérateurs de l&apos;État »,
+        <Abbr a="FIPECO" /> (fév. 2025), <Abbr a="IFRAP" />, Cour des comptes, Sénat.
         Les 431 opérateurs reçoivent 51,6 Md&euro; de crédits budgétaires
-        et emploient 482 000 agents (ETP).
+        et emploient 482 000 agents (<Abbr a="ETP" />).
       </p>
     </div>
   );

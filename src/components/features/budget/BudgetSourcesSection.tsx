@@ -1,3 +1,5 @@
+import { Abbr } from '@/components/ui/abbr';
+
 export function BudgetSourcesSection() {
   return (
     <div className="rounded-lg border border-border-default bg-surface-secondary/50 p-4 text-xs text-text-muted">
@@ -173,7 +175,7 @@ export function BudgetSourcesSection() {
       <p className="mt-3">
         Projections dette : extrapolation linéaire à déficit constant avec effet boule de neige
         des intérêts (taux moyen 3,5%). Ces projections sont indicatives et ne constituent
-        pas une prévision officielle. Population : 68,4 M (INSEE 2025).
+        pas une prévision officielle. Population : 68,4 M (<Abbr a="INSEE" /> 2025).
       </p>
     </div>
   );

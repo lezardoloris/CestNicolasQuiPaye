@@ -16,7 +16,7 @@ export default function MobileHeader() {
           alt="C'est Nicolas qui paie"
           width={192}
           height={34}
-          className="h-6 w-auto"
+          className="h-6 w-auto invert dark:invert-0"
           priority
         />
       </Link>
