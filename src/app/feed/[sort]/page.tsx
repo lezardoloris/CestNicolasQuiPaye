@@ -16,6 +16,7 @@ import { auth } from '@/lib/auth';
 import { PendingReviewCard } from '@/components/features/submissions/PendingReviewCard';
 import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
 import { FeedRightSidebar } from '@/components/features/feed/FeedRightSidebar';
+import { MobileContributeBanner } from '@/components/features/feed/MobileContributeBanner';
 import type { Metadata } from 'next';
 
 // ISR revalidation: base 60s (hot default)
@@ -103,10 +104,8 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
         <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:max-w-[600px] lg:border-x lg:border-border-default">
           <HeroSection stats={stats} />
 
-          {/* Mobile: inline mini leaderboard */}
-          <div className="lg:hidden">
-            <MiniLeaderboard entries={leaderboard} variant="inline" />
-          </div>
+          {/* Mobile: contribution CTAs */}
+          <MobileContributeBanner />
 
           <FeedSortTabs activeSort={sort} />
 
