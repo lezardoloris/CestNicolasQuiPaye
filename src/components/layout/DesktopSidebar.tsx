@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Home, Calculator, Heart, PlusCircle, Github, Zap, LogIn } from 'lucide-react';
+import { Home, Calculator, SlidersHorizontal, Heart, PlusCircle, Github, Zap, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
@@ -21,6 +21,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { href: '/feed/hot', label: 'Feed', icon: Home, matchPrefix: '/feed' },
   { href: '/chiffres', label: 'Chiffres', icon: Calculator, matchPrefix: '/chiffres' },
+  { href: '/simulateur', label: 'Simulateur', icon: SlidersHorizontal, matchPrefix: '/simulateur' },
   { href: '/contribuer', label: 'Contribuer', icon: Heart, matchPrefix: '/contribuer' },
 ];
 
