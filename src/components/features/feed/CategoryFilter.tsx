@@ -24,14 +24,14 @@ export function CategoryFilter({
     };
 
     return (
-        <div className="relative mb-4 overflow-hidden">
+        <div className="relative mb-4">
             {/* Fade edges */}
             <div
-                className="pointer-events-none absolute left-0 top-0 z-10 h-full w-6 bg-gradient-to-r from-surface-primary to-transparent"
+                className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-surface-primary to-transparent"
                 aria-hidden="true"
             />
             <div
-                className="pointer-events-none absolute right-0 top-0 z-10 h-full w-6 bg-gradient-to-l from-surface-primary to-transparent"
+                className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-surface-primary to-transparent"
                 aria-hidden="true"
             />
 
@@ -39,7 +39,7 @@ export function CategoryFilter({
                 ref={scrollRef}
                 role="group"
                 aria-label="Filtrer par catégorie"
-                className="scrollbar-hide flex gap-2 overflow-x-auto px-1 py-1"
+                className="scrollbar-hide flex gap-2 overflow-x-auto px-1 pr-8 py-1"
             >
                 {/* "Tous" pill */}
                 <CategoryPill

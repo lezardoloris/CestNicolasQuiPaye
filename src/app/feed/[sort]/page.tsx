@@ -14,6 +14,7 @@ import { getPendingSubmissionCount } from '@/lib/api/pending-count';
 import { isValidSort } from '@/lib/utils/validation';
 import { auth } from '@/lib/auth';
 import { PendingReviewCard } from '@/components/features/submissions/PendingReviewCard';
+import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
 import type { Metadata } from 'next';
 
 // ISR revalidation: base 60s (hot default)
@@ -86,10 +87,13 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
   const isLoggedOut = !session?.user;
 
   return (
-    <main id="main-content" className="mx-auto max-w-[1100px] px-4 pt-4 pb-20 md:pt-6 md:pb-6">
+    <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 pb-20 md:pt-6 md:pb-6">
       <div className="lg:flex lg:gap-6">
+        {/* Left sidebar — desktop only */}
+        <DesktopSidebar />
+
         {/* Feed column — Twitter-style center column with vertical borders */}
-        <div className="mx-auto min-w-0 w-full max-w-[620px] lg:mx-0 lg:max-w-[620px] lg:border-x lg:border-border-default">
+        <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:max-w-[600px] lg:border-x lg:border-border-default">
           <HeroSection stats={stats} />
 
           {/* Mobile: inline mini leaderboard */}

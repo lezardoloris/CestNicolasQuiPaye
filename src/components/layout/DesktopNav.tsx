@@ -56,7 +56,7 @@ export default function DesktopNav() {
         </span>
       </Link>
 
-      <nav className="flex items-center gap-6">
+      <nav className="flex items-center gap-6 lg:hidden">
         {navLinks.map((link) => (
           <Link
             key={link.href}

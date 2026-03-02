@@ -86,7 +86,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 rel="noopener noreferrer"
                 className="text-text-secondary decoration-text-muted/30 hover:text-text-primary font-medium underline"
               >
-                Proposer une amélioration
+                Contribuer sur GitHub
               </a>
             </p>
           </div>
