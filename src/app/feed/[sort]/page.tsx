@@ -15,6 +15,7 @@ import { isValidSort } from '@/lib/utils/validation';
 import { auth } from '@/lib/auth';
 import { PendingReviewCard } from '@/components/features/submissions/PendingReviewCard';
 import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
+import { FeedRightSidebar } from '@/components/features/feed/FeedRightSidebar';
 import type { Metadata } from 'next';
 
 // ISR revalidation: base 60s (hot default)
@@ -112,19 +113,17 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
           />
         </div>
 
-        {/* Right sidebar */}
-        <aside className="hidden w-[340px] shrink-0 lg:block">
-          <div className="sticky top-20 space-y-4">
-            <MiniLeaderboard entries={leaderboard} variant="sidebar" />
-            {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
-            {isLoggedOut && (
-              <>
-                <GamificationTeaser />
-                <SignupCTA />
-              </>
-            )}
-          </div>
-        </aside>
+        {/* Right sidebar — swaps to submission preview on card click */}
+        <FeedRightSidebar>
+          <MiniLeaderboard entries={leaderboard} variant="sidebar" />
+          {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
+          {isLoggedOut && (
+            <>
+              <GamificationTeaser />
+              <SignupCTA />
+            </>
+          )}
+        </FeedRightSidebar>
       </div>
     </main>
   );

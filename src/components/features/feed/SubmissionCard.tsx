@@ -15,6 +15,7 @@ import { SourceBadge } from '@/components/features/sources/SourceBadge';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
 import { MessageSquare, Flame } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
+import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import type { SubmissionCardData } from '@/types/submission';
 
 interface SubmissionCardProps {
@@ -27,6 +28,17 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const category = getCategoryDef(submission.ministryTag);
   const costPerTaxpayer = submission.costPerTaxpayer;
   const isExtreme = costPerTaxpayer ? parseFloat(costPerTaxpayer) >= 10 : false;
+  const setSelectedSubmission = useFeedPreviewStore((s) => s.setSelectedSubmission);
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Let ctrl/meta/middle clicks navigate normally (open in new tab)
+    if (e.ctrlKey || e.metaKey || e.button === 1) return;
+    // Only intercept on lg+ screens where sidebar preview exists
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+      e.preventDefault();
+      setSelectedSubmission(submission);
+    }
+  };
 
   return (
     <motion.article
@@ -40,6 +52,7 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
       {/* Stretched link — makes entire card clickable */}
       <Link
         href={`/s/${submission.id}`}
+        onClick={handleCardClick}
         className="absolute inset-0 z-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-inset"
         aria-label={truncate(submission.title, 120)}
         tabIndex={-1}
