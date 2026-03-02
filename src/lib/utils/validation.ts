@@ -285,6 +285,17 @@ export const createSolutionSchema = z.object({
 
 export type CreateSolutionData = z.infer<typeof createSolutionSchema>;
 
+// ─── Adjustment Suggestion Validation ────────────────────────────
+export const createAdjustmentSchema = z.object({
+  body: z
+    .string()
+    .min(5, 'L\'ajustement doit contenir au moins 5 caractères')
+    .max(500, 'L\'ajustement ne doit pas dépasser 500 caractères')
+    .transform((val) => val.trim()),
+});
+
+export type CreateAdjustmentData = z.infer<typeof createAdjustmentSchema>;
+
 export const featureVoteQuerySchema = z.object({
   sortBy: z.enum(['votes', 'date']).default('votes'),
   status: z.string().optional(),

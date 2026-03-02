@@ -5,6 +5,8 @@ import { ArrowUp, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useAdjustments } from '@/hooks/useAdjustments';
+import { AdjustmentThread } from '@/components/features/solutions/AdjustmentThread';
 
 interface SolutionItemProps {
   solution: {
@@ -29,6 +31,15 @@ export function SolutionItem({
   isVoting,
 }: SolutionItemProps) {
   const [showThread, setShowThread] = useState(false);
+  const { adjustments, isLoading: loadingAdjustments, refetch, createAdjustment, isCreating } =
+    useAdjustments(solution.id);
+
+  const handleToggleThread = () => {
+    const next = !showThread;
+    setShowThread(next);
+    if (next) refetch();
+  };
+
   const percentage = totalUpvotes > 0
     ? Math.round((solution.upvoteCount / totalUpvotes) * 100)
     : 0;
@@ -86,7 +97,7 @@ export function SolutionItem({
         </time>
         <span className="flex-1" />
         <button
-          onClick={() => setShowThread(!showThread)}
+          onClick={handleToggleThread}
           className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
         >
           <MessageCircle className="size-3" aria-hidden="true" />
@@ -94,15 +105,13 @@ export function SolutionItem({
         </button>
       </div>
 
-      {/* Mini-thread placeholder — will be connected to API */}
       {showThread && (
-        <div className="mt-2 border-t border-border-default pt-2">
-          <div className="ml-2 border-l-2 border-border-default pl-3">
-            <p className="text-xs text-text-muted">
-              Les suggestions d&apos;ajustement arrivent bientôt.
-            </p>
-          </div>
-        </div>
+        <AdjustmentThread
+          adjustments={adjustments}
+          isLoading={loadingAdjustments}
+          onSubmit={createAdjustment}
+          isSubmitting={isCreating}
+        />
       )}
     </div>
   );

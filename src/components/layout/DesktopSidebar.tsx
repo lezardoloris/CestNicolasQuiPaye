@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Calculator, Heart, PlusCircle } from 'lucide-react';
+import { Home, Calculator, Heart, PlusCircle, Github, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -56,13 +56,33 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
             href="/submit"
             className={cn(
               'mt-4 flex w-full items-center justify-center gap-2 rounded-full',
-              'bg-chainsaw-red px-4 py-2.5 text-[15px] font-bold text-white',
+              'bg-chainsaw-red px-4 py-2.5 text-sm font-bold text-white',
               'hover:bg-chainsaw-red-hover transition-colors',
             )}
           >
             <PlusCircle className="size-5" />
-            Signaler
+            Signaler une dépense
           </Link>
+
+          {/* GitHub contribution CTA */}
+          <a
+            href="https://github.com/lezardoloris/CestNicolasQuiPaye"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'mt-2 flex w-full items-center justify-center gap-1.5 rounded-full',
+              'border border-border-default bg-surface-secondary px-4 py-2 text-xs font-medium',
+              'text-text-secondary transition-colors',
+              'hover:bg-surface-elevated hover:text-text-primary',
+            )}
+          >
+            <Github className="size-3.5" />
+            Contribuer sur GitHub
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-chainsaw-red/10 px-1.5 py-0.5 text-[10px] font-bold text-chainsaw-red">
+              <Zap className="size-2.5" />
+              +50 XP
+            </span>
+          </a>
         </nav>
 
         {children}

@@ -64,8 +64,8 @@ export function HeroSection({ stats }: HeroSectionProps) {
             </span>
           </div>
 
-          {/* CTA row */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          {/* CTA row — visible on mobile only, desktop uses left sidebar */}
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 lg:hidden">
             <Link
               href="/submit"
               className={cn(

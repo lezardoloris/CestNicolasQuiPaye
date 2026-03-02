@@ -219,23 +219,28 @@ export const solutionVotes = pgTable(
 );
 
 // ─── Comments ───────────────────────────────────────────────────────
-export const comments = pgTable('comments', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  authorId: uuid('author_id').references(() => users.id, { onDelete: 'set null' }),
-  authorDisplay: varchar('author_display', { length: 100 }).notNull().default('Anonyme'),
-  submissionId: uuid('submission_id')
-    .notNull()
-    .references(() => submissions.id, { onDelete: 'cascade' }),
-  parentCommentId: uuid('parent_comment_id'),
-  body: text('body').notNull(),
-  depth: integer('depth').notNull().default(0),
-  upvoteCount: integer('upvote_count').notNull().default(0),
-  downvoteCount: integer('downvote_count').notNull().default(0),
-  score: integer('score').notNull().default(0),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
-  deletedAt: timestamp('deleted_at'),
-});
+export const comments = pgTable(
+  'comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    authorId: uuid('author_id').references(() => users.id, { onDelete: 'set null' }),
+    authorDisplay: varchar('author_display', { length: 100 }).notNull().default('Anonyme'),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    parentCommentId: uuid('parent_comment_id'),
+    solutionId: uuid('solution_id').references(() => solutions.id, { onDelete: 'cascade' }),
+    body: text('body').notNull(),
+    depth: integer('depth').notNull().default(0),
+    upvoteCount: integer('upvote_count').notNull().default(0),
+    downvoteCount: integer('downvote_count').notNull().default(0),
+    score: integer('score').notNull().default(0),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (table) => [index('idx_comments_solution').on(table.solutionId)],
+);
 
 // ─── Relations ──────────────────────────────────────────────────────
 export const usersRelations = relations(users, ({ many }) => ({
@@ -282,6 +287,10 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
     fields: [comments.submissionId],
     references: [submissions.id],
   }),
+  solution: one(solutions, {
+    fields: [comments.solutionId],
+    references: [solutions.id],
+  }),
   commentVotes: many(commentVotes),
 }));
 
@@ -302,6 +311,7 @@ export const solutionsRelations = relations(solutions, ({ one, many }) => ({
     references: [users.id],
   }),
   solutionVotes: many(solutionVotes),
+  adjustments: many(comments),
 }));
 
 export const solutionVotesRelations = relations(solutionVotes, ({ one }) => ({

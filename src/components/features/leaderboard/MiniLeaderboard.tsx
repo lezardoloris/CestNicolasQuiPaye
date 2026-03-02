@@ -16,27 +16,27 @@ function RankBadge({ rank }: { rank: number }) {
 
 function LeaderboardRow({ entry }: { entry: LeaderboardEntry }) {
   return (
-    <div className="flex items-center gap-3 py-2">
+    <div className="flex items-center gap-2 py-2">
       <RankBadge rank={entry.rank} />
-      <div className="bg-drapeau-rouge/10 text-drapeau-rouge flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold">
+      <div className="bg-drapeau-rouge/10 text-drapeau-rouge flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold">
         {entry.displayName.charAt(0).toUpperCase()}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-text-primary truncate text-sm font-medium">{entry.displayName}</p>
-        <div className="text-text-secondary flex items-center gap-2 text-xs">
+        <p className="text-text-primary truncate text-xs font-medium">{entry.displayName}</p>
+        <div className="text-text-secondary flex items-center gap-1.5 text-[10px]">
           <span className="flex items-center gap-0.5">
-            <Zap className="h-3 w-3 text-amber-500" />
-            Niv. {entry.level}
+            <Zap className="h-2.5 w-2.5 text-amber-500" />
+            Niv.{entry.level}
           </span>
           {entry.streak > 0 && (
             <span className="flex items-center gap-0.5">
-              <Flame className="h-3 w-3 text-orange-500" />
+              <Flame className="h-2.5 w-2.5 text-orange-500" />
               {entry.streak}j
             </span>
           )}
+          <span className="ml-auto tabular-nums font-medium">{entry.totalXp.toLocaleString('fr-FR')} XP</span>
         </div>
       </div>
-      <span className="text-text-secondary text-xs font-medium">{entry.totalXp.toLocaleString('fr-FR')} XP</span>
     </div>
   );
 }

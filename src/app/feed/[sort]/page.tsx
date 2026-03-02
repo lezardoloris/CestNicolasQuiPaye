@@ -92,6 +92,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
       <div className="lg:flex lg:gap-6">
         {/* Left sidebar — desktop only */}
         <DesktopSidebar>
+          {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
           <MiniLeaderboard entries={leaderboard} variant="sidebar" />
         </DesktopSidebar>
 
@@ -117,7 +118,6 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
 
         {/* Right sidebar — swaps to submission preview on card click */}
         <FeedRightSidebar>
-          {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
           {isLoggedOut && (
             <>
               <GamificationTeaser />
