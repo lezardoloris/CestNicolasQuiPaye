@@ -19,6 +19,8 @@ export interface SubmissionCardData {
   pinnedNoteBody?: string | null;
   authorLevel?: number | null;
   authorStreak?: number | null;
+  solutionCount?: number;
+  topSolutionBody?: string | null;
 }
 
 export interface SubmissionDetailData extends SubmissionCardData {

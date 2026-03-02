@@ -15,7 +15,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { loginSchema } from '@/lib/validators/auth';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Github } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Google SVG icon (no external dep)
@@ -34,6 +34,7 @@ export default function LoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isGitHubLoading, setIsGitHubLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -44,6 +45,16 @@ export default function LoginForm() {
     } catch {
       toast.error('Erreur lors de la connexion Google. Réessayez.');
       setIsGoogleLoading(false);
+    }
+  }
+
+  async function handleGitHubSignIn() {
+    setIsGitHubLoading(true);
+    try {
+      await signIn('github', { callbackUrl: '/feed/hot' });
+    } catch {
+      toast.error('Erreur lors de la connexion GitHub. Réessayez.');
+      setIsGitHubLoading(false);
     }
   }
 
@@ -109,12 +120,12 @@ export default function LoginForm() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        {/* ── Google SSO ── */}
+        {/* ── OAuth SSO ── */}
         <Button
           type="button"
           variant="outline"
           onClick={handleGoogleSignIn}
-          disabled={isGoogleLoading || isLoading}
+          disabled={isGoogleLoading || isGitHubLoading || isLoading}
           className="w-full gap-3 border-border-default bg-surface-primary hover:bg-surface-elevated"
           id="btn-google-signin"
         >
@@ -124,6 +135,22 @@ export default function LoginForm() {
             <GoogleIcon />
           )}
           Continuer avec Google
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleGitHubSignIn}
+          disabled={isGoogleLoading || isGitHubLoading || isLoading}
+          className="w-full gap-3 border-border-default bg-surface-primary hover:bg-surface-elevated"
+          id="btn-github-signin"
+        >
+          {isGitHubLoading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Github className="size-[18px]" />
+          )}
+          Continuer avec GitHub
         </Button>
 
         {/* ── Divider ── */}
@@ -197,7 +224,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            disabled={isLoading || isGoogleLoading}
+            disabled={isLoading || isGoogleLoading || isGitHubLoading}
             className="w-full bg-chainsaw-red text-white hover:bg-chainsaw-red-hover"
           >
             {isLoading ? (

@@ -3,13 +3,15 @@ import { submissions } from '@/lib/db/schema';
 import { desc, gt, gte, and, eq, sql, or, getTableColumns } from 'drizzle-orm';
 import type { SortType } from '@/lib/utils/validation';
 
-// Subqueries for feed enrichment (sources + community notes)
+// Subqueries for feed enrichment (sources + community notes + solutions)
 const feedSelect = {
   ...getTableColumns(submissions),
   sourceCount: sql<number>`(SELECT count(*) FROM submission_sources WHERE submission_id = ${submissions.id})`.as('source_count'),
   pinnedNoteBody: sql<string | null>`(SELECT body FROM community_notes WHERE submission_id = ${submissions.id} AND is_pinned = 1 ORDER BY pinned_at DESC LIMIT 1)`.as('pinned_note_body'),
   authorLevel: sql<number>`(SELECT total_xp FROM users WHERE id = ${submissions.authorId})`.as('author_level'),
   authorStreak: sql<number>`(SELECT current_streak FROM users WHERE id = ${submissions.authorId})`.as('author_streak'),
+  solutionCount: sql<number>`(SELECT count(*) FROM solutions WHERE submission_id = ${submissions.id} AND deleted_at IS NULL)`.as('solution_count'),
+  topSolutionBody: sql<string | null>`(SELECT LEFT(body, 200) FROM solutions WHERE submission_id = ${submissions.id} AND deleted_at IS NULL ORDER BY (upvote_count - downvote_count) DESC, created_at ASC LIMIT 1)`.as('top_solution_body'),
 };
 
 // ─── Cursor Encoding ──────────────────────────────────────────────

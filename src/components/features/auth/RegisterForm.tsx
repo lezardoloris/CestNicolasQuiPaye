@@ -15,7 +15,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { registerSchema } from '@/lib/validators/auth';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Github } from 'lucide-react';
 
 function GoogleIcon() {
   return (
@@ -32,6 +32,7 @@ export default function RegisterForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isGitHubLoading, setIsGitHubLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -39,6 +40,12 @@ export default function RegisterForm() {
     setIsGoogleLoading(true);
     // Google handles both registration and login transparently
     await signIn('google', { callbackUrl: '/feed/hot' });
+  }
+
+  async function handleGitHubSignIn() {
+    setIsGitHubLoading(true);
+    // GitHub handles both registration and login transparently
+    await signIn('github', { callbackUrl: '/feed/hot' });
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -113,12 +120,12 @@ export default function RegisterForm() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        {/* ── Google SSO — fastest onboarding ── */}
+        {/* ── OAuth SSO — fastest onboarding ── */}
         <Button
           type="button"
           variant="outline"
           onClick={handleGoogleSignIn}
-          disabled={isGoogleLoading || isLoading}
+          disabled={isGoogleLoading || isGitHubLoading || isLoading}
           className="w-full gap-3 border-border-default bg-surface-primary hover:bg-surface-elevated"
           id="btn-google-register"
         >
@@ -128,6 +135,22 @@ export default function RegisterForm() {
             <GoogleIcon />
           )}
           Continuer avec Google
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleGitHubSignIn}
+          disabled={isGoogleLoading || isGitHubLoading || isLoading}
+          className="w-full gap-3 border-border-default bg-surface-primary hover:bg-surface-elevated"
+          id="btn-github-register"
+        >
+          {isGitHubLoading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Github className="size-[18px]" />
+          )}
+          Continuer avec GitHub
         </Button>
 
         {/* ── Divider ── */}
@@ -217,7 +240,7 @@ export default function RegisterForm() {
 
           <Button
             type="submit"
-            disabled={isLoading || isGoogleLoading}
+            disabled={isLoading || isGoogleLoading || isGitHubLoading}
             className="w-full bg-chainsaw-red text-white hover:bg-chainsaw-red-hover"
           >
             {isLoading ? (

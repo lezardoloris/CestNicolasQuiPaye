@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
+import GitHub from 'next-auth/providers/github';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
@@ -38,6 +39,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
 
+    // ── GitHub OAuth ────────────────────────────────────────────────
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+
     // ── Email / Password ─────────────────────────────────────────────
     Credentials({
       credentials: {
@@ -55,7 +62,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user) return null;
         if (user.deletedAt) return null;
 
-        // Google-only accounts have no password → deny credential login
+        // OAuth-only accounts have no password → deny credential login
         if (!user.passwordHash) return null;
 
         const passwordMatch = await bcrypt.compare(
@@ -78,15 +85,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
 
   callbacks: {
-    // ── Sign-in: auto-create user row for Google OAuth ────────────────
+    // ── Sign-in: auto-create user row for OAuth providers ─────────────
     async signIn({ user, account }) {
-      if (account?.provider === 'google' && user.email) {
+      const isOAuth = account?.provider === 'google' || account?.provider === 'github';
+      if (isOAuth && user.email) {
         const existing = await db.query.users.findFirst({
           where: eq(users.email, user.email),
         });
 
         if (!existing) {
-          // First Google login → materialise in our users table
+          // First OAuth login → materialise in our users table
           const anonymousId = generateAnonymousId();
           await db.insert(users).values({
             email: user.email,

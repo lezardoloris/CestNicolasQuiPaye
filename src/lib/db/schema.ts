@@ -790,6 +790,7 @@ export const xpActionType = pgEnum('xp_action_type', [
   'moderation_action',
   'price_correction',
   'daily_bonus',
+  'oauth_linked',
   'admin_manual',
   'clawback',
 ]);

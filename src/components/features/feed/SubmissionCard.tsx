@@ -13,8 +13,10 @@ import { VoteButtonInline } from '@/components/features/voting/VoteButtonInline'
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { SourceBadge } from '@/components/features/sources/SourceBadge';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
-import { MessageSquare, Flame } from 'lucide-react';
+import { TopSolutionPreview } from '@/components/features/solutions/TopSolutionPreview';
+import { MessageSquare, Flame, Lightbulb, BarChart3 } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
+import { getCategoryBudgetFact } from '@/lib/constants/category-budget-context';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import type { SubmissionCardData } from '@/types/submission';
 
@@ -26,6 +28,7 @@ interface SubmissionCardProps {
 export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const score = submission.upvoteCount - submission.downvoteCount;
   const category = getCategoryDef(submission.ministryTag);
+  const budgetFact = getCategoryBudgetFact(submission.ministryTag);
   const costPerTaxpayer = submission.costPerTaxpayer;
   const isExtreme = costPerTaxpayer ? parseFloat(costPerTaxpayer) >= 10 : false;
   const setSelectedSubmission = useFeedPreviewStore((s) => s.setSelectedSubmission);
@@ -119,10 +122,32 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
           )}
         </div>
 
+        {/* Row 4b: official budget context */}
+        {budgetFact && (
+          <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-text-muted">
+            <BarChart3 className="size-3 shrink-0" aria-hidden="true" />
+            <span>{budgetFact.fact}</span>
+            <span aria-hidden="true">&middot;</span>
+            <Link
+              href={`/chiffres#${budgetFact.anchor}`}
+              className="pointer-events-auto text-text-secondary underline-offset-2 hover:underline hover:text-text-primary"
+            >
+              Voir les chiffres
+            </Link>
+          </div>
+        )}
+
         {/* Pinned Community Note */}
         {submission.pinnedNoteBody && (
           <div className="mt-2">
             <PinnedNote body={submission.pinnedNoteBody} />
+          </div>
+        )}
+
+        {/* Top Solution Preview */}
+        {submission.topSolutionBody && (
+          <div className="mt-2">
+            <TopSolutionPreview body={submission.topSolutionBody} />
           </div>
         )}
 
@@ -148,6 +173,21 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             <MessageSquare className="size-4" aria-hidden="true" />
             <span>{submission.commentCount}</span>
           </Link>
+
+          {(submission.solutionCount ?? 0) > 0 && (
+            <Link
+              href={`/s/${submission.id}#solutions`}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
+                'text-xs font-medium text-warning/80',
+                'transition-colors hover:bg-warning/10 hover:text-warning',
+              )}
+              aria-label={`${submission.solutionCount} solutions proposees`}
+            >
+              <Lightbulb className="size-4" aria-hidden="true" />
+              <span>{submission.solutionCount}</span>
+            </Link>
+          )}
 
           <span className="flex-1" />
 

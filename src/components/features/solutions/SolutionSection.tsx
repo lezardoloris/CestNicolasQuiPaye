@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Lightbulb } from 'lucide-react';
 import { useSolutions } from '@/hooks/useSolutions';
 import { SolutionForm } from './SolutionForm';
@@ -19,6 +20,11 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
     isVoting,
   } = useSolutions(submissionId);
 
+  const totalUpvotes = useMemo(
+    () => solutions.reduce((sum, s) => sum + s.upvoteCount, 0),
+    [solutions],
+  );
+
   return (
     <section className="mt-8" aria-label="Solutions proposees">
       <div className="mb-4 flex items-center gap-2">
@@ -33,15 +39,21 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
         </h2>
       </div>
 
+      {totalUpvotes > 0 && (
+        <p className="mb-3 text-xs text-text-muted">
+          {totalUpvotes} vote{totalUpvotes > 1 ? 's' : ''} de la communaute
+        </p>
+      )}
+
       <SolutionForm onSubmit={createSolution} isSubmitting={isCreating} />
 
-      <div className="mt-4 space-y-3">
+      <div className="mt-4 space-y-2">
         {isLoading ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="h-24 animate-pulse rounded-lg bg-surface-secondary"
+                className="h-20 animate-pulse rounded-lg bg-surface-secondary"
               />
             ))}
           </div>
@@ -50,10 +62,12 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
             Aucune solution proposee. Soyez le premier !
           </p>
         ) : (
-          solutions.map((solution) => (
+          solutions.map((solution, index) => (
             <SolutionItem
               key={solution.id}
               solution={solution}
+              totalUpvotes={totalUpvotes}
+              rank={index}
               onVote={(solutionId, voteType) =>
                 voteSolution({ solutionId, voteType })
               }

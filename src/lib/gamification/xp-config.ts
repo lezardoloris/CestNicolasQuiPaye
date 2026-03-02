@@ -28,6 +28,7 @@ export const XP_TABLE: Record<XpActionType, XpActionConfig> = {
   share: { xp: 5, maxPerDay: 3, label: 'Partage social' },
   moderation_action: { xp: 15, maxPerDay: 50, label: 'Action de modération' },
   price_correction: { xp: 20, maxPerDay: 10, label: 'Correction de montant' },
+  oauth_linked: { xp: 50, maxPerDay: 1, label: 'Compte OAuth lié' },
   daily_bonus: { xp: 10, maxPerDay: 1, label: 'Bonus du jour' },
   admin_manual: { xp: 0, maxPerDay: null, label: 'Attribution manuelle' },
   clawback: { xp: 0, maxPerDay: null, label: 'Récupération XP' },
