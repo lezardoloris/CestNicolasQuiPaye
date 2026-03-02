@@ -30,6 +30,8 @@ export const submissionStatus = pgEnum('submission_status', [
   'hidden',
   'deleted',
 ]);
+export const importSourceEnum = pgEnum('import_source', ['decp', 'plf_budget', 'subventions']);
+export const importStatusEnum = pgEnum('import_status', ['running', 'completed', 'failed']);
 
 // ─── Users ──────────────────────────────────────────────────────────
 export const users = pgTable('users', {
@@ -127,10 +129,15 @@ export const submissions = pgTable('submissions', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
   isSeeded: integer('is_seeded').notNull().default(0),
+  // ─── Open Data import fields ───
+  externalId: varchar('external_id', { length: 255 }),
+  importSource: importSourceEnum('import_source'),
   // ─── Community validation weights ───
   approveWeight: integer('approve_weight').notNull().default(0),
   rejectWeight: integer('reject_weight').notNull().default(0),
-});
+}, (table) => [
+  uniqueIndex('idx_submissions_external_id_source').on(table.importSource, table.externalId),
+]);
 
 // ─── Votes ──────────────────────────────────────────────────────────
 export const votes = pgTable(
@@ -939,6 +946,19 @@ export const communityValidationsRelations = relations(communityValidations, ({ 
   }),
 }));
 
+// ─── Data Imports (Open Data tracking) ────────────────────────────
+export const dataImports = pgTable('data_imports', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  source: importSourceEnum('source').notNull(),
+  status: importStatusEnum('status').notNull().default('running'),
+  recordsFetched: integer('records_fetched').notNull().default(0),
+  recordsInserted: integer('records_inserted').notNull().default(0),
+  recordsSkipped: integer('records_skipped').notNull().default(0),
+  errorMessage: text('error_message'),
+  startedAt: timestamp('started_at').notNull().defaultNow(),
+  completedAt: timestamp('completed_at'),
+});
+
 // ─── Type Exports ──────────────────────────────────────────────────
 export type Submission = typeof submissions.$inferSelect;
 export type NewSubmission = typeof submissions.$inferInsert;
@@ -974,3 +994,5 @@ export type UserBadge = typeof userBadges.$inferSelect;
 export type AntiGamingEvent = typeof antiGamingEvents.$inferSelect;
 export type CommunityValidation = typeof communityValidations.$inferSelect;
 export type NewCommunityValidation = typeof communityValidations.$inferInsert;
+export type DataImport = typeof dataImports.$inferSelect;
+export type NewDataImport = typeof dataImports.$inferInsert;

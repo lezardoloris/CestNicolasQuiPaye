@@ -8,6 +8,7 @@ import {
   Megaphone,
   Lightbulb,
   Zap,
+  Download,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { href: '/admin/broadcast', label: 'Diffusion', icon: Megaphone },
   { href: '/admin/features', label: 'Fonctionnalites', icon: Lightbulb },
   { href: '/admin/gamification', label: 'Gamification', icon: Zap },
+  { href: '/admin/imports', label: 'Imports', icon: Download },
 ];
 
 export default async function AdminLayout({
