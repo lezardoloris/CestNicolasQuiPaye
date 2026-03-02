@@ -152,7 +152,7 @@ export default function DisplayNameForm({
         {/* Live preview */}
         <div className="rounded-lg bg-surface-elevated p-4">
           <p className="text-sm text-text-muted">
-            Apercu : <strong className="text-text-primary">{previewName}</strong>
+            Aperçu : <strong className="text-text-primary">{previewName}</strong>
           </p>
           <p className="mt-1 text-xs text-text-muted">
             Soumis par <strong>{previewName}</strong> - il y a 2 minutes
@@ -168,10 +168,10 @@ export default function DisplayNameForm({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
-                Mise a jour...
+                Mise à jour...
               </>
             ) : (
-              'Mettre a jour'
+              'Mettre à jour'
             )}
           </Button>
           {currentDisplayName && (

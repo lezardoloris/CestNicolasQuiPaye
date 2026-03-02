@@ -90,7 +90,7 @@ export function SolutionItem({
           className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
         >
           <MessageCircle className="size-3" aria-hidden="true" />
-          Suggerer un ajustement
+          Suggérer un ajustement
         </button>
       </div>
 
@@ -99,7 +99,7 @@ export function SolutionItem({
         <div className="mt-2 border-t border-border-default pt-2">
           <div className="ml-2 border-l-2 border-border-default pl-3">
             <p className="text-xs text-text-muted">
-              Les suggestions d&apos;ajustement arrivent bientot.
+              Les suggestions d&apos;ajustement arrivent bientôt.
             </p>
           </div>
         </div>

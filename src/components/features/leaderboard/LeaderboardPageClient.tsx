@@ -86,19 +86,19 @@ export function LeaderboardPageClient() {
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
                   +20
                 </span>
-                <span>Source ajoutee</span>
+                <span>Source ajoutée</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
                   +15
                 </span>
-                <span>Note de communaute</span>
+                <span>Note de communauté</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
                   +10
                 </span>
-                <span>Bonus quotidien (serie)</span>
+                <span>Bonus quotidien (série)</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-surface-elevated text-xs font-bold text-text-secondary">

@@ -4,7 +4,7 @@ import SubmissionForm from '@/components/features/submissions/SubmissionForm';
 export const metadata: Metadata = {
   title: 'Signaler un gaspillage',
   description:
-    'Soumettez un cas de gaspillage public avec un titre, une description, un cout estime et un lien source.',
+    'Soumettez un cas de gaspillage public avec un titre, une description, un coût estimé et un lien source.',
 };
 
 export default function SubmitPage() {

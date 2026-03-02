@@ -19,7 +19,7 @@ export function SolutionForm({ onSubmit, isSubmitting }: SolutionFormProps) {
 
     const trimmed = body.trim();
     if (trimmed.length < 10) {
-      setError('La solution doit contenir au moins 10 caracteres.');
+      setError('La solution doit contenir au moins 10 caractères.');
       return;
     }
 
@@ -36,7 +36,7 @@ export function SolutionForm({ onSubmit, isSubmitting }: SolutionFormProps) {
       <Textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
-        placeholder="Proposez une solution pour reduire ce gaspillage..."
+        placeholder="Proposez une solution pour réduire ce gaspillage..."
         className="min-h-[80px] bg-surface-primary border-border-default text-text-primary placeholder:text-text-muted"
         maxLength={2000}
       />

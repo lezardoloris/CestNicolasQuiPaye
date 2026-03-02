@@ -23,7 +23,7 @@ export function VoteProminentButtons({
   const activeVote = currentVote ?? serverVote ?? null;
 
   return (
-    <div className="flex flex-col gap-2" role="group" aria-label="Votre avis sur cette depense">
+    <div className="flex flex-col gap-1.5" role="group" aria-label="Votre avis sur cette dépense">
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -33,7 +33,7 @@ export function VoteProminentButtons({
         disabled={isLoading}
         aria-pressed={activeVote === 'up'}
         className={cn(
-          'flex w-full items-center justify-between rounded-lg border px-4 py-3 text-sm font-semibold transition-all',
+          'flex w-full items-center justify-between rounded-lg border px-3 py-2 text-[13px] font-semibold transition-all',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
           activeVote === 'up'
             ? 'border-chainsaw-red bg-chainsaw-red text-white'
@@ -42,7 +42,7 @@ export function VoteProminentButtons({
       >
         <span className="flex items-center gap-2">
           <AlertTriangle className="size-4" aria-hidden="true" />
-          Depense a revoir
+          Dépense à revoir
         </span>
         <span className="tabular-nums">{counts.up}</span>
       </button>
@@ -56,7 +56,7 @@ export function VoteProminentButtons({
         disabled={isLoading}
         aria-pressed={activeVote === 'down'}
         className={cn(
-          'flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-[13px] font-medium transition-all',
+          'flex w-full items-center justify-between rounded-lg border px-3 py-2 text-[13px] font-medium transition-all',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
           activeVote === 'down'
             ? 'border-emerald-600 bg-emerald-600 text-white'
@@ -65,7 +65,7 @@ export function VoteProminentButtons({
       >
         <span className="flex items-center gap-2">
           <CheckCircle className="size-4" aria-hidden="true" />
-          Depense justifiee
+          Dépense justifiée
         </span>
         <span className="tabular-nums">{counts.down}</span>
       </button>

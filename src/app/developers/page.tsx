@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 export const metadata: Metadata = {
   title: 'API Publique Open Data - Nicolas Paye',
   description:
-    'Documentation de l\'API publique Open Data de nicoquipaie.co. Acces libre aux donnees des depenses publiques francaises.',
+    'Documentation de l\'API publique Open Data de nicoquipaie.co. Accès libre aux données des dépenses publiques françaises.',
 };
 
 // ─── Endpoint definitions ────────────────────────────────────────
@@ -31,15 +31,15 @@ const endpoints: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/submissions',
-    description: 'Liste paginee des depenses publiques approuvees, avec filtres et tri.',
+    description: 'Liste paginée des dépenses publiques approuvées, avec filtres et tri.',
     params: [
       { name: 'sort', type: 'string', required: false, description: 'hot | new | top | amount', defaultValue: 'new' },
-      { name: 'limit', type: 'number', required: false, description: 'Nombre de resultats (1-100)', defaultValue: '20' },
-      { name: 'cursor', type: 'string', required: false, description: 'Curseur de pagination (fourni dans la reponse)' },
-      { name: 'category', type: 'string', required: false, description: 'Filtrer par categorie (ex: Defense, Sante)' },
+      { name: 'limit', type: 'number', required: false, description: 'Nombre de résultats (1-100)', defaultValue: '20' },
+      { name: 'cursor', type: 'string', required: false, description: 'Curseur de pagination (fourni dans la réponse)' },
+      { name: 'category', type: 'string', required: false, description: 'Filtrer par catégorie (ex: Défense, Santé)' },
       { name: 'amountMin', type: 'number', required: false, description: 'Montant minimum en EUR' },
       { name: 'amountMax', type: 'number', required: false, description: 'Montant maximum en EUR' },
-      { name: 'dateFrom', type: 'string', required: false, description: 'Date de debut (ISO 8601)' },
+      { name: 'dateFrom', type: 'string', required: false, description: 'Date de début (ISO 8601)' },
       { name: 'dateTo', type: 'string', required: false, description: 'Date de fin (ISO 8601)' },
       { name: 'timeWindow', type: 'string', required: false, description: 'today | week | month | all', defaultValue: 'all' },
     ],
@@ -48,7 +48,7 @@ const endpoints: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/submissions/:id',
-    description: 'Detail complet d\'une soumission : sources, notes communautaires, solutions, calculs de cout.',
+    description: 'Détail complet d\'une soumission : sources, notes communautaires, solutions, calculs de coût.',
     params: [
       { name: 'id', type: 'uuid', required: true, description: 'Identifiant de la soumission' },
     ],
@@ -57,11 +57,11 @@ const endpoints: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/submissions/export',
-    description: 'Export complet des soumissions approuvees en JSON ou CSV.',
+    description: 'Export complet des soumissions approuvées en JSON ou CSV.',
     params: [
       { name: 'format', type: 'string', required: false, description: 'json | csv', defaultValue: 'json' },
-      { name: 'category', type: 'string', required: false, description: 'Filtrer par categorie' },
-      { name: 'dateFrom', type: 'string', required: false, description: 'Date de debut (ISO 8601)' },
+      { name: 'category', type: 'string', required: false, description: 'Filtrer par catégorie' },
+      { name: 'dateFrom', type: 'string', required: false, description: 'Date de début (ISO 8601)' },
       { name: 'dateTo', type: 'string', required: false, description: 'Date de fin (ISO 8601)' },
     ],
     exampleUrl: '/api/v1/submissions/export?format=csv',
@@ -69,14 +69,14 @@ const endpoints: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/stats',
-    description: 'Statistiques agregees : totaux, repartition par categorie, top 10, evolution temporelle.',
+    description: 'Statistiques agrégées : totaux, répartition par catégorie, top 10, évolution temporelle.',
     params: [],
     exampleUrl: '/api/v1/stats',
   },
   {
     method: 'GET',
     path: '/api/v1/categories',
-    description: 'Liste des 16 categories de depenses publiques.',
+    description: 'Liste des 16 catégories de dépenses publiques.',
     params: [],
     exampleUrl: '/api/v1/categories',
   },
@@ -85,10 +85,10 @@ const endpoints: Endpoint[] = [
     path: '/api/v1/search',
     description: 'Recherche dans les titres et descriptions des soumissions.',
     params: [
-      { name: 'q', type: 'string', required: true, description: 'Terme de recherche (2-200 caracteres)' },
-      { name: 'limit', type: 'number', required: false, description: 'Nombre de resultats (1-100)', defaultValue: '20' },
+      { name: 'q', type: 'string', required: true, description: 'Terme de recherche (2-200 caractères)' },
+      { name: 'limit', type: 'number', required: false, description: 'Nombre de résultats (1-100)', defaultValue: '20' },
       { name: 'cursor', type: 'string', required: false, description: 'Curseur de pagination' },
-      { name: 'category', type: 'string', required: false, description: 'Filtrer par categorie' },
+      { name: 'category', type: 'string', required: false, description: 'Filtrer par catégorie' },
     ],
     exampleUrl: '/api/v1/search?q=defense&limit=10',
   },
@@ -112,10 +112,10 @@ function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-border-default text-text-muted">
-                <th className="pb-2 pr-4 font-medium">Parametre</th>
+                <th className="pb-2 pr-4 font-medium">Paramètre</th>
                 <th className="pb-2 pr-4 font-medium">Type</th>
                 <th className="pb-2 pr-4 font-medium">Requis</th>
-                <th className="pb-2 pr-4 font-medium">Defaut</th>
+                <th className="pb-2 pr-4 font-medium">Défaut</th>
                 <th className="pb-2 font-medium">Description</th>
               </tr>
             </thead>
@@ -155,7 +155,7 @@ export default function DevelopersPage() {
           API Publique Open Data
         </h1>
         <p className="mb-4 text-lg text-text-secondary">
-          Acces libre et gratuit aux donnees des depenses publiques francaises
+          Accès libre et gratuit aux données des dépenses publiques françaises
           soumises par les citoyens sur Nicolas Paye.
         </p>
         <div className="rounded-lg bg-surface-elevated p-4">
@@ -167,21 +167,21 @@ export default function DevelopersPage() {
       {/* Response format */}
       <section className="mb-12">
         <h2 className="mb-4 text-xl font-semibold text-text-primary">
-          Format de reponse
+          Format de réponse
         </h2>
         <p className="mb-3 text-sm text-text-secondary">
-          Toutes les reponses suivent la meme enveloppe JSON :
+          Toutes les réponses suivent la même enveloppe JSON :
         </p>
         <pre className={cn(
           'overflow-x-auto rounded-lg bg-surface-elevated p-4 text-xs text-text-secondary',
         )}>
 {`{
-  "data": [ ... ],       // Les donnees demandees
-  "error": null,          // null en cas de succes, objet d'erreur sinon
+  "data": [ ... ],       // Les données demandées
+  "error": null,          // null en cas de succès, objet d'erreur sinon
   "meta": {
-    "requestId": "uuid",  // Identifiant unique de la requete
+    "requestId": "uuid",  // Identifiant unique de la requête
     "cursor": "abc...",    // Curseur pour la page suivante (si applicable)
-    "hasMore": true        // Indique s'il y a plus de resultats
+    "hasMore": true        // Indique s'il y a plus de résultats
   }
 }`}
         </pre>
@@ -205,17 +205,17 @@ export default function DevelopersPage() {
           Pagination
         </h2>
         <p className="mb-3 text-sm text-text-secondary">
-          Les endpoints pagines utilisent un systeme de curseur. Si{' '}
+          Les endpoints paginés utilisent un système de curseur. Si{' '}
           <code className="text-accent-primary">meta.hasMore</code> est{' '}
           <code>true</code>, passez la valeur de{' '}
           <code className="text-accent-primary">meta.cursor</code> dans le
-          parametre <code>cursor</code> de la requete suivante.
+          paramètre <code>cursor</code> de la requête suivante.
         </p>
         <pre className="overflow-x-auto rounded-lg bg-surface-elevated p-4 text-xs text-text-secondary">
-{`# Premiere page
+{`# Première page
 curl ${BASE_URL}/api/v1/submissions?limit=10
 
-# Page suivante (avec le curseur recu)
+# Page suivante (avec le curseur reçu)
 curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
         </pre>
       </section>
@@ -233,8 +233,8 @@ curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
             <span className="text-sm text-text-secondary">par adresse IP</span>
           </div>
           <p className="mt-2 text-sm text-text-muted">
-            En cas de depassement, l&apos;API retourne un code HTTP 429. Les
-            reponses incluent des headers de cache pour reduire les appels
+            En cas de dépassement, l&apos;API retourne un code HTTP 429. Les
+            réponses incluent des headers de cache pour réduire les appels
             inutiles.
           </p>
         </div>
@@ -246,7 +246,7 @@ curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
           CORS
         </h2>
         <p className="text-sm text-text-secondary">
-          L&apos;API accepte les requetes depuis n&apos;importe quelle origine
+          L&apos;API accepte les requêtes depuis n&apos;importe quelle origine
           (<code>Access-Control-Allow-Origin: *</code>). Vous pouvez
           l&apos;appeler directement depuis le navigateur.
         </p>
@@ -255,10 +255,10 @@ curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
       {/* License */}
       <section className="mb-12">
         <h2 className="mb-4 text-xl font-semibold text-text-primary">
-          Licence des donnees
+          Licence des données
         </h2>
         <p className="text-sm text-text-secondary">
-          Les donnees sont mises a disposition sous licence{' '}
+          Les données sont mises à disposition sous licence{' '}
           <a
             href="https://opendatacommons.org/licenses/by/1-0/"
             target="_blank"
@@ -267,7 +267,7 @@ curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
           >
             Open Data Commons Attribution (ODC-BY)
           </a>
-          . Vous etes libre de les utiliser, partager et adapter, a condition de
+          . Vous êtes libre de les utiliser, partager et adapter, à condition de
           mentionner la source : <strong>nicoquipaie.co</strong>.
         </p>
       </section>
@@ -286,7 +286,7 @@ curl ${BASE_URL}/api/v1/submissions?limit=10&cursor=eyJpZCI6Ii4uLiJ9`}
             rel="noopener noreferrer"
             className="underline hover:text-text-primary"
           >
-            depot GitHub
+            dépôt GitHub
           </a>{' '}
           du projet.
         </p>

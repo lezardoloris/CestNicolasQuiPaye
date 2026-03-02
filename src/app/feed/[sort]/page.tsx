@@ -91,7 +91,9 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
     <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 pb-20 md:pt-6 md:pb-6">
       <div className="lg:flex lg:gap-6">
         {/* Left sidebar — desktop only */}
-        <DesktopSidebar />
+        <DesktopSidebar>
+          <MiniLeaderboard entries={leaderboard} variant="sidebar" />
+        </DesktopSidebar>
 
         {/* Feed column — Twitter-style center column with vertical borders */}
         <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:max-w-[600px] lg:border-x lg:border-border-default">
@@ -115,7 +117,6 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
 
         {/* Right sidebar — swaps to submission preview on card click */}
         <FeedRightSidebar>
-          <MiniLeaderboard entries={leaderboard} variant="sidebar" />
           {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
           {isLoggedOut && (
             <>

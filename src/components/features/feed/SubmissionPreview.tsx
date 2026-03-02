@@ -37,30 +37,30 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
 
   return (
     <div className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border-default bg-surface-primary">
-      {/* Header: title + close button */}
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface-primary/95 px-4 py-2.5 backdrop-blur-sm">
-        <span className="text-sm font-medium text-text-primary">Apercu</span>
+      {/* Header: close button */}
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface-primary/95 px-3 py-1.5 backdrop-blur-sm">
+        <span className="text-xs font-medium text-text-muted">Aperçu</span>
         <button
           onClick={clearSelectedSubmission}
-          className="rounded-full p-1.5 text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-primary"
-          aria-label="Fermer l'apercu"
+          className="rounded-full p-1 text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-primary"
+          aria-label="Fermer l'aperçu"
         >
-          <X className="size-4" />
+          <X className="size-3.5" />
         </button>
       </div>
 
-      <div className="px-4 py-3">
-        {/* Metadata */}
-        <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-text-muted">
+      <div className="px-3 py-2">
+        {/* Metadata + title combined */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-text-muted">
           {category && (
             <span
               className={cn(
-                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-4',
+                'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-3',
                 category.color,
                 category.bgColor,
               )}
             >
-              <category.icon className="size-3" aria-hidden="true" />
+              <category.icon className="size-2.5" aria-hidden="true" />
               {category.label}
             </span>
           )}
@@ -74,36 +74,46 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
           >
             {formatRelativeTime(submission.createdAt)}
           </time>
-        </div>
-
-        {/* Title */}
-        <h3 className="mt-2 text-[17px] font-bold leading-snug text-text-primary">
-          {submission.title}
-        </h3>
-
-        {/* Cost box */}
-        <div className="mt-3 rounded-lg border border-chainsaw-red/20 bg-chainsaw-red/5 px-3 py-2.5">
-          <p className="text-[11px] font-medium tracking-wide text-text-muted uppercase">
-            Cout estime
-          </p>
-          <p
-            className={cn(
-              'mt-0.5 font-display text-xl font-black tabular-nums',
-              isExtreme ? 'text-chainsaw-red' : 'text-chainsaw-red/90',
-            )}
-          >
-            {isExtreme && <Flame className="mr-1 inline size-4" aria-hidden="true" />}
-            {formatCompactEUR(Number(submission.amount))}
-          </p>
-          {costPerTaxpayer && (
-            <p className="mt-0.5 text-[13px] text-text-secondary">
-              soit {formatEURPrecise(costPerTaxpayer)} par citoyen
-            </p>
+          {sourceDomain && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <a
+                href={submission.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 transition-colors hover:text-text-primary"
+              >
+                <ExternalLink className="size-2.5" />
+                {sourceDomain}
+              </a>
+            </>
           )}
         </div>
 
-        {/* Prominent vote buttons */}
-        <div className="mt-3">
+        <h3 className="mt-1 text-[15px] font-bold leading-snug text-text-primary">
+          {submission.title}
+        </h3>
+
+        {/* Cost — inline compact */}
+        <div className="mt-1.5 flex items-center gap-2">
+          <span
+            className={cn(
+              'text-[13px] font-bold tabular-nums',
+              isExtreme ? 'text-chainsaw-red' : 'text-chainsaw-red/90',
+            )}
+          >
+            {isExtreme && <Flame className="mr-0.5 inline size-3" aria-hidden="true" />}
+            {formatCompactEUR(Number(submission.amount))}
+          </span>
+          {costPerTaxpayer && (
+            <span className="text-[12px] font-medium tabular-nums text-text-muted">
+              ({formatEURPrecise(costPerTaxpayer)}/citoyen)
+            </span>
+          )}
+        </div>
+
+        {/* Vote buttons — compact */}
+        <div className="mt-2">
           <VoteProminentButtons
             submissionId={submission.id}
             serverCounts={{
@@ -113,46 +123,33 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
           />
         </div>
 
-        {/* Description — full text */}
+        {/* Description — truncated */}
         {submission.description && (
-          <p className="mt-3 text-[14px] leading-relaxed text-text-secondary">
+          <p className="mt-2 line-clamp-3 text-[13px] leading-relaxed text-text-secondary">
             {submission.description}
           </p>
         )}
 
-        {/* Source link */}
-        {sourceDomain && (
-          <a
-            href={submission.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-text-muted transition-colors hover:text-text-primary"
-          >
-            <ExternalLink className="size-3.5" />
-            {sourceDomain}
-          </a>
-        )}
-
         {/* Pinned community note */}
         {submission.pinnedNoteBody && (
-          <div className="mt-3">
+          <div className="mt-2">
             <PinnedNote body={submission.pinnedNoteBody} />
           </div>
         )}
 
-        {/* ── Solutions — inline, no tab needed ── */}
-        <div className="mt-4 border-t border-border-default pt-1">
+        {/* Solutions — inline */}
+        <div className="mt-2 border-t border-border-default pt-1">
           <SolutionSection submissionId={submission.id} />
         </div>
 
         {/* Action bar */}
-        <div className="mt-3 flex items-center gap-1 border-t border-border-default pt-3">
+        <div className="mt-2 flex items-center gap-1 border-t border-border-default pt-2">
           <Link
             href={`/s/${submission.id}#commentaires`}
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
           >
-            <MessageSquare className="size-4" aria-hidden="true" />
-            <span>{submission.commentCount} commentaires</span>
+            <MessageSquare className="size-3.5" aria-hidden="true" />
+            <span>{submission.commentCount}</span>
           </Link>
 
           <span className="flex-1" />
@@ -166,17 +163,17 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
                 : undefined
             }
             variant="compact"
-            className="h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-3 py-1.5 text-xs font-medium text-text-muted shadow-none hover:bg-surface-elevated hover:text-text-secondary"
+            className="h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-2.5 py-1 text-xs font-medium text-text-muted shadow-none hover:bg-surface-elevated hover:text-text-secondary"
           />
         </div>
 
         {/* Full page link */}
         <Link
           href={`/s/${submission.id}`}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border-default bg-surface-secondary px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary"
+          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-border-default bg-surface-secondary px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary"
         >
-          Voir la page complete
-          <ArrowRight className="size-4" />
+          Voir la page complète
+          <ArrowRight className="size-3.5" />
         </Link>
       </div>
     </div>

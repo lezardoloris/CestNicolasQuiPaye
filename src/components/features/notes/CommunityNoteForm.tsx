@@ -18,7 +18,7 @@ export function CommunityNoteForm({ onSubmit, isSubmitting }: CommunityNoteFormP
     setError('');
 
     if (body.trim().length < 10) {
-      setError('La note doit contenir au moins 10 caracteres');
+      setError('La note doit contenir au moins 10 caractères');
       return;
     }
 

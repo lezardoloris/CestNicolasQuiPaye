@@ -198,7 +198,7 @@ function FeatureManagementCard({
               <Textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="Raison du refus (min. 10 caracteres)..."
+                placeholder="Raison du refus (min. 10 caractères)..."
                 rows={2}
                 maxLength={500}
                 aria-label="Raison du refus"
