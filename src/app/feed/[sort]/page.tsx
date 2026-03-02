@@ -86,19 +86,19 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
   const isLoggedOut = !session?.user;
 
   return (
-    <main id="main-content" className="mx-auto max-w-6xl px-4 pt-4 pb-20 md:pt-6 md:pb-6">
-      <div className="mx-auto max-w-3xl lg:max-w-none">
-        <HeroSection stats={stats} />
-      </div>
+    <main id="main-content" className="mx-auto max-w-[1050px] px-4 pt-4 pb-20 md:pt-6 md:pb-6">
+      {/* Hero spans full width */}
+      <HeroSection stats={stats} />
 
       {/* Mobile: inline mini leaderboard */}
-      <div className="mx-auto max-w-3xl lg:hidden">
+      <div className="lg:hidden">
         <MiniLeaderboard entries={leaderboard} variant="inline" />
       </div>
 
-      <div className="mx-auto max-w-3xl lg:max-w-none lg:relative lg:flex lg:justify-center">
-        {/* Main feed column — centered on the full viewport */}
-        <div className="min-w-0 w-full max-w-3xl">
+      {/* Twitter-style two-column layout: feed + sidebar */}
+      <div className="lg:flex lg:gap-8">
+        {/* Main feed column — like Twitter's center column */}
+        <div className="min-w-0 flex-1">
           <FeedSortTabs activeSort={sort} />
 
           {sort === 'top' && <TopTimeFilter activeWindow={validTimeWindow} />}
@@ -112,8 +112,8 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
           </div>
         </div>
 
-        {/* Desktop sidebar — positioned absolutely so it doesn't affect feed centering */}
-        <aside className="hidden lg:block lg:absolute lg:left-[calc(50%+24rem+1.5rem)] lg:top-0 lg:w-[280px]">
+        {/* Right sidebar — like Twitter's "What's happening" column */}
+        <aside className="hidden w-[350px] shrink-0 lg:block">
           <div className="sticky top-20 space-y-4">
             <MiniLeaderboard entries={leaderboard} variant="sidebar" />
             {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
