@@ -62,7 +62,7 @@ export function FeedList({ initialData, sort, timeWindow, activeCategory = null 
   }
 
   return (
-    <div id="main-feed" className="flex flex-col gap-3 md:gap-4">
+    <div id="main-feed" className="flex flex-col">
       {filteredSubmissions.map((submission, index) => (
         <SubmissionCard key={submission.id} submission={submission} index={index} />
       ))}

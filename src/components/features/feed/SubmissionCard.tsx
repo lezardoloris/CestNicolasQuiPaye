@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import {
-  formatEUR,
   formatCompactEUR,
   formatEURPrecise,
   formatRelativeTime,
@@ -14,9 +13,8 @@ import { VoteButtonInline } from '@/components/features/voting/VoteButtonInline'
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { SourceBadge } from '@/components/features/sources/SourceBadge';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
-import { MessageSquare, Flame, Zap } from 'lucide-react';
+import { MessageSquare, Flame } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
-import { getLevelFromXp } from '@/lib/gamification/xp-config';
 import type { SubmissionCardData } from '@/types/submission';
 
 interface SubmissionCardProps {
@@ -24,25 +22,11 @@ interface SubmissionCardProps {
   index?: number;
 }
 
-function getOutrageTier(costPerTaxpayer: string | null): {
-  border: string;
-  bg: string;
-  isExtreme: boolean;
-} {
-  if (!costPerTaxpayer) return { border: 'border-l-border-default', bg: '', isExtreme: false };
-  const cost = parseFloat(costPerTaxpayer);
-  if (cost >= 10)
-    return { border: 'border-l-chainsaw-red', bg: '', isExtreme: true };
-  if (cost >= 1) return { border: 'border-l-chainsaw-red/50', bg: '', isExtreme: false };
-  if (cost >= 0.1) return { border: 'border-l-text-muted', bg: '', isExtreme: false };
-  return { border: 'border-l-text-muted', bg: '', isExtreme: false };
-}
-
 export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const score = submission.upvoteCount - submission.downvoteCount;
   const category = getCategoryDef(submission.ministryTag);
-  const outrage = getOutrageTier(submission.costPerTaxpayer);
-  const authorLevelInfo = submission.authorLevel ? getLevelFromXp(submission.authorLevel) : null;
+  const costPerTaxpayer = submission.costPerTaxpayer;
+  const isExtreme = costPerTaxpayer ? parseFloat(costPerTaxpayer) >= 10 : false;
 
   return (
     <motion.article
@@ -50,137 +34,87 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5), ease: 'easeOut' }}
       role="article"
-      aria-label={`${submission.title}, score: ${score}, cout: ${formatEUR(submission.amount)}`}
-      className={cn(
-        'group relative rounded-lg border border-border-default',
-        'bg-surface-secondary',
-        outrage.bg,
-        'transition-all duration-200 hover:border-border-default/80 hover:bg-surface-elevated',
-        'border-l-[5px]',
-        'card-hover-lift',
-        outrage.border,
-      )}
+      aria-label={`${submission.title}, score: ${score}`}
+      className="group relative border-b border-border-default transition-colors hover:bg-surface-secondary/50"
     >
       {/* Stretched link — makes entire card clickable */}
       <Link
         href={`/s/${submission.id}`}
-        className="absolute inset-0 z-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary"
+        className="absolute inset-0 z-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-inset"
         aria-label={truncate(submission.title, 120)}
         tabIndex={-1}
       />
 
-      <div className="pointer-events-none relative z-1 p-4">
-        {/* Top section: stacked on mobile, row on desktop */}
-        <div className="md:flex md:items-start md:justify-between md:gap-4">
-          <div className="min-w-0 space-y-2 md:flex-1">
-            {/* Metadata row */}
-            <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
-              {category && (
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-4',
-                    category.color,
-                    category.bgColor,
-                  )}
-                >
-                  <category.icon className="size-3" aria-hidden="true" />
-                  {category.label}
-                </span>
+      <div className="pointer-events-none relative z-1 px-4 py-3">
+        {/* Row 1: metadata */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[13px] text-text-muted">
+          {category && (
+            <span
+              className={cn(
+                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-4',
+                category.color,
+                category.bgColor,
               )}
-              <SourceBadge
-                sourceUrl={submission.sourceUrl}
-                sourceCount={submission.sourceCount}
-              />
-              <span aria-hidden="true">&middot;</span>
-              <time
-                dateTime={
-                  typeof submission.createdAt === 'string'
-                    ? submission.createdAt
-                    : submission.createdAt.toISOString()
-                }
-              >
-                {formatRelativeTime(submission.createdAt)}
-              </time>
-              {authorLevelInfo && authorLevelInfo.level > 1 && (
-                <>
-                  <span aria-hidden="true">&middot;</span>
-                  <span
-                    className="inline-flex items-center gap-0.5 text-[10px] font-bold text-chainsaw-red/70"
-                    title={`Nv.${authorLevelInfo.level} ${authorLevelInfo.title}`}
-                  >
-                    <Zap className="size-2.5" />
-                    Nv.{authorLevelInfo.level}
-                  </span>
-                </>
-              )}
-              {submission.authorStreak && submission.authorStreak >= 3 ? (
-                <Flame className="size-3 text-text-muted" />
-              ) : null}
-            </div>
-
-            {/* Cost badges: above title on mobile, hidden on desktop (shown top-right instead) */}
-            <div className="flex flex-wrap items-center gap-1.5 md:hidden">
-              {submission.costPerTaxpayer && (
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold leading-4 tabular-nums',
-                    outrage.isExtreme
-                      ? 'bg-chainsaw-red/15 text-chainsaw-red'
-                      : 'bg-warning/15 text-warning',
-                  )}
-                >
-                  {outrage.isExtreme && <Flame className="size-3" aria-hidden="true" />}
-                  {formatEURPrecise(submission.costPerTaxpayer)}/citoyen
-                </span>
-              )}
-              <span className="inline-flex items-center rounded-full bg-chainsaw-red/10 px-2 py-0.5 text-[11px] font-black tabular-nums text-chainsaw-red">
-                {formatCompactEUR(Number(submission.amount))}
-              </span>
-            </div>
-
-            {/* Title + Description */}
-            <div>
-              <h3 className="line-clamp-2 text-base font-semibold leading-snug text-text-primary transition-colors group-hover:text-chainsaw-red md:text-lg">
-                {truncate(submission.title, 120)}
-              </h3>
-              {submission.description && (
-                <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-text-secondary">
-                  {truncate(submission.description, 200)}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Cost badges: top-right on desktop */}
-          <div className="hidden shrink-0 items-center gap-1.5 md:flex">
-            {submission.costPerTaxpayer && (
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold leading-4 tabular-nums',
-                  outrage.isExtreme
-                    ? 'bg-chainsaw-red/15 text-chainsaw-red'
-                    : 'bg-chainsaw-red/10 text-chainsaw-red/80',
-                )}
-              >
-                {outrage.isExtreme && <Flame className="size-3" aria-hidden="true" />}
-                {formatEURPrecise(submission.costPerTaxpayer)}/citoyen
-              </span>
-            )}
-            <span className="inline-flex items-center rounded-full bg-chainsaw-red/10 px-2.5 py-0.5 text-xs font-black tabular-nums text-chainsaw-red">
-              {formatCompactEUR(Number(submission.amount))}
+            >
+              <category.icon className="size-3" aria-hidden="true" />
+              {category.label}
             </span>
-          </div>
+          )}
+          <span aria-hidden="true">&middot;</span>
+          <time
+            dateTime={
+              typeof submission.createdAt === 'string'
+                ? submission.createdAt
+                : submission.createdAt.toISOString()
+            }
+          >
+            {formatRelativeTime(submission.createdAt)}
+          </time>
+          <SourceBadge
+            sourceUrl={submission.sourceUrl}
+            sourceCount={submission.sourceCount}
+          />
+        </div>
+
+        {/* Row 2: title */}
+        <h3 className="mt-1.5 line-clamp-2 text-[17px] font-semibold leading-snug text-text-primary transition-colors group-hover:text-chainsaw-red">
+          {truncate(submission.title, 120)}
+        </h3>
+
+        {/* Row 3: description */}
+        {submission.description && (
+          <p className="mt-1 line-clamp-2 text-[15px] leading-normal text-text-secondary">
+            {truncate(submission.description, 200)}
+          </p>
+        )}
+
+        {/* Row 4: cost info — inline */}
+        <div className="mt-2 flex items-center gap-2">
+          <span
+            className={cn(
+              'text-[13px] font-bold tabular-nums',
+              isExtreme ? 'text-chainsaw-red' : 'text-chainsaw-red/80',
+            )}
+          >
+            {isExtreme && <Flame className="mr-0.5 inline size-3" aria-hidden="true" />}
+            {formatCompactEUR(Number(submission.amount))}
+          </span>
+          {costPerTaxpayer && (
+            <span className="text-[13px] font-medium tabular-nums text-text-muted">
+              ({formatEURPrecise(costPerTaxpayer)}/citoyen)
+            </span>
+          )}
         </div>
 
         {/* Pinned Community Note */}
         {submission.pinnedNoteBody && (
-          <div className="mt-3">
+          <div className="mt-2">
             <PinnedNote body={submission.pinnedNoteBody} />
           </div>
         )}
 
-        {/* Action Bar */}
-        <div className="pointer-events-auto mt-3 flex items-center gap-1">
+        {/* Row 5: action bar */}
+        <div className="pointer-events-auto mt-2 flex items-center gap-1">
           <VoteButtonInline
             submissionId={submission.id}
             serverCounts={{

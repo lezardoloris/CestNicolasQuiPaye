@@ -51,7 +51,7 @@ export function FeedSortTabs({ activeSort }: FeedSortTabsProps) {
     <div
       role="tablist"
       aria-label="Trier les signalements"
-      className="sticky top-12 md:top-16 z-10 flex gap-1 overflow-x-auto bg-surface-primary py-3 scrollbar-hide md:overflow-x-visible"
+      className="sticky top-12 md:top-16 z-10 flex overflow-x-auto border-b border-border-default bg-surface-primary scrollbar-hide md:overflow-x-visible"
     >
       {SORT_OPTIONS.map((option, index) => (
         <button
@@ -65,12 +65,12 @@ export function FeedSortTabs({ activeSort }: FeedSortTabsProps) {
           onKeyDown={(e) => handleKeyDown(e, index)}
           onClick={() => handleTabClick(option.value)}
           className={cn(
-            'whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors',
-            'scroll-snap-align-start',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary',
+            'whitespace-nowrap px-4 py-3 text-sm font-semibold transition-colors',
+            'border-b-2',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chainsaw-red focus-visible:ring-inset',
             activeSort === option.value
-              ? 'bg-chainsaw-red text-white'
-              : 'bg-surface-secondary text-text-secondary hover:text-text-primary hover:bg-surface-elevated',
+              ? 'border-chainsaw-red text-text-primary'
+              : 'border-transparent text-text-muted hover:text-text-secondary hover:bg-surface-secondary/50',
           )}
         >
           {option.label}

@@ -86,34 +86,30 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
   const isLoggedOut = !session?.user;
 
   return (
-    <main id="main-content" className="mx-auto max-w-[1050px] px-4 pt-4 pb-20 md:pt-6 md:pb-6">
-      {/* Hero spans full width */}
-      <HeroSection stats={stats} />
+    <main id="main-content" className="mx-auto max-w-[1100px] px-4 pt-4 pb-20 md:pt-6 md:pb-6">
+      <div className="lg:flex lg:gap-6">
+        {/* Feed column — Twitter-style center column with vertical borders */}
+        <div className="mx-auto min-w-0 w-full max-w-[620px] lg:mx-0 lg:max-w-[620px] lg:border-x lg:border-border-default">
+          <HeroSection stats={stats} />
 
-      {/* Mobile: inline mini leaderboard */}
-      <div className="lg:hidden">
-        <MiniLeaderboard entries={leaderboard} variant="inline" />
-      </div>
+          {/* Mobile: inline mini leaderboard */}
+          <div className="lg:hidden">
+            <MiniLeaderboard entries={leaderboard} variant="inline" />
+          </div>
 
-      {/* Twitter-style two-column layout: feed + sidebar */}
-      <div className="lg:flex lg:gap-8">
-        {/* Main feed column — like Twitter's center column */}
-        <div className="min-w-0 flex-1">
           <FeedSortTabs activeSort={sort} />
 
           {sort === 'top' && <TopTimeFilter activeWindow={validTimeWindow} />}
 
-          <div className="mt-4">
-            <FeedPageClient
-              initialData={submissions}
-              sort={sort}
-              timeWindow={sort === 'top' ? validTimeWindow : undefined}
-            />
-          </div>
+          <FeedPageClient
+            initialData={submissions}
+            sort={sort}
+            timeWindow={sort === 'top' ? validTimeWindow : undefined}
+          />
         </div>
 
-        {/* Right sidebar — like Twitter's "What's happening" column */}
-        <aside className="hidden w-[350px] shrink-0 lg:block">
+        {/* Right sidebar */}
+        <aside className="hidden w-[340px] shrink-0 lg:block">
           <div className="sticky top-20 space-y-4">
             <MiniLeaderboard entries={leaderboard} variant="sidebar" />
             {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
