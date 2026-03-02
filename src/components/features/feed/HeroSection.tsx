@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { ChevronDown, PlusCircle, Github, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { formatCompactEUR, formatCompactNumber } from '@/lib/utils/format';
+import { formatCompactEUR } from '@/lib/utils/format';
 import type { PlatformStats } from '@/lib/api/stats';
 
 interface HeroSectionProps {
@@ -55,12 +55,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 {stats ? formatCompactEUR(stats.costPerTaxpayer) : '--'}
               </span>
               <span className="ml-1 text-text-muted">/contribuable</span>
-            </span>
-            <span>
-              <span className="font-display font-bold tabular-nums text-text-primary">
-                {stats ? formatCompactNumber(stats.totalSubmissions) : '--'}
-              </span>
-              <span className="ml-1 text-text-muted">signalements</span>
             </span>
           </div>
 
