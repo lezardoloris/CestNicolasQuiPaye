@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
-import { ChevronDown, PlusCircle } from 'lucide-react';
+import { ChevronDown, PlusCircle, Github, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatCompactEUR, formatCompactNumber } from '@/lib/utils/format';
 import type { PlatformStats } from '@/lib/api/stats';
@@ -79,16 +79,19 @@ export function HeroSection({ stats }: HeroSectionProps) {
               <PlusCircle className="size-4" aria-hidden="true" />
               Signaler une dépense
             </Link>
-            <p className="text-text-muted text-xs">
-              <a
-                href="https://github.com/lezardoloris/CestNicolasQuiPaye"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-secondary decoration-text-muted/30 hover:text-text-primary font-medium underline"
-              >
-                Contribuer sur GitHub
-              </a>
-            </p>
+            <a
+              href="https://github.com/lezardoloris/CestNicolasQuiPaye"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary"
+            >
+              <Github className="size-3.5" aria-hidden="true" />
+              Contribuer sur GitHub
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-chainsaw-red/10 px-1.5 py-0.5 text-[10px] font-bold text-chainsaw-red">
+                <Zap className="size-2.5" />
+                +50 XP
+              </span>
+            </a>
           </div>
         </motion.section>
       ) : (
