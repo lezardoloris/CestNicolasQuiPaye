@@ -77,7 +77,7 @@ export function FeatureProposalForm({ onSuccess }: FeatureProposalFormProps) {
           <DialogHeader>
             <DialogTitle>Proposer une fonctionnalité</DialogTitle>
             <DialogDescription>
-              Décrivez votre idée pour améliorer NICOLAS PAYE. La communauté pourra
+              Décrivez votre idée pour améliorer C'est Nicolas Qui Paye. La communauté pourra
               voter pour les propositions les plus intéressantes.
             </DialogDescription>
           </DialogHeader>

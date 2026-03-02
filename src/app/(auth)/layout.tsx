@@ -11,7 +11,7 @@ export default function AuthLayout({
         href="/feed/hot"
         className="mb-4 font-display text-3xl font-bold text-chainsaw-red md:mb-8"
       >
-        NICOLAS PAYE
+        C'est Nicolas Qui Paye
       </Link>
       <div className="w-full max-w-md">{children}</div>
     </div>

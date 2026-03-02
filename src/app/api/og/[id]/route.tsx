@@ -61,7 +61,7 @@ export async function GET(
                 letterSpacing: '-0.02em',
               }}
             >
-              NICOLAS PAYE
+              C'est Nicolas Qui Paye
             </span>
           </div>
 
