@@ -27,6 +27,14 @@ export default function Footer() {
           <a href="/developers" className="underline hover:text-text-secondary">
             API Publique / Open Data
           </a>
+          {' · '}
+          <a href="/mentions-legales" className="underline hover:text-text-secondary">
+            Mentions légales
+          </a>
+          {' · '}
+          <a href="/cgu" className="underline hover:text-text-secondary">
+            CGU
+          </a>
         </p>
       </div>
     </footer>
