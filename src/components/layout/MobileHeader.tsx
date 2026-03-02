@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { XpProgressBarCompact } from '@/components/features/gamification/XpProgressBar';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 export default function MobileHeader() {
   return (
@@ -20,6 +21,7 @@ export default function MobileHeader() {
         />
       </Link>
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <XpProgressBarCompact />
         <Link
           href="/submit"

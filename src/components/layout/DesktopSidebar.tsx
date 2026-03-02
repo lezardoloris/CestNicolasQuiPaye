@@ -8,6 +8,7 @@ import { Home, Calculator, SlidersHorizontal, Heart, PlusCircle, Github, Zap, Lo
 import { cn } from '@/lib/utils';
 import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -140,6 +141,10 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
             Se connecter
           </Link>
         )}
+
+        <div className="flex justify-center pt-2">
+          <ThemeToggle />
+        </div>
       </div>
     </aside>
   );
