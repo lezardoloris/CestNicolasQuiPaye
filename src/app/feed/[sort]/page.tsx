@@ -96,12 +96,9 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
         <MiniLeaderboard entries={leaderboard} variant="inline" />
       </div>
 
-      <div className="lg:grid lg:grid-cols-[1fr_minmax(0,48rem)_280px] lg:gap-6">
-        {/* Left spacer — keeps feed centered */}
-        <div className="hidden lg:block" />
-
-        {/* Main feed column (centered) */}
-        <div className="min-w-0">
+      <div className="lg:flex lg:justify-center lg:gap-6">
+        {/* Main feed column */}
+        <div className="min-w-0 w-full max-w-3xl">
           <FeedSortTabs activeSort={sort} />
 
           {sort === 'top' && <TopTimeFilter activeWindow={validTimeWindow} />}
@@ -115,8 +112,8 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
           </div>
         </div>
 
-        {/* Desktop sidebar (right) */}
-        <aside className="hidden lg:block">
+        {/* Desktop sidebar */}
+        <aside className="hidden w-[280px] shrink-0 lg:block">
           <div className="sticky top-20 space-y-4">
             <MiniLeaderboard entries={leaderboard} variant="sidebar" />
             {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
