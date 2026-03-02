@@ -1,6 +1,15 @@
 import { db } from '@/lib/db';
-import { submissions, users, costCalculations, votes, ipVotes } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
+import {
+  submissions,
+  users,
+  costCalculations,
+  votes,
+  ipVotes,
+  submissionSources,
+  communityNotes,
+  solutions,
+} from '@/lib/db/schema';
+import { eq, and, count, sql } from 'drizzle-orm';
 import { isValidUUID } from '@/lib/utils/validation';
 
 export async function getSubmissionById(
@@ -57,10 +66,29 @@ export async function getSubmissionById(
     userVote = (ipVoteResult[0]?.voteType as 'up' | 'down') ?? null;
   }
 
+  // Fetch contribution counts for completeness indicator
+  const [sourceCountResult, noteCountResult, solutionCountResult] = await Promise.all([
+    db
+      .select({ value: count() })
+      .from(submissionSources)
+      .where(eq(submissionSources.submissionId, id)),
+    db
+      .select({ value: count() })
+      .from(communityNotes)
+      .where(and(eq(communityNotes.submissionId, id), sql`${communityNotes.deletedAt} IS NULL`)),
+    db
+      .select({ value: count() })
+      .from(solutions)
+      .where(and(eq(solutions.submissionId, id), sql`${solutions.deletedAt} IS NULL`)),
+  ]);
+
   return {
     ...row.submission,
     author: row.author,
     costCalculation: row.costCalculation,
     userVote,
+    sourceCount: sourceCountResult[0]?.value ?? 0,
+    noteCount: noteCountResult[0]?.value ?? 0,
+    solutionCount: solutionCountResult[0]?.value ?? 0,
   };
 }

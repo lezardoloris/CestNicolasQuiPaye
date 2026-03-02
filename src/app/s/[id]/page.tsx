@@ -7,6 +7,7 @@ import { ConsequenceLoader } from '@/components/features/consequences/Consequenc
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { CommentSection } from '@/components/features/comments/CommentSection';
 import { FlagButton } from '@/components/features/submissions/FlagButton';
+import { CompletenessBar } from '@/components/features/submissions/CompletenessBar';
 import { SolutionSection } from '@/components/features/solutions/SolutionSection';
 import { SourceList } from '@/components/features/sources/SourceList';
 import { CommunityNoteSection } from '@/components/features/notes/CommunityNoteSection';
@@ -116,6 +117,16 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
           costPerTaxpayer={submission.costPerTaxpayer ? parseFloat(submission.costPerTaxpayer) : undefined}
         />
         <FlagButton submissionId={submission.id} />
+      </div>
+
+      {/* Completeness indicator */}
+      <div className="mt-4">
+        <CompletenessBar
+          sourceCount={submission.sourceCount}
+          noteCount={submission.noteCount}
+          solutionCount={submission.solutionCount}
+          voteCount={submission.upvoteCount + submission.downvoteCount}
+        />
       </div>
 
       {/* Sources & Verification */}

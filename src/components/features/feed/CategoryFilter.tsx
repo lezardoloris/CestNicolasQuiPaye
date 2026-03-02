@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { motion } from 'motion/react';
 import { LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,18 +10,31 @@ import { CATEGORIES } from '@/lib/constants/categories';
 interface CategoryFilterProps {
     activeCategory: string | null;
     onCategoryChange: (category: string | null) => void;
+    /** Only show categories that have approved submissions */
+    activeCategories?: string[];
 }
 
 export function CategoryFilter({
     activeCategory,
     onCategoryChange,
+    activeCategories,
 }: CategoryFilterProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    const visibleCategories = useMemo(
+        () =>
+            activeCategories
+                ? CATEGORIES.filter((cat) => activeCategories.includes(cat.slug))
+                : CATEGORIES,
+        [activeCategories],
+    );
+
     const handleSelect = (slug: string | null) => {
-        // Toggle off if already selected
         onCategoryChange(activeCategory === slug ? null : slug);
     };
+
+    // Hide filter row entirely when only 0-1 categories exist
+    if (visibleCategories.length <= 1) return null;
 
     return (
         <div className="relative mb-4">
@@ -50,7 +63,7 @@ export function CategoryFilter({
                     id="category-filter-tous"
                 />
 
-                {CATEGORIES.map((cat) => {
+                {visibleCategories.map((cat) => {
                     const Icon = cat.icon;
                     return (
                         <CategoryPill

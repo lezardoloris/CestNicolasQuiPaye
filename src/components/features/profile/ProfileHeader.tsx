@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { FileText, ArrowUpDown, Flame, Shield } from 'lucide-react';
+import { FileText, ArrowUpDown, Flame, Shield, Target, BookOpen, Lightbulb } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import type { UserProfile } from '@/types/user';
@@ -105,7 +105,7 @@ export default function ProfileHeader({
             </div>
           )}
 
-          <div className="flex gap-3 mt-0.5">
+          <div className="flex flex-wrap gap-2 mt-0.5">
             <Badge
               variant="outline"
               className="gap-1 border-border-default text-text-secondary"
@@ -120,6 +120,33 @@ export default function ProfileHeader({
               <ArrowUpDown className="size-3" />
               {profile.voteCount} vote{profile.voteCount !== 1 ? 's' : ''}
             </Badge>
+            {profile.sourceCount > 0 && (
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary"
+              >
+                <Target className="size-3" />
+                {profile.sourceCount} source{profile.sourceCount !== 1 ? 's' : ''}
+              </Badge>
+            )}
+            {profile.noteCount > 0 && (
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary"
+              >
+                <BookOpen className="size-3" />
+                {profile.noteCount} note{profile.noteCount !== 1 ? 's' : ''}
+              </Badge>
+            )}
+            {profile.solutionCount > 0 && (
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary"
+              >
+                <Lightbulb className="size-3" />
+                {profile.solutionCount} solution{profile.solutionCount !== 1 ? 's' : ''}
+              </Badge>
+            )}
           </div>
         </div>
       </CardContent>

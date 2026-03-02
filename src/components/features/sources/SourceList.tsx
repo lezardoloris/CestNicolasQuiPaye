@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useState } from 'react';
 import { FileText, ThumbsUp, ThumbsDown, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SOURCE_TYPE_LABELS } from '@/lib/utils/validation';
@@ -9,6 +10,8 @@ import { AddSourceForm } from './AddSourceForm';
 import { extractDomain } from '@/lib/utils/format';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { XpRewardBadge } from '@/components/features/gamification/XpRewardBadge';
+import { PostActionNudge } from '@/components/features/gamification/PostActionNudge';
 
 interface SourceListProps {
   submissionId: string;
@@ -21,9 +24,17 @@ function getSourceTypeColor(_type: SourceType): string {
 export function SourceList({ submissionId }: SourceListProps) {
   const { sources, isLoading, addSource, isAdding, validateSource, isValidating } =
     useSources(submissionId);
+  const [showNudge, setShowNudge] = useState(false);
+  const dismissNudge = useCallback(() => setShowNudge(false), []);
+
+  const handleAddSource: typeof addSource = async (data) => {
+    const result = await addSource(data);
+    setShowNudge(true);
+    return result;
+  };
 
   return (
-    <section className="space-y-4">
+    <section id="sources" className="space-y-4">
       <div className="flex items-center gap-2">
         <FileText className="size-5 text-text-muted" aria-hidden="true" />
         <h2 className="text-base font-semibold text-text-primary">
@@ -40,7 +51,10 @@ export function SourceList({ submissionId }: SourceListProps) {
           <Skeleton className="h-16 w-full rounded-lg" />
         </div>
       ) : sources.length === 0 ? (
-        <p className="text-sm text-text-muted">Aucune source ajoutee.</p>
+        <p className="flex items-center gap-2 text-sm text-text-muted">
+          Soyez le premier à ajouter une source !
+          <XpRewardBadge actionType="source_added" variant="pill" />
+        </p>
       ) : (
         <div className="space-y-2">
           {sources.map((source) => {
@@ -111,7 +125,8 @@ export function SourceList({ submissionId }: SourceListProps) {
         </div>
       )}
 
-      <AddSourceForm onSubmit={addSource} isSubmitting={isAdding} />
+      <AddSourceForm onSubmit={handleAddSource} isSubmitting={isAdding} />
+      <PostActionNudge action="source_added" visible={showNudge} onDismiss={dismissNudge} />
     </section>
   );
 }

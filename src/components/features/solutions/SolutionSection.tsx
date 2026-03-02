@@ -1,10 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Lightbulb } from 'lucide-react';
 import { useSolutions } from '@/hooks/useSolutions';
 import { SolutionForm } from './SolutionForm';
 import { SolutionItem } from './SolutionItem';
+import { XpRewardBadge } from '@/components/features/gamification/XpRewardBadge';
+import { PostActionNudge } from '@/components/features/gamification/PostActionNudge';
 
 interface SolutionSectionProps {
   submissionId: string;
@@ -20,6 +22,15 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
     isVoting,
   } = useSolutions(submissionId);
 
+  const [showNudge, setShowNudge] = useState(false);
+  const dismissNudge = useCallback(() => setShowNudge(false), []);
+
+  const handleCreateSolution = async (body: string) => {
+    const result = await createSolution(body);
+    setShowNudge(true);
+    return result;
+  };
+
   const totalUpvotes = useMemo(
     () => solutions.reduce((sum, s) => sum + s.upvoteCount, 0),
     [solutions],
@@ -33,7 +44,7 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
   ];
 
   return (
-    <section className="mt-4" aria-label="Solutions proposées">
+    <section id="solutions" className="mt-4" aria-label="Solutions proposées">
       <div className="mb-3 flex items-center gap-2">
         <Lightbulb className="size-4 text-warning" />
         <h2 className="text-sm font-semibold text-text-primary">
@@ -63,14 +74,15 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
           </div>
         ) : solutions.length === 0 ? (
           <div>
-            <p className="mb-2 text-xs text-text-muted">
+            <p className="mb-2 flex items-center gap-2 text-xs text-text-muted">
               Aucune solution proposée. Choisissez une idée ou proposez la vôtre :
+              <XpRewardBadge actionType="solution_proposed" variant="pill" />
             </p>
             <div className="flex flex-wrap gap-1.5">
               {defaultSuggestions.map((suggestion) => (
                 <button
                   key={suggestion}
-                  onClick={() => createSolution(suggestion)}
+                  onClick={() => handleCreateSolution(suggestion)}
                   disabled={isCreating}
                   className="rounded-full border border-border-default bg-surface-secondary px-2.5 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:border-warning/40 hover:bg-warning/10 hover:text-warning"
                 >
@@ -96,8 +108,9 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
       </div>
 
       <div className="mt-2">
-        <SolutionForm onSubmit={createSolution} isSubmitting={isCreating} />
+        <SolutionForm onSubmit={handleCreateSolution} isSubmitting={isCreating} />
       </div>
+      <PostActionNudge action="solution_proposed" visible={showNudge} onDismiss={dismissNudge} />
     </section>
   );
 }

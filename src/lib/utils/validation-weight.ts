@@ -15,10 +15,10 @@ export const MIN_VALIDATION_LEVEL = 2;
 
 /** Thresholds for auto-resolving submissions */
 export const VALIDATION_THRESHOLDS = {
-  /** Minimum total approve weight to auto-approve */
-  minApproveWeight: 10,
-  /** Minimum total reject weight to auto-reject */
-  minRejectWeight: 10,
+  /** Minimum total approve weight to auto-approve (low for early-stage growth) */
+  minApproveWeight: 3,
+  /** Minimum total reject weight to auto-reject (higher bar to reject) */
+  minRejectWeight: 5,
   /** Approve must exceed reject by this ratio */
   approveRatio: 2,
   /** Reject must exceed approve by this ratio */

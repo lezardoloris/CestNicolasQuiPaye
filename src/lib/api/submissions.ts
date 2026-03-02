@@ -182,6 +182,22 @@ async function getTopFeed({
   return paginateResults(results, limit, 'top');
 }
 
+// ─── Active Categories ───────────────────────────────────────────
+
+export async function getActiveCategories(): Promise<string[]> {
+  const results = await db
+    .selectDistinct({ tag: submissions.ministryTag })
+    .from(submissions)
+    .where(
+      and(
+        eq(submissions.status, 'published'),
+        eq(submissions.moderationStatus, 'approved'),
+      ),
+    );
+
+  return results.map((r) => r.tag).filter((tag): tag is string => tag !== null);
+}
+
 // ─── Pagination Helper ────────────────────────────────────────────
 
 function paginateResults(

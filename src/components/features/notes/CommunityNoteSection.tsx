@@ -1,10 +1,13 @@
 'use client';
 
+import { useCallback, useState } from 'react';
 import { BookOpen } from 'lucide-react';
 import { useCommunityNotes } from '@/hooks/useCommunityNotes';
 import { CommunityNoteItem } from './CommunityNoteItem';
 import { CommunityNoteForm } from './CommunityNoteForm';
 import { Skeleton } from '@/components/ui/skeleton';
+import { XpRewardBadge } from '@/components/features/gamification/XpRewardBadge';
+import { PostActionNudge } from '@/components/features/gamification/PostActionNudge';
 
 interface CommunityNoteSectionProps {
   submissionId: string;
@@ -13,9 +16,17 @@ interface CommunityNoteSectionProps {
 export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps) {
   const { notes, isLoading, createNote, isCreating, voteNote, isVoting } =
     useCommunityNotes(submissionId);
+  const [showNudge, setShowNudge] = useState(false);
+  const dismissNudge = useCallback(() => setShowNudge(false), []);
+
+  const handleCreateNote: typeof createNote = async (data) => {
+    const result = await createNote(data);
+    setShowNudge(true);
+    return result;
+  };
 
   return (
-    <section className="space-y-4">
+    <section id="community-notes" className="space-y-4">
       <div className="flex items-center gap-2">
         <BookOpen className="size-5 text-info" aria-hidden="true" />
         <h2 className="text-base font-semibold text-text-primary">
@@ -32,7 +43,8 @@ export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps
         Apportez du contexte factuel et sourcé pour aider la communauté à comprendre cette dépense.
       </p>
 
-      <CommunityNoteForm onSubmit={createNote} isSubmitting={isCreating} />
+      <CommunityNoteForm onSubmit={handleCreateNote} isSubmitting={isCreating} />
+      <PostActionNudge action="note_written" visible={showNudge} onDismiss={dismissNudge} />
 
       {isLoading ? (
         <div className="space-y-2">
@@ -40,8 +52,9 @@ export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps
           <Skeleton className="h-20 w-full rounded-lg" />
         </div>
       ) : notes.length === 0 ? (
-        <p className="py-4 text-center text-sm text-text-muted">
-          Aucune note de contexte. Soyez le premier à apporter du contexte !
+        <p className="flex items-center justify-center gap-2 py-4 text-center text-sm text-text-muted">
+          Soyez le premier à apporter du contexte !
+          <XpRewardBadge actionType="community_note_written" variant="pill" />
         </p>
       ) : (
         <div className="space-y-2">

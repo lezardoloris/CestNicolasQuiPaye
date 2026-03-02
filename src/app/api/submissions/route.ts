@@ -1,11 +1,12 @@
 import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { submissions, submissionSources } from '@/lib/db/schema';
+import { submissions, submissionSources, users } from '@/lib/db/schema';
 import { submissionFormSchema } from '@/lib/utils/validation';
 import { isTweetUrl, normalizeTweetUrl } from '@/lib/utils/tweet-detector';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
+import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   try {
@@ -61,8 +62,17 @@ export async function POST(request: NextRequest) {
     const authorId = session?.user?.id ?? null;
     const authorDisplay = session?.user?.name ?? 'Citoyen Anonyme';
 
-    // All submissions go to moderation before publication
-    const moderationStatus = 'pending';
+    // Auto-approve submissions from admins/moderators, otherwise pending
+    let moderationStatus: 'pending' | 'approved' = 'pending';
+    if (authorId) {
+      const author = await db.query.users.findFirst({
+        where: eq(users.id, authorId),
+        columns: { role: true },
+      });
+      if (author?.role === 'admin' || author?.role === 'moderator') {
+        moderationStatus = 'approved';
+      }
+    }
 
     const [submission] = await db
       .insert(submissions)

@@ -7,7 +7,7 @@ import { MiniLeaderboard } from '@/components/features/leaderboard/MiniLeaderboa
 import { LevelUpTeaser } from '@/components/features/gamification/LevelUpTeaser';
 import { SidebarGamification } from '@/components/features/gamification/SidebarGamification';
 
-import { getSubmissions } from '@/lib/api/submissions';
+import { getSubmissions, getActiveCategories } from '@/lib/api/submissions';
 import { getPlatformStats } from '@/lib/api/stats';
 import { getTopLeaderboard } from '@/lib/api/leaderboard';
 import { getPendingSubmissionCount } from '@/lib/api/pending-count';
@@ -77,13 +77,15 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
       ? (timeWindow as 'today' | 'week' | 'month' | 'all')
       : 'week';
 
-  const [submissions, stats, leaderboard, session, pendingCount] = await Promise.all([
-    getSubmissions({ sort, timeWindow: validTimeWindow }),
-    getPlatformStats(),
-    getTopLeaderboard(5),
-    auth(),
-    getPendingSubmissionCount(),
-  ]);
+  const [submissions, stats, leaderboard, session, pendingCount, activeCategories] =
+    await Promise.all([
+      getSubmissions({ sort, timeWindow: validTimeWindow }),
+      getPlatformStats(),
+      getTopLeaderboard(5),
+      auth(),
+      getPendingSubmissionCount(),
+      getActiveCategories(),
+    ]);
 
   const isLoggedOut = !session?.user;
 
@@ -114,6 +116,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
             initialData={submissions}
             sort={sort}
             timeWindow={sort === 'top' ? validTimeWindow : undefined}
+            activeCategories={activeCategories}
           />
         </div>
 

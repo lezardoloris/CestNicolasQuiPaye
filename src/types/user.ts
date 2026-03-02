@@ -7,6 +7,9 @@ export interface UserProfile {
   memberSince: string;
   submissionCount: number;
   voteCount: number;
+  sourceCount: number;
+  noteCount: number;
+  solutionCount: number;
   avatarUrl: string | null;
   bio: string | null;
   karma: number;
