@@ -52,7 +52,7 @@ export function SimulatorPageClient() {
         <div className="flex items-center gap-2">
           <Calculator className="size-6 text-chainsaw-red" />
           <h1 className="font-display text-2xl font-bold text-text-primary">
-            Combien Nicolas paye ?
+            Combien Nicolas paie ?
           </h1>
         </div>
         <p className="text-sm text-text-muted">

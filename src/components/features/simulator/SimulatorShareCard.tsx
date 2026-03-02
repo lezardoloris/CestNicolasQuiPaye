@@ -38,8 +38,8 @@ export function SimulatorShareCard({ simulation }: SimulatorShareCardProps) {
   const handleNativeShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: 'Mon simulation fiscale — C\'est Nicolas qui paye',
-        text: `Avec ${formatEUR(input.annualGross)} brut/an, je paye ${formatEUR(totalPrelevements)} de prélèvements (${(tauxEffectifGlobal * 100).toFixed(1)}%).`,
+        title: 'Mon simulation fiscale — C\'est Nicolas qui paie',
+        text: `Avec ${formatEUR(input.annualGross)} brut/an, je paie ${formatEUR(totalPrelevements)} de prélèvements (${(tauxEffectifGlobal * 100).toFixed(1)}%).`,
         url: shareUrl,
       });
     } else {
@@ -55,7 +55,7 @@ export function SimulatorShareCard({ simulation }: SimulatorShareCardProps) {
         <p>
           Avec un salaire de <strong>{formatEUR(input.annualGross)}</strong> brut/an
           {!input.isSingle ? ' (couple)' : ''}{input.nbChildren > 0 ? `, ${input.nbChildren} enfant${input.nbChildren > 1 ? 's' : ''}` : ''},
-          je paye <strong className="text-chainsaw-red">{formatEUR(totalPrelevements)}</strong> de
+          je paie <strong className="text-chainsaw-red">{formatEUR(totalPrelevements)}</strong> de
           prélèvements par an ({(tauxEffectifGlobal * 100).toFixed(1)} %).
         </p>
       </div>
