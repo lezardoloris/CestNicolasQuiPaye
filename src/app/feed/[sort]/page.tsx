@@ -14,7 +14,6 @@ import { getPendingSubmissionCount } from '@/lib/api/pending-count';
 import { isValidSort } from '@/lib/utils/validation';
 import { auth } from '@/lib/auth';
 import { PendingReviewCard } from '@/components/features/submissions/PendingReviewCard';
-import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
 import { FeedRightSidebar } from '@/components/features/feed/FeedRightSidebar';
 import { MobileContributeBanner } from '@/components/features/feed/MobileContributeBanner';
 import type { Metadata } from 'next';
@@ -91,16 +90,9 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
   const isLoggedOut = !session?.user;
 
   return (
-    <main id="main-content" className="mx-auto max-w-7xl px-4 pt-4 pb-20 md:pt-6 md:pb-6 lg:pt-0">
+    <main id="main-content" className="px-4 pt-4 pb-20 md:pt-6 md:pb-6 lg:pt-0">
       <div className="lg:flex lg:gap-6">
-        {/* Left sidebar — desktop only */}
-        <DesktopSidebar>
-          {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
-          <MiniLeaderboard entries={leaderboard} variant="sidebar" />
-          {isLoggedOut && <SidebarGamification />}
-        </DesktopSidebar>
-
-        {/* Feed column — Twitter-style center column with vertical borders */}
+        {/* Feed column — center column with vertical borders on desktop */}
         <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:flex-1 lg:max-w-none lg:border-x lg:border-border-default">
           <HeroSection stats={stats} />
 
@@ -119,9 +111,12 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
           />
         </div>
 
-        {/* Right sidebar — swaps to submission preview on card click */}
+        {/* Right sidebar — widgets + submission preview on card click */}
         <FeedRightSidebar>
+          {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
           {!isLoggedOut && <LevelUpTeaser />}
+          <MiniLeaderboard entries={leaderboard} variant="sidebar" />
+          {isLoggedOut && <SidebarGamification />}
         </FeedRightSidebar>
       </div>
     </main>

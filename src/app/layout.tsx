@@ -7,6 +7,7 @@ import DesktopNav from '@/components/layout/DesktopNav';
 import MobileTabBar from '@/components/layout/MobileTabBar';
 import MobileHeader from '@/components/layout/MobileHeader';
 import Footer from '@/components/layout/Footer';
+import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
 import WelcomePromptWrapper from '@/components/features/auth/WelcomePromptWrapper';
 import FlashMessage from '@/components/features/common/FlashMessage';
 import { GamificationProvider } from '@/components/features/gamification/GamificationProvider';
@@ -74,7 +75,12 @@ export default function RootLayout({
           </a>
           <DesktopNav />
           <MobileHeader />
-          <div className="min-h-[calc(100dvh-3rem)] pb-20 md:min-h-screen md:pb-0 lg:min-h-screen">{children}</div>
+          <div className="lg:mx-auto lg:flex lg:max-w-[1380px] lg:gap-6 lg:px-6 lg:pt-4">
+            <DesktopSidebar />
+            <div className="min-h-[calc(100dvh-3rem)] min-w-0 flex-1 pb-20 md:min-h-screen md:pb-0 lg:min-h-screen">
+              {children}
+            </div>
+          </div>
           <Footer />
           <MobileTabBar />
           <WelcomePromptWrapper />
