@@ -43,6 +43,8 @@ export const users = pgTable('users', {
   role: userRole('role').notNull().default('user'),
   twitterId: varchar('twitter_id', { length: 255 }).unique(),
   twitterHandle: varchar('twitter_handle', { length: 50 }),
+  githubId: varchar('github_id', { length: 255 }).unique(),
+  githubUsername: varchar('github_username', { length: 50 }),
   avatarUrl: text('avatar_url'),
   bio: text('bio'),
   submissionCount: integer('submission_count').notNull().default(0),
@@ -791,6 +793,9 @@ export const xpActionType = pgEnum('xp_action_type', [
   'price_correction',
   'daily_bonus',
   'oauth_linked',
+  'github_pr_opened',
+  'github_pr_merged',
+  'github_issue_opened',
   'admin_manual',
   'clawback',
 ]);

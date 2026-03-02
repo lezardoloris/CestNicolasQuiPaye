@@ -21,7 +21,6 @@ import { DailyGoalIndicator } from '@/components/features/gamification/DailyGoal
 const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
   { href: '/submit', label: 'Signaler' },
-  { href: '/stats', label: 'Stats' },
   { href: '/chiffres', label: 'Chiffres' },
   // { href: '/leaderboard', label: 'Classement' }, // contributions anonymes
   { href: '/contribuer', label: 'Contribuer' },

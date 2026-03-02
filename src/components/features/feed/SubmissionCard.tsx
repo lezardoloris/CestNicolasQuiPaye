@@ -174,20 +174,22 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             <span>{submission.commentCount}</span>
           </Link>
 
-          {(submission.solutionCount ?? 0) > 0 && (
-            <Link
-              href={`/s/${submission.id}#solutions`}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
-                'text-xs font-medium text-warning/80',
-                'transition-colors hover:bg-warning/10 hover:text-warning',
-              )}
-              aria-label={`${submission.solutionCount} solutions proposees`}
-            >
-              <Lightbulb className="size-4" aria-hidden="true" />
-              <span>{submission.solutionCount}</span>
-            </Link>
-          )}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setSelectedSubmission(submission);
+            }}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
+              'text-xs font-medium text-warning/80',
+              'transition-colors hover:bg-warning/10 hover:text-warning',
+            )}
+            aria-label="Proposer une solution"
+          >
+            <Lightbulb className="size-4" aria-hidden="true" />
+            <span>{(submission.solutionCount ?? 0) > 0 ? submission.solutionCount : 'Proposer'}</span>
+          </button>
 
           <span className="flex-1" />
 

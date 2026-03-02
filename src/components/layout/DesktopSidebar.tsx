@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BarChart3, Calculator, Heart, PlusCircle } from 'lucide-react';
+import { Home, Calculator, Heart, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
 
@@ -15,7 +15,6 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { href: '/feed/hot', label: 'Feed', icon: Home, matchPrefix: '/feed' },
-  { href: '/stats', label: 'Stats', icon: BarChart3, matchPrefix: '/stats' },
   { href: '/chiffres', label: 'Chiffres', icon: Calculator, matchPrefix: '/chiffres' },
   { href: '/contribuer', label: 'Contribuer', icon: Heart, matchPrefix: '/contribuer' },
 ];

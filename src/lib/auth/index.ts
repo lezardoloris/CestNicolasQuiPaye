@@ -86,7 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     // ── Sign-in: auto-create user row for OAuth providers ─────────────
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       const isOAuth = account?.provider === 'google' || account?.provider === 'github';
       if (isOAuth && user.email) {
         const existing = await db.query.users.findFirst({
@@ -96,15 +96,47 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!existing) {
           // First OAuth login → materialise in our users table
           const anonymousId = generateAnonymousId();
-          await db.insert(users).values({
-            email: user.email,
-            passwordHash: '', // OAuth user — no password
-            anonymousId,
-            displayName: user.name ?? null,
-            role: 'user',
-          });
+          const isGitHub = account.provider === 'github';
+          // profile.login is the GitHub username (NextAuth generic Profile type)
+          const ghProfile = profile as { login?: string } | undefined;
+
+          const [newUser] = await db
+            .insert(users)
+            .values({
+              email: user.email,
+              passwordHash: '', // OAuth user — no password
+              anonymousId,
+              displayName: user.name ?? null,
+              role: 'user',
+              ...(isGitHub && {
+                githubId: account.providerAccountId,
+                githubUsername: ghProfile?.login ?? null,
+              }),
+            })
+            .returning({ id: users.id });
+
+          // Award +50 XP for first GitHub sign-in
+          if (isGitHub && newUser) {
+            const { awardXp } = await import('@/lib/gamification/xp-engine');
+            await awardXp(newUser.id, 'oauth_linked', newUser.id, 'github_oauth').catch(() => {});
+          }
         } else if (existing.deletedAt) {
           return false; // banned/deleted account
+        } else if (account.provider === 'github' && !existing.githubUsername) {
+          // Existing user linking GitHub for the first time
+          const ghProfile = profile as { login?: string } | undefined;
+          await db
+            .update(users)
+            .set({
+              githubId: account.providerAccountId,
+              githubUsername: ghProfile?.login ?? null,
+              updatedAt: new Date(),
+            })
+            .where(eq(users.id, existing.id));
+
+          // Award +50 XP for linking GitHub (idempotent via relatedEntityId)
+          const { awardXp } = await import('@/lib/gamification/xp-engine');
+          await awardXp(existing.id, 'oauth_linked', existing.id, 'github_oauth').catch(() => {});
         }
       }
       return true;
