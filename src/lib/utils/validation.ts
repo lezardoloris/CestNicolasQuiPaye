@@ -292,3 +292,45 @@ export const featureVoteQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });
+
+// ─── Public API Validation ──────────────────────────────────────
+
+export const publicSubmissionsQuerySchema = z.object({
+  sort: z.enum(['hot', 'new', 'top', 'amount']).default('new'),
+  cursor: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  category: z.string().optional(),
+  amountMin: z.coerce.number().min(0).optional(),
+  amountMax: z.coerce.number().min(0).optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+  timeWindow: z.enum(['today', 'week', 'month', 'all']).default('all'),
+});
+
+export type PublicSubmissionsQuery = z.infer<typeof publicSubmissionsQuerySchema>;
+
+export const publicSearchQuerySchema = z.object({
+  q: z.string().min(2).max(200),
+  cursor: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  category: z.string().optional(),
+});
+
+export type PublicSearchQuery = z.infer<typeof publicSearchQuerySchema>;
+
+export const publicExportQuerySchema = z.object({
+  format: z.enum(['json', 'csv']).default('json'),
+  category: z.string().optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+});
+
+export type PublicExportQuery = z.infer<typeof publicExportQuerySchema>;
+
+// ─── Open Data Cron Validation ────────────────────────────────────
+
+export const openDataCronSchema = z.object({
+  source: z.enum(['decp', 'plf_budget', 'subventions', 'all']).default('all'),
+});
+
+export type OpenDataCronQuery = z.infer<typeof openDataCronSchema>;

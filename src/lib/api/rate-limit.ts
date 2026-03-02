@@ -55,6 +55,10 @@ export const rateLimiters = {
     Ratelimit.slidingWindow(5, '1h'),
     'ratelimit:community-note',
   ),
+  publicApi: createRateLimiter(
+    Ratelimit.slidingWindow(100, '1m'),
+    'ratelimit:public-api',
+  ),
 };
 
 /**

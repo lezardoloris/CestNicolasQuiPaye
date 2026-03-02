@@ -23,6 +23,10 @@ export default function Footer() {
           <a href="/methodologie" className="underline hover:text-text-secondary">
             Méthodologie et sources
           </a>
+          {' · '}
+          <a href="/developers" className="underline hover:text-text-secondary">
+            API Publique / Open Data
+          </a>
         </p>
       </div>
     </footer>
