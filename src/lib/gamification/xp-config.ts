@@ -35,6 +35,7 @@ export const XP_TABLE: Record<XpActionType, XpActionConfig> = {
   daily_bonus: { xp: 10, maxPerDay: 1, label: 'Bonus du jour' },
   admin_manual: { xp: 0, maxPerDay: null, label: 'Attribution manuelle' },
   clawback: { xp: 0, maxPerDay: null, label: 'Récupération XP' },
+  criteria_vote: { xp: 3, maxPerDay: 30, label: 'Évaluation détaillée' },
 };
 
 // ─── Level Thresholds ───────────────────────────────────────────────

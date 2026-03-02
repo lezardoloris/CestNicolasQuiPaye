@@ -11,6 +11,7 @@ import { CompletenessBar } from '@/components/features/submissions/CompletenessB
 import { SolutionSection } from '@/components/features/solutions/SolutionSection';
 import { SourceList } from '@/components/features/sources/SourceList';
 import { CommunityNoteSection } from '@/components/features/notes/CommunityNoteSection';
+import { CriteriaVoteSection } from '@/components/features/voting/CriteriaVoteSection';
 import { auth } from '@/lib/auth';
 import { isValidUUID } from '@/lib/utils/validation';
 import { hashIp } from '@/lib/utils/ip-hash';
@@ -128,6 +129,9 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
           voteCount={submission.upvoteCount + submission.downvoteCount}
         />
       </div>
+
+      {/* Criteria Vote (multi-axis evaluation) */}
+      <CriteriaVoteSection submissionId={submission.id} />
 
       {/* Sources & Verification */}
       <div className="mt-8">

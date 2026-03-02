@@ -176,6 +176,55 @@ export const ipVotes = pgTable(
   ]
 );
 
+// ─── Criteria Votes (multi-axis evaluation) ────────────────────────
+export const criterionKey = pgEnum('criterion_key', ['proportional', 'legitimate', 'alternative']);
+
+export const criteriaVotes = pgTable(
+  'criteria_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    criterion: criterionKey('criterion').notNull(),
+    value: boolean('value').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('criteria_votes_user_submission_criterion_idx').on(
+      table.userId,
+      table.submissionId,
+      table.criterion,
+    ),
+    index('idx_criteria_votes_submission').on(table.submissionId),
+  ],
+);
+
+export const ipCriteriaVotes = pgTable(
+  'ip_criteria_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ipHash: varchar('ip_hash', { length: 64 }).notNull(),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    criterion: criterionKey('criterion').notNull(),
+    value: boolean('value').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('ip_criteria_votes_hash_submission_criterion_idx').on(
+      table.ipHash,
+      table.submissionId,
+      table.criterion,
+    ),
+    index('idx_ip_criteria_votes_submission').on(table.submissionId),
+  ],
+);
+
 // ─── Solutions ──────────────────────────────────────────────────────
 export const solutions = pgTable(
   'solutions',
@@ -260,6 +309,8 @@ export const submissionsRelations = relations(submissions, ({ one, many }) => ({
   }),
   votes: many(votes),
   ipVotes: many(ipVotes),
+  criteriaVotes: many(criteriaVotes),
+  ipCriteriaVotes: many(ipCriteriaVotes),
   comments: many(comments),
   solutions: many(solutions),
   sources: many(submissionSources),
@@ -297,6 +348,24 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
 export const ipVotesRelations = relations(ipVotes, ({ one }) => ({
   submission: one(submissions, {
     fields: [ipVotes.submissionId],
+    references: [submissions.id],
+  }),
+}));
+
+export const criteriaVotesRelations = relations(criteriaVotes, ({ one }) => ({
+  user: one(users, {
+    fields: [criteriaVotes.userId],
+    references: [users.id],
+  }),
+  submission: one(submissions, {
+    fields: [criteriaVotes.submissionId],
+    references: [submissions.id],
+  }),
+}));
+
+export const ipCriteriaVotesRelations = relations(ipCriteriaVotes, ({ one }) => ({
+  submission: one(submissions, {
+    fields: [ipCriteriaVotes.submissionId],
     references: [submissions.id],
   }),
 }));
@@ -808,6 +877,7 @@ export const xpActionType = pgEnum('xp_action_type', [
   'github_issue_opened',
   'admin_manual',
   'clawback',
+  'criteria_vote',
 ]);
 
 export const xpEvents = pgTable(
@@ -1012,3 +1082,7 @@ export type CommunityValidation = typeof communityValidations.$inferSelect;
 export type NewCommunityValidation = typeof communityValidations.$inferInsert;
 export type DataImport = typeof dataImports.$inferSelect;
 export type NewDataImport = typeof dataImports.$inferInsert;
+export type CriteriaVote = typeof criteriaVotes.$inferSelect;
+export type NewCriteriaVote = typeof criteriaVotes.$inferInsert;
+export type IpCriteriaVote = typeof ipCriteriaVotes.$inferSelect;
+export type NewIpCriteriaVote = typeof ipCriteriaVotes.$inferInsert;

@@ -58,6 +58,21 @@ export const voteSchema = z.object({
 
 export type VoteInput = z.infer<typeof voteSchema>;
 
+// ─── Criteria Vote Validation ────────────────────────────────────
+
+export const criteriaVoteSchema = z.object({
+  criterion: z.enum(['proportional', 'legitimate', 'alternative']),
+  value: z.boolean(),
+});
+
+export type CriteriaVoteInput = z.infer<typeof criteriaVoteSchema>;
+
+export const CRITERION_LABELS: Record<string, string> = {
+  proportional: 'Le montant est-il proportionné ?',
+  legitimate: "L'objectif est-il légitime ?",
+  alternative: 'Existe-t-il une alternative moins coûteuse ?',
+};
+
 // ─── Sort Validation ──────────────────────────────────────────────
 
 export const VALID_SORTS = ['hot', 'new', 'top'] as const;
