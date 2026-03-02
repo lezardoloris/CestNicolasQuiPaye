@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { XpProgressBarCompact } from '@/components/features/gamification/XpProgressBar';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 export default function MobileHeader() {
   return (
@@ -15,11 +16,12 @@ export default function MobileHeader() {
           alt="C'est Nicolas qui paie"
           width={192}
           height={34}
-          className="h-6 w-auto"
+          className="h-6 w-auto invert dark:invert-0"
           priority
         />
       </Link>
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <XpProgressBarCompact />
         <Link
           href="/submit"

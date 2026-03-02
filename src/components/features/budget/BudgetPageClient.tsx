@@ -1,4 +1,5 @@
 import type { BudgetData } from '@/lib/constants/budget-2026';
+import { Abbr } from '@/components/ui/abbr';
 import { BudgetNav } from './BudgetNav';
 import { DeficitCounter } from './DeficitCounter';
 import { BudgetKpiCards } from './BudgetKpiCards';
@@ -45,7 +46,7 @@ export function BudgetPageClient({ data }: BudgetPageClientProps) {
         Finances publiques françaises : budget de l&apos;État (Loi de Finances 2026), dette,
         protection sociale, santé, fraude, impôts, rémunérations publiques,
         associations, agences de l&apos;État et comparaison européenne.<br />
-        Sources : budget.gouv.fr, Sénat, INSEE, Cour des comptes, DGFiP, DREES, Eurostat, IFRAP.
+        Sources : budget.gouv.fr, Sénat, <Abbr a="INSEE" />, Cour des comptes, <Abbr a="DGFiP" />, <Abbr a="DREES" />, Eurostat, <Abbr a="IFRAP" />.
       </p>
 
       {/* Data freshness badge */}

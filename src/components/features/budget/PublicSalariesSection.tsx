@@ -1,4 +1,5 @@
 import { formatEUR, fmtDecimal1 } from '@/lib/utils/format';
+import { Abbr } from '@/components/ui/abbr';
 import type { PublicSalary } from '@/lib/constants/budget-2026';
 
 interface PublicSalariesSectionProps {
@@ -72,7 +73,7 @@ export function PublicSalariesSection({ salaries, smic }: PublicSalariesSectionP
 
       <p className="text-xs text-text-muted">
         Sources : Sénat, Assemblée nationale, rapports annuels des entreprises publiques,
-        DGFiP, presse. Les montants sont en brut annuel. Les parts variables et avantages
+        <Abbr a="DGFiP" />, presse. Les montants sont en brut annuel. Les parts variables et avantages
         en nature ne sont pas toujours inclus.
       </p>
     </div>

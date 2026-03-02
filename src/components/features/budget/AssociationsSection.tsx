@@ -1,4 +1,5 @@
 import { formatEUR, formatCompactEUR } from '@/lib/utils/format';
+import { Abbr } from '@/components/ui/abbr';
 import type { SubsidizedAssociation } from '@/lib/constants/budget-2026';
 
 interface AssociationsSectionProps {
@@ -30,7 +31,7 @@ export function AssociationsSection({
           <p className="font-display text-xl font-bold tabular-nums text-warning sm:text-2xl">
             44%
           </p>
-          <p className="text-xs text-text-muted">Ne publient pas leurs comptes (IGAS)</p>
+          <p className="text-xs text-text-muted">Ne publient pas leurs comptes (<Abbr a="IGAS" />)</p>
         </div>
       </div>
 
@@ -89,13 +90,13 @@ export function AssociationsSection({
           Le plafond légal de rémunération d&apos;un dirigeant d&apos;association est fixé
           à 3 fois le plafond de la Sécurité sociale, soit environ{' '}
           <strong className="text-text-primary">11 592&euro; brut/mois</strong> (2025).
-          Selon l&apos;IGAS, 44% des associations contrôlées ne publient pas leurs
+          Selon l&apos;<Abbr a="IGAS" />, 44% des associations contrôlées ne publient pas leurs
           comptes, rendant tout contrôle citoyen impossible.
         </p>
       </div>
 
       <p className="text-xs text-text-muted">
-        Sources : Contribuables Associés (données 2018), IFRAP, IGAS, Code
+        Sources : Contribuables Associés (données 2018), <Abbr a="IFRAP" />, <Abbr a="IGAS" />, Code
         général des impôts (art. 261-7-1&deg;-d). Total de 23 Md&euro; = État
         (7 Md&euro;) + collectivités (8 Md&euro;) + Sécu et opérateurs
         (8 Md&euro;).

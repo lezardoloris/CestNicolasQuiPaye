@@ -1,5 +1,6 @@
 import type { SocialFraudItem } from '@/lib/constants/budget-2026';
 import { fmtDecimal1 } from '@/lib/utils/format';
+import { Abbr } from '@/components/ui/abbr';
 import { BudgetKpiCard } from './BudgetKpiCard';
 
 interface SocialFraudSectionProps {
@@ -101,10 +102,10 @@ export function SocialFraudSection({
         </p>
         <p className="mt-1 text-xs text-text-secondary">
           Le déficit de la Sécu s&apos;est creusé de 10,8 Md&euro; (2023) à 15,3 Md&euro; (2024),
-          avec une projection à 22-23 Md&euro; pour 2025. La dette sociale (ACOSS) passerait de
+          avec une projection à 22-23 Md&euro; pour 2025. La dette sociale (<Abbr a="ACOSS" />) passerait de
           42 Md&euro; (2025) à <strong className="text-text-primary">113 Md&euro; d&apos;ici 2028</strong>.
           La Cour des comptes alerte sur un risque de « crise de liquidité » dès 2026.
-          Le PLFSS 2026 prévoit 9 Md&euro; d&apos;économies, dont 7 Md&euro; sur l&apos;assurance maladie.
+          Le <Abbr a="PLFSS" /> 2026 prévoit 9 Md&euro; d&apos;économies, dont 7 Md&euro; sur l&apos;assurance maladie.
         </p>
       </div>
     </div>

@@ -22,6 +22,7 @@ import {
   CHART_TOOLTIP_WRAPPER_STYLE,
 } from '@/lib/constants/chart-styles';
 import { SocialFraudSection } from './SocialFraudSection';
+import { Abbr } from '@/components/ui/abbr';
 import type { SocialSpendingItem, SocialFraudItem } from '@/lib/constants/budget-2026';
 
 interface SocialSpendingSectionProps {
@@ -89,9 +90,9 @@ export function SocialSpendingSection({
       {/* Comparaison UE */}
       <div className="rounded-lg border border-info/20 bg-info/5 p-4 text-sm text-text-secondary">
         <p>
-          La France consacre <strong className="text-text-primary">31,5% de son PIB</strong> à
+          La France consacre <strong className="text-text-primary">31,5% de son <Abbr a="PIB" /></strong> à
           la protection sociale, contre <strong className="text-text-primary">26,6%</strong> en
-          moyenne dans l&apos;UE — soit environ{' '}
+          moyenne dans l&apos;<Abbr a="UE" /> — soit environ{' '}
           <strong className="text-text-primary">140 Md&euro; de plus</strong> que la moyenne
           européenne à PIB égal. Elle est{' '}
           <strong className="text-text-primary">1re en Europe</strong> pour les dépenses
@@ -107,7 +108,7 @@ export function SocialSpendingSection({
             Protection sociale ({socialProtectionTotalBn} Md&euro;)
           </h3>
           <p className="mb-3 text-xs text-text-muted">
-            Répartition COFOG 2024 — 41% des dépenses publiques
+            Répartition <Abbr a="COFOG" /> 2024 — 41% des dépenses publiques
           </p>
           <div role="img" aria-label="Graphique de la répartition de la protection sociale (693 Md€) : retraites, maladie, famille, chômage, logement">
           <ResponsiveContainer width="100%" height={isMobile ? 200 : 220}>
@@ -167,7 +168,7 @@ export function SocialSpendingSection({
             Dépenses de santé ({healthSpendingTotalBn} Md&euro;)
           </h3>
           <p className="mb-3 text-xs text-text-muted">
-            DREES DCSi 2024 — 11,4% du PIB (+3,6% vs 2023)
+            <Abbr a="DREES" /> DCSi 2024 — 11,4% du <Abbr a="PIB" /> (+3,6% vs 2023)
           </p>
           <div role="img" aria-label="Graphique des dépenses de santé (333 Md€) : soins hospitaliers, soins de ville, médicaments et autres postes">
           <ResponsiveContainer width="100%" height={isMobile ? 240 : 280}>
@@ -221,9 +222,9 @@ export function SocialSpendingSection({
       />
 
       <p className="text-xs text-text-muted">
-        Sources : DREES — Comptes de la santé 2024, INSEE Première n&deg;2093 (COFOG 2024),
-        Cour des comptes — Sécurité sociale 2025, CNAM rapport charges &amp; produits 2025,
-        DNLF rapport 2024, HCFiPS, IFRAP, Sénat.
+        Sources : <Abbr a="DREES" /> — Comptes de la santé 2024, <Abbr a="INSEE" /> Première n&deg;2093 (<Abbr a="COFOG" /> 2024),
+        Cour des comptes — Sécurité sociale 2025, <Abbr a="CNAM" /> rapport charges &amp; produits 2025,
+        <Abbr a="DNLF" /> rapport 2024, <Abbr a="HCFiPS" />, <Abbr a="IFRAP" />, Sénat.
       </p>
     </div>
   );

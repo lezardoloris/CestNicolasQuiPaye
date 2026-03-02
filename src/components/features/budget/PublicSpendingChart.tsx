@@ -10,6 +10,7 @@ import {
   CHART_TOOLTIP_ITEM_STYLE,
   CHART_TOOLTIP_WRAPPER_STYLE,
 } from '@/lib/constants/chart-styles';
+import { Abbr } from '@/components/ui/abbr';
 import type { PublicSpendingFunction } from '@/lib/constants/budget-2026';
 
 interface PublicSpendingChartProps {
@@ -35,7 +36,7 @@ export function PublicSpendingChart({ data }: PublicSpendingChartProps) {
         Où va l&apos;argent public ? (1 672 Md&euro;)
       </h3>
       <p className="mb-4 text-xs text-text-muted">
-        Dépenses publiques totales 2024 par fonction (État + Sécu + collectivités) — INSEE, COFOG
+        Dépenses publiques totales 2024 par fonction (État + Sécu + collectivités) — <Abbr a="INSEE" />, <Abbr a="COFOG" />
       </p>
       <div role="img" aria-label="Graphique des dépenses publiques totales (1 672 Md€) par fonction : protection sociale 414€, santé 156€, enseignement 89€ sur 1 000€ d'impôts">
       <ResponsiveContainer width="100%" height={isMobile ? 320 : 380}>
