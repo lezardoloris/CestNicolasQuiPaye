@@ -70,6 +70,10 @@ export async function getSubmissions({
       return getNewFeed({ cursor: decoded, limit });
     case 'top':
       return getTopFeed({ cursor: decoded, limit, timeWindow });
+    case 'budget_desc':
+      return getBudgetDescFeed({ cursor: decoded, limit });
+    case 'budget_asc':
+      return getBudgetAscFeed({ cursor: decoded, limit });
   }
 }
 
@@ -184,6 +188,66 @@ async function getTopFeed({
   return paginateResults(results, limit, 'top');
 }
 
+// ─── Budget Desc Feed ──────────────────────────────────────────────
+
+async function getBudgetDescFeed({
+  cursor,
+  limit,
+}: {
+  cursor: CursorPayload | null;
+  limit: number;
+}) {
+  const conditions = [
+    eq(submissions.status, 'published'),
+    eq(submissions.moderationStatus, 'approved'),
+  ];
+
+  if (cursor) {
+    conditions.push(
+      sql`(${submissions.amount}::numeric < ${Number(cursor.sortValue)} OR (${submissions.amount}::numeric = ${Number(cursor.sortValue)} AND ${submissions.id} < ${cursor.id}))`,
+    );
+  }
+
+  const results = await db
+    .select(feedSelect)
+    .from(submissions)
+    .where(and(...conditions))
+    .orderBy(desc(sql`${submissions.amount}::numeric`), desc(submissions.id))
+    .limit(limit + 1);
+
+  return paginateResults(results, limit, 'budget_desc');
+}
+
+// ─── Budget Asc Feed ───────────────────────────────────────────────
+
+async function getBudgetAscFeed({
+  cursor,
+  limit,
+}: {
+  cursor: CursorPayload | null;
+  limit: number;
+}) {
+  const conditions = [
+    eq(submissions.status, 'published'),
+    eq(submissions.moderationStatus, 'approved'),
+  ];
+
+  if (cursor) {
+    conditions.push(
+      sql`(${submissions.amount}::numeric > ${Number(cursor.sortValue)} OR (${submissions.amount}::numeric = ${Number(cursor.sortValue)} AND ${submissions.id} < ${cursor.id}))`,
+    );
+  }
+
+  const results = await db
+    .select(feedSelect)
+    .from(submissions)
+    .where(and(...conditions))
+    .orderBy(sql`${submissions.amount}::numeric`, desc(submissions.id))
+    .limit(limit + 1);
+
+  return paginateResults(results, limit, 'budget_asc');
+}
+
 // ─── Active Categories ───────────────────────────────────────────
 
 export async function getActiveCategories(): Promise<string[]> {
@@ -225,6 +289,10 @@ function paginateResults(
         break;
       case 'new':
         sortValue = lastItem.createdAt.toISOString();
+        break;
+      case 'budget_desc':
+      case 'budget_asc':
+        sortValue = String(lastItem.amount);
         break;
     }
 

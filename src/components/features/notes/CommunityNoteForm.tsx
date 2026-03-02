@@ -6,11 +6,19 @@ import { cn } from '@/lib/utils';
 interface CommunityNoteFormProps {
   onSubmit: (data: { body: string; sourceUrl?: string }) => Promise<unknown>;
   isSubmitting: boolean;
+  initialData?: { body: string; sourceUrl?: string };
+  onCancel?: () => void;
 }
 
-export function CommunityNoteForm({ onSubmit, isSubmitting }: CommunityNoteFormProps) {
-  const [body, setBody] = useState('');
-  const [sourceUrl, setSourceUrl] = useState('');
+export function CommunityNoteForm({
+  onSubmit,
+  isSubmitting,
+  initialData,
+  onCancel,
+}: CommunityNoteFormProps) {
+  const isEditMode = !!initialData;
+  const [body, setBody] = useState(initialData?.body ?? '');
+  const [sourceUrl, setSourceUrl] = useState(initialData?.sourceUrl ?? '');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,8 +35,10 @@ export function CommunityNoteForm({ onSubmit, isSubmitting }: CommunityNoteFormP
         body: body.trim(),
         sourceUrl: sourceUrl.trim() || undefined,
       });
-      setBody('');
-      setSourceUrl('');
+      if (!isEditMode) {
+        setBody('');
+        setSourceUrl('');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur');
     }
@@ -69,16 +79,31 @@ export function CommunityNoteForm({ onSubmit, isSubmitting }: CommunityNoteFormP
 
       {error && <p className="text-xs text-chainsaw-red">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={isSubmitting || body.trim().length < 10}
-        className={cn(
-          'rounded-md bg-info px-3 py-1.5 text-xs font-semibold text-white',
-          'transition-colors hover:bg-info/80 disabled:opacity-50',
+      <div className="flex items-center gap-2">
+        <button
+          type="submit"
+          disabled={isSubmitting || body.trim().length < 10}
+          className={cn(
+            'rounded-md bg-info px-3 py-1.5 text-xs font-semibold text-white',
+            'transition-colors hover:bg-info/80 disabled:opacity-50',
+          )}
+        >
+          {isSubmitting
+            ? 'Envoi...'
+            : isEditMode
+              ? 'Modifier'
+              : 'Ajouter une note'}
+        </button>
+        {isEditMode && onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-md px-3 py-1.5 text-xs font-semibold text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
+          >
+            Annuler
+          </button>
         )}
-      >
-        {isSubmitting ? 'Envoi...' : 'Ajouter une note'}
-      </button>
+      </div>
     </form>
   );
 }

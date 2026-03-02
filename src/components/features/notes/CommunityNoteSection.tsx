@@ -14,8 +14,18 @@ interface CommunityNoteSectionProps {
 }
 
 export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps) {
-  const { notes, isLoading, createNote, isCreating, voteNote, isVoting } =
-    useCommunityNotes(submissionId);
+  const {
+    notes,
+    isLoading,
+    createNote,
+    isCreating,
+    updateNote,
+    isUpdating,
+    deleteNote,
+    isDeleting,
+    voteNote,
+    isVoting,
+  } = useCommunityNotes(submissionId);
   const [showNudge, setShowNudge] = useState(false);
   const dismissNudge = useCallback(() => setShowNudge(false), []);
 
@@ -64,6 +74,10 @@ export function CommunityNoteSection({ submissionId }: CommunityNoteSectionProps
               note={note}
               onVote={(isUseful) => voteNote({ noteId: note.id, isUseful })}
               isVoting={isVoting}
+              onUpdate={(noteId, data) => updateNote({ noteId, data })}
+              onDelete={(noteId) => deleteNote(noteId)}
+              isUpdating={isUpdating}
+              isDeleting={isDeleting}
             />
           ))}
         </div>

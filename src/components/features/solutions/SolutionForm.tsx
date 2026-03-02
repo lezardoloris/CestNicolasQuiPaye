@@ -7,10 +7,18 @@ import { Textarea } from '@/components/ui/textarea';
 interface SolutionFormProps {
   onSubmit: (body: string) => Promise<unknown>;
   isSubmitting: boolean;
+  initialBody?: string;
+  onCancel?: () => void;
 }
 
-export function SolutionForm({ onSubmit, isSubmitting }: SolutionFormProps) {
-  const [body, setBody] = useState('');
+export function SolutionForm({
+  onSubmit,
+  isSubmitting,
+  initialBody,
+  onCancel,
+}: SolutionFormProps) {
+  const isEditMode = !!initialBody;
+  const [body, setBody] = useState(initialBody ?? '');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,7 +33,9 @@ export function SolutionForm({ onSubmit, isSubmitting }: SolutionFormProps) {
 
     try {
       await onSubmit(trimmed);
-      setBody('');
+      if (!isEditMode) {
+        setBody('');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de la soumission');
     }
@@ -43,13 +53,24 @@ export function SolutionForm({ onSubmit, isSubmitting }: SolutionFormProps) {
       {error && <p className="text-sm text-chainsaw-red">{error}</p>}
       <div className="flex items-center justify-between">
         <span className="text-xs text-text-muted">{body.length}/2000</span>
-        <Button
-          type="submit"
-          disabled={isSubmitting || body.trim().length < 10}
-          size="sm"
-        >
-          {isSubmitting ? 'Envoi...' : 'Proposer une solution'}
-        </Button>
+        <div className="flex items-center gap-2">
+          {isEditMode && onCancel && (
+            <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
+              Annuler
+            </Button>
+          )}
+          <Button
+            type="submit"
+            disabled={isSubmitting || body.trim().length < 10}
+            size="sm"
+          >
+            {isSubmitting
+              ? 'Envoi...'
+              : isEditMode
+                ? 'Modifier'
+                : 'Proposer une solution'}
+          </Button>
+        </div>
       </div>
     </form>
   );

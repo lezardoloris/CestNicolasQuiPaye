@@ -124,7 +124,7 @@ export default function SubmissionsList({ userId }: SubmissionsListProps) {
             >
               <div className="flex-1 min-w-0 pr-4">
                 <Link
-                  href={`/s/${submission.id}/${submission.slug}`}
+                  href={`/s/${submission.id}`}
                   className="font-medium text-text-primary hover:text-chainsaw-red transition-colors line-clamp-1"
                 >
                   {submission.title}

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { communityNotes } from '@/lib/db/schema';
-import { eq, desc, sql } from 'drizzle-orm';
+import { eq, desc, sql, isNull, and } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { createCommunityNoteSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
@@ -25,7 +25,7 @@ export async function GET(
   const results = await db
     .select()
     .from(communityNotes)
-    .where(eq(communityNotes.submissionId, submissionId))
+    .where(and(eq(communityNotes.submissionId, submissionId), isNull(communityNotes.deletedAt)))
     .orderBy(
       desc(communityNotes.isPinned),
       desc(sql`${communityNotes.upvoteCount} - ${communityNotes.downvoteCount}`),

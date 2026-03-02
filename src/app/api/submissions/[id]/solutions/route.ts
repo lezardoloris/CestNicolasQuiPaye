@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { solutions } from '@/lib/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, isNull, and } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { createSolutionSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
@@ -24,7 +24,7 @@ export async function GET(
   const results = await db
     .select()
     .from(solutions)
-    .where(eq(solutions.submissionId, submissionId))
+    .where(and(eq(solutions.submissionId, submissionId), isNull(solutions.deletedAt)))
     .orderBy(desc(solutions.upvoteCount));
 
   return apiSuccess(results);

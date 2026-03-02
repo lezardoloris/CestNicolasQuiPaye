@@ -1,9 +1,9 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { LayoutGrid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CATEGORIES } from '@/lib/constants/categories';
 
@@ -20,6 +20,8 @@ export function CategoryFilter({
     activeCategories,
 }: CategoryFilterProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
 
     const visibleCategories = useMemo(
         () =>
@@ -28,6 +30,33 @@ export function CategoryFilter({
                 : CATEGORIES,
         [activeCategories],
     );
+
+    const updateScrollState = useCallback(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        setCanScrollLeft(el.scrollLeft > 2);
+        setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+    }, []);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        updateScrollState();
+        el.addEventListener('scroll', updateScrollState, { passive: true });
+        const ro = new ResizeObserver(updateScrollState);
+        ro.observe(el);
+        return () => {
+            el.removeEventListener('scroll', updateScrollState);
+            ro.disconnect();
+        };
+    }, [updateScrollState]);
+
+    const scroll = useCallback((direction: 'left' | 'right') => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const amount = el.clientWidth * 0.6;
+        el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
+    }, []);
 
     const handleSelect = (slug: string | null) => {
         onCategoryChange(activeCategory === slug ? null : slug);
@@ -38,17 +67,33 @@ export function CategoryFilter({
 
     return (
         <div className="relative mb-4">
-            {/* Fade right edge to hint at more filters */}
-            <div
-                className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-surface-primary to-transparent"
-                aria-hidden="true"
-            />
+            {/* Left chevron */}
+            {canScrollLeft && (
+                <button
+                    onClick={() => scroll('left')}
+                    className="absolute left-0 top-0 z-20 flex h-full items-center bg-gradient-to-r from-surface-primary via-surface-primary/90 to-transparent pl-1 pr-2"
+                    aria-label="Défiler les catégories vers la gauche"
+                >
+                    <ChevronLeft className="size-4 text-text-secondary" />
+                </button>
+            )}
+
+            {/* Right chevron */}
+            {canScrollRight && (
+                <button
+                    onClick={() => scroll('right')}
+                    className="absolute right-0 top-0 z-20 flex h-full items-center bg-gradient-to-l from-surface-primary via-surface-primary/90 to-transparent pl-2 pr-1"
+                    aria-label="Défiler les catégories vers la droite"
+                >
+                    <ChevronRight className="size-4 text-text-secondary" />
+                </button>
+            )}
 
             <div
                 ref={scrollRef}
                 role="group"
                 aria-label="Filtrer par catégorie"
-                className="scrollbar-hide flex gap-2 overflow-x-auto px-4 pr-10 py-1"
+                className="scrollbar-hide flex gap-2 overflow-x-auto px-4 py-1"
             >
                 {/* "Tous" pill */}
                 <CategoryPill

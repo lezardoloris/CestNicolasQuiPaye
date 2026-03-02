@@ -18,6 +18,10 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
     isLoading,
     createSolution,
     isCreating,
+    updateSolution,
+    isUpdating,
+    deleteSolution,
+    isDeleting,
     voteSolution,
     isVoting,
   } = useSolutions(submissionId);
@@ -102,6 +106,12 @@ export function SolutionSection({ submissionId }: SolutionSectionProps) {
                 voteSolution({ solutionId, voteType })
               }
               isVoting={isVoting}
+              onUpdate={(solutionId, data) =>
+                updateSolution({ solutionId, data })
+              }
+              onDelete={(solutionId) => deleteSolution(solutionId)}
+              isUpdating={isUpdating}
+              isDeleting={isDeleting}
             />
           ))
         )}

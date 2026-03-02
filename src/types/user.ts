@@ -10,6 +10,7 @@ export interface UserProfile {
   sourceCount: number;
   noteCount: number;
   solutionCount: number;
+  commentCount: number;
   avatarUrl: string | null;
   bio: string | null;
   karma: number;

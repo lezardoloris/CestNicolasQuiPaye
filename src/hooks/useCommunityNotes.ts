@@ -50,6 +50,46 @@ export function useCommunityNotes(submissionId: string) {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({
+      noteId,
+      data,
+    }: {
+      noteId: string;
+      data: { body: string; sourceUrl?: string };
+    }) => {
+      const res = await fetch(`/api/notes/${noteId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error?.message ?? 'Erreur');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['communityNotes', submissionId] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (noteId: string) => {
+      const res = await fetch(`/api/notes/${noteId}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error?.message ?? 'Erreur');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['communityNotes', submissionId] });
+    },
+  });
+
   const voteMutation = useMutation({
     mutationFn: async ({ noteId, isUseful }: { noteId: string; isUseful: boolean }) => {
       const res = await fetch(`/api/notes/${noteId}/vote`, {
@@ -71,6 +111,10 @@ export function useCommunityNotes(submissionId: string) {
     isLoading: query.isLoading,
     createNote: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
+    updateNote: updateMutation.mutateAsync,
+    isUpdating: updateMutation.isPending,
+    deleteNote: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
     voteNote: voteMutation.mutate,
     isVoting: voteMutation.isPending,
   };

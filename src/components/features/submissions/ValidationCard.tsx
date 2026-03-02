@@ -75,7 +75,7 @@ export function ValidationCard({ submission, onValidate }: ValidationCardProps) 
       <div className="mb-2 flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <Link
-            href={`/s/${submission.slug}`}
+            href={`/s/${submission.id}`}
             className="text-text-primary text-sm font-semibold hover:underline"
             target="_blank"
           >

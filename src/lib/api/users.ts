@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { users, submissions, votes, submissionSources, communityNotes, solutions } from '@/lib/db/schema';
+import { users, submissions, votes, submissionSources, communityNotes, solutions, comments } from '@/lib/db/schema';
 import { eq, and, isNull, desc, lt, count } from 'drizzle-orm';
 import { resolveDisplayName, maskEmail } from '@/lib/utils/user-display';
 import { calculateKarma, getKarmaTier } from '@/lib/utils/karma';
@@ -26,8 +26,9 @@ export async function getUserProfile(
   let sourceCount = 0;
   let noteCount = 0;
   let solutionCount = 0;
+  let commentCount = 0;
   try {
-    const [srcResult, noteResult, solResult] = await Promise.all([
+    const [srcResult, noteResult, solResult, commentResult] = await Promise.all([
       db
         .select({ count: count() })
         .from(submissionSources)
@@ -40,10 +41,15 @@ export async function getUserProfile(
         .select({ count: count() })
         .from(solutions)
         .where(and(eq(solutions.authorId, userId), isNull(solutions.deletedAt))),
+      db
+        .select({ count: count() })
+        .from(comments)
+        .where(and(eq(comments.authorId, userId), isNull(comments.deletedAt))),
     ]);
     sourceCount = srcResult[0]?.count ?? 0;
     noteCount = noteResult[0]?.count ?? 0;
     solutionCount = solResult[0]?.count ?? 0;
+    commentCount = commentResult[0]?.count ?? 0;
   } catch {
     // Tables may not exist yet
   }
@@ -116,6 +122,7 @@ export async function getUserProfile(
     sourceCount,
     noteCount,
     solutionCount,
+    commentCount,
     avatarUrl: user.avatarUrl,
     bio: user.bio,
     karma,
