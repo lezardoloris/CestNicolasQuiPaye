@@ -101,7 +101,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
         </DesktopSidebar>
 
         {/* Feed column — Twitter-style center column with vertical borders */}
-        <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:max-w-[600px] lg:border-x lg:border-border-default">
+        <div className="mx-auto min-w-0 w-full max-w-[600px] lg:mx-0 lg:flex-1 lg:max-w-none lg:border-x lg:border-border-default">
           <HeroSection stats={stats} />
 
           {/* Mobile: contribution CTAs */}
