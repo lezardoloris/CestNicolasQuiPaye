@@ -1,6 +1,4 @@
 import { notFound } from 'next/navigation';
-import { FeedSortTabs } from '@/components/features/feed/FeedSortTabs';
-import { TopTimeFilter } from '@/components/features/feed/TopTimeFilter';
 import { HeroSection } from '@/components/features/feed/HeroSection';
 import { FeedPageClient } from '@/components/features/feed/FeedPageClient';
 import { MiniLeaderboard } from '@/components/features/leaderboard/MiniLeaderboard';
@@ -98,10 +96,6 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
 
           {/* Mobile: contribution CTAs */}
           <MobileContributeBanner />
-
-          <FeedSortTabs activeSort={sort} />
-
-          {sort === 'top' && <TopTimeFilter activeWindow={validTimeWindow} />}
 
           <FeedPageClient
             initialData={submissions}
