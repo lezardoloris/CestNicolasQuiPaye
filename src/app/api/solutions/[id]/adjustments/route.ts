@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { comments, solutions } from '@/lib/db/schema';
-import { eq, and, isNull, asc } from 'drizzle-orm';
+import { comments, solutions, submissions } from '@/lib/db/schema';
+import { eq, and, isNull, asc, sql } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { createAdjustmentSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
@@ -87,6 +87,12 @@ export async function POST(
       body: parsed.data.body,
     })
     .returning();
+
+  // Increment denormalized comment count on submission
+  await db
+    .update(submissions)
+    .set({ commentCount: sql`${submissions.commentCount} + 1` })
+    .where(eq(submissions.id, solution.submissionId));
 
   return apiSuccess(comment, {}, 201);
 }

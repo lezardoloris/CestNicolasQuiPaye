@@ -7,6 +7,8 @@ import type { SortType } from '@/lib/utils/validation';
 const feedSelect = {
   ...getTableColumns(submissions),
   sourceCount: sql<number>`(SELECT count(*) FROM submission_sources WHERE submission_id = ${submissions.id})`.as('source_count'),
+  // Live comment count — overrides denormalized field to avoid desync
+  commentCount: sql<number>`(SELECT count(*) FROM comments WHERE submission_id = ${submissions.id} AND deleted_at IS NULL)`.as('live_comment_count'),
   pinnedNoteBody: sql<string | null>`(SELECT body FROM community_notes WHERE submission_id = ${submissions.id} AND is_pinned = 1 ORDER BY pinned_at DESC LIMIT 1)`.as('pinned_note_body'),
   authorLevel: sql<number>`(SELECT total_xp FROM users WHERE id = ${submissions.authorId})`.as('author_level'),
   authorStreak: sql<number>`(SELECT current_streak FROM users WHERE id = ${submissions.authorId})`.as('author_streak'),
