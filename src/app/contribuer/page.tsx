@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 export const metadata: Metadata = {
   title: 'Contribuer',
   description:
-    'C\'est Nicolas Qui Paye est open source. Contribuez du code, du contenu, des solutions ou des idées.',
+    'C\'est Nicolas Qui Paie est open source. Contribuez du code, du contenu, des solutions ou des idées.',
 };
 
 const GITHUB_URL = 'https://github.com/lezardoloris/CestNicolasQuiPaye';
@@ -107,7 +107,7 @@ export default function ContribuerPage() {
     >
       <div className="mb-8 text-center">
         <h1 className="font-display text-3xl font-bold text-text-primary md:text-4xl">
-          Contribuer à C'est Nicolas Qui Paye
+          Contribuer à C'est Nicolas Qui Paie
         </h1>
         <p className="mt-3 text-lg text-text-secondary">
           Ce projet est{' '}

@@ -1,7 +1,7 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_APP_URL || 'https://nicoquipaie.co';
-export const SITE_NAME = "C'est Nicolas Qui Paye";
+export const SITE_NAME = "C'est Nicolas Qui Paie";
 export const TWITTER_HANDLE = '@NicolasPaye_FR';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.png`;
 export const DEFAULT_DESCRIPTION =
-  "C'est Nicolas Qui Paye - La plateforme citoyenne sourced pour tronçonner les dépenses publiques françaises. Chaque dépense documentée, chaque euro compté.";
+  "C'est Nicolas Qui Paie - La plateforme citoyenne sourced pour tronçonner les dépenses publiques françaises. Chaque dépense documentée, chaque euro compté.";

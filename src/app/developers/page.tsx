@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'API Publique Open Data - Nicolas Paye',
+  title: 'API Publique Open Data - Nicolas Paie',
   description:
     'Documentation de l\'API publique Open Data de nicoquipaie.co. Accès libre aux données des dépenses publiques françaises.',
 };
@@ -156,7 +156,7 @@ export default function DevelopersPage() {
         </h1>
         <p className="mb-4 text-lg text-text-secondary">
           Accès libre et gratuit aux données des dépenses publiques françaises
-          soumises par les citoyens sur Nicolas Paye.
+          soumises par les citoyens sur Nicolas Paie.
         </p>
         <div className="rounded-lg bg-surface-elevated p-4">
           <p className="mb-1 text-sm font-medium text-text-muted">Base URL</p>

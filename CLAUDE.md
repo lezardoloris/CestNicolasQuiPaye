@@ -1,4 +1,4 @@
-# CLAUDE.md — C'est Nicolas Qui Paye
+# CLAUDE.md — C'est Nicolas Qui Paie
 
 ## Project Overview
 

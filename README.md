@@ -1,4 +1,4 @@
-# C'est Nicolas qui paye
+# C'est Nicolas qui paie
 
 Plateforme citoyenne de transparence fiscale. Les utilisateurs soumettent des exemples de depenses publiques, votent, commentent et partagent.
 

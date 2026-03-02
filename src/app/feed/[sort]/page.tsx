@@ -30,7 +30,7 @@ const SORT_META: Record<string, { title: string; description: string }> = {
   hot: {
     title: 'Tendances',
     description:
-      'Les gaspillages publics les plus signalés en ce moment sur C\'est Nicolas Qui Paye.',
+      'Les gaspillages publics les plus signalés en ce moment sur C\'est Nicolas Qui Paie.',
   },
   new: {
     title: 'Récent',
@@ -40,7 +40,7 @@ const SORT_META: Record<string, { title: string; description: string }> = {
   top: {
     title: 'Top',
     description:
-      'Les gaspillages publics les plus votés de tous les temps sur C\'est Nicolas Qui Paye.',
+      'Les gaspillages publics les plus votés de tous les temps sur C\'est Nicolas Qui Paie.',
   },
 };
 
@@ -51,10 +51,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { sort } = await params;
   const meta = SORT_META[sort];
-  if (!meta) return { title: 'C\'est Nicolas Qui Paye' };
+  if (!meta) return { title: 'C\'est Nicolas Qui Paie' };
 
   return {
-    title: `${meta.title} - C'est Nicolas Qui Paye`,
+    title: `${meta.title} - C'est Nicolas Qui Paie`,
     description: meta.description,
   };
 }

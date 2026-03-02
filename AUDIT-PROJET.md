@@ -1,4 +1,4 @@
-# Audit Projet — C'est Nicolas Qui Paye
+# Audit Projet — C'est Nicolas Qui Paie
 
 > Date : 28 février 2026
 > Site : https://nicoquipaie.co/

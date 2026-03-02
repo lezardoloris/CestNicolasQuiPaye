@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="hidden md:block border-t border-border-default bg-surface-primary py-8 px-6">
       <div className="mx-auto max-w-5xl flex flex-col gap-4 text-text-muted text-sm">
         <p>
-          C'est Nicolas Qui Paye &mdash; La communauté open source pour tronçonner les dépenses publiques. Licence{' '}
+          C'est Nicolas Qui Paie &mdash; La communauté open source pour tronçonner les dépenses publiques. Licence{' '}
           <a
             href="https://opensource.org/licenses/MIT"
             target="_blank"

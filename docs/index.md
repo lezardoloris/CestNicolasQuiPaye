@@ -1,4 +1,4 @@
-# C'EST NICOLAS QUI PAYE — Index de documentation
+# C'EST NICOLAS QUI PAIE — Index de documentation
 
 > **Date de generation :** 2026-02-28
 > **Mode de scan :** Exhaustif (tous les fichiers source)

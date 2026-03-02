@@ -1,6 +1,6 @@
 # Architecture
 
-> **Projet :** C'EST NICOLAS QUI PAYE
+> **Projet :** C'EST NICOLAS QUI PAIE
 > **Type :** web (monolithe Next.js fullstack)
 > **Date :** 2026-02-28
 

@@ -1,6 +1,6 @@
 # Guide de developpement
 
-> **Projet :** C'EST NICOLAS QUI PAYE
+> **Projet :** C'EST NICOLAS QUI PAIE
 > **Date :** 2026-02-28
 
 ## Prerequis

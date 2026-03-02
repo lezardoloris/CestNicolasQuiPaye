@@ -1,11 +1,11 @@
-# Roadmap — C'est Nicolas Qui Paye
+# Roadmap — C'est Nicolas Qui Paie
 
 > Dernière mise à jour : 28 février 2026
 > Audits : voir `AUDIT-LES-CHIFFRES.md` (contribution) et `AUDIT-PROJET.md` (projet)
 
 ---
 
-## -- EN COURS @BEUZZLEKLAIR -- Prochaine feature : Simulateur « Combien Nicolas Paye » 
+## -- EN COURS @BEUZZLEKLAIR -- Prochaine feature : Simulateur « Combien Nicolas Paie » 
 
 **Priorité : HAUTE — À développer immédiatement après le push de la feature "Les Chiffres"**
 

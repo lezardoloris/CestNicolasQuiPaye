@@ -1,6 +1,6 @@
 # Guide de deploiement
 
-> **Projet :** C'EST NICOLAS QUI PAYE
+> **Projet :** C'EST NICOLAS QUI PAIE
 > **Plateforme :** Railway
 > **Date :** 2026-02-28
 

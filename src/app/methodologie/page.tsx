@@ -27,7 +27,7 @@ export default async function MethodologiePage() {
         Méthodologie de calcul
       </h1>
       <p className="text-text-secondary mb-8">
-        Chaque chiffre affiché sur C'est Nicolas Qui Paye est calculable, vérifiable et
+        Chaque chiffre affiché sur C'est Nicolas Qui Paie est calculable, vérifiable et
         contestable. Voici les formules exactes et les sources officielles
         utilisées.
       </p>

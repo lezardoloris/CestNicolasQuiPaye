@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Les chiffres des finances publiques françaises — C\'EST NICOLAS QUI PAYE';
+export const alt = 'Les chiffres des finances publiques françaises — C\'EST NICOLAS QUI PAIE';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -47,7 +47,7 @@ export default function OgImage(): ImageResponse {
             N
           </div>
           <span style={{ fontSize: '20px', color: '#A3A3A3' }}>
-            C&apos;EST NICOLAS QUI PAYE
+            C&apos;EST NICOLAS QUI PAIE
           </span>
         </div>
 

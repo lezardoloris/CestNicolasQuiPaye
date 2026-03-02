@@ -40,7 +40,7 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
         <Link
           href="/feed/hot"
           className="flex flex-col items-start gap-0 px-2 pb-2"
-          aria-label="C'est Nicolas qui paye - accueil"
+          aria-label="C'est Nicolas qui paie - accueil"
         >
           <Image
             src="/logo.png"

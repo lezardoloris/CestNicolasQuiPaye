@@ -1,4 +1,4 @@
-# Contribuer a NICOLAS PAYE
+# Contribuer a NICOLAS PAIE
 
 Merci de vouloir contribuer ! Ce projet est 100% open source et communautaire. Tout le monde peut participer, que ce soit du code, du contenu, des corrections ou des idees.
 

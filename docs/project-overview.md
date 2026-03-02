@@ -1,6 +1,6 @@
 # Vue d'ensemble du projet
 
-> **Projet :** C'EST NICOLAS QUI PAYE
+> **Projet :** C'EST NICOLAS QUI PAIE
 > **Type :** Application web monolithique (Next.js fullstack)
 > **Date de documentation :** 2026-02-28
 > **Scan :** Exhaustif (tous les fichiers source lus)
@@ -11,7 +11,7 @@ Plateforme citoyenne open source de transparence fiscale. Les utilisateurs soume
 
 ## Resume executif
 
-**C'EST NICOLAS QUI PAYE** est une plateforme civic-tech construite avec Next.js 16 et React 19, deployee sur Railway. Elle permet aux citoyens de :
+**C'EST NICOLAS QUI PAIE** est une plateforme civic-tech construite avec Next.js 16 et React 19, deployee sur Railway. Elle permet aux citoyens de :
 
 - **Soumettre** des depenses publiques avec montant, source et description
 - **Voter** (pour/contre) sur les soumissions, meme anonymement (par IP)

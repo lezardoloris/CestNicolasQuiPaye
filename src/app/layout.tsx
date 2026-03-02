@@ -31,21 +31,21 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'C\'est Nicolas Qui Paye - La communauté open source pour tronçonner les dépenses publiques',
-    template: '%s | C\'est Nicolas Qui Paye',
+    default: 'C\'est Nicolas Qui Paie - La communauté open source pour tronçonner les dépenses publiques',
+    template: '%s | C\'est Nicolas Qui Paie',
   },
   description:
     'Plateforme citoyenne collaborative pour identifier, documenter et voter sur les dépenses publiques à réduire. Transparence, données officielles et participation démocratique.',
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    siteName: 'C\'est Nicolas Qui Paye',
+    siteName: 'C\'est Nicolas Qui Paie',
     images: [
       {
         url: '/og-default.png',
         width: 1200,
         height: 630,
-        alt: 'C\'est Nicolas Qui Paye - La communauté open source pour tronçonner les dépenses publiques',
+        alt: 'C\'est Nicolas Qui Paie - La communauté open source pour tronçonner les dépenses publiques',
       },
     ],
   },

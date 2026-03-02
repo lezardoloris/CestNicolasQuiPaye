@@ -40,7 +40,7 @@ export default function DesktopNav() {
       <Link
         href="/feed/hot"
         className="flex flex-col items-start gap-0"
-        aria-label="C'est Nicolas qui paye - accueil"
+        aria-label="C'est Nicolas qui paie - accueil"
       >
         <Image
           src="/logo.png"

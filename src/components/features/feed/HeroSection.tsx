@@ -25,7 +25,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          aria-label="Présentation de Nicolas Paye"
+          aria-label="Présentation de Nicolas Paie"
           className="border-b border-border-default px-4 py-4"
         >
           {/* Top row: headline + collapse */}

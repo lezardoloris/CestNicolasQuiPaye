@@ -747,7 +747,7 @@ async function main() {
     const hotScore = calculateHotScore(0, 0, createdAt);
 
     return {
-      authorDisplay: 'Nicolas Paye',
+      authorDisplay: 'Nicolas Paie',
       title: item.title,
       slug: generateSlug(item.title),
       description: item.description,

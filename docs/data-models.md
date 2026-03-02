@@ -1,6 +1,6 @@
 # Modeles de donnees
 
-> **Projet :** C'EST NICOLAS QUI PAYE
+> **Projet :** C'EST NICOLAS QUI PAIE
 > **ORM :** Drizzle ORM (PostgreSQL 16)
 > **Schema :** `src/lib/db/schema.ts`
 > **Date :** 2026-02-28

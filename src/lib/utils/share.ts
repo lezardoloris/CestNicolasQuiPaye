@@ -12,7 +12,7 @@ export function buildShareText(
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(costPerTaxpayer);
-  return `${truncatedTitle} coûte ${formatted} EUR par an à chaque contribuable français. #NicolasPaye #Tronçonneuse`;
+  return `${truncatedTitle} coûte ${formatted} EUR par an à chaque contribuable français. #NicolasPaie #Tronçonneuse`;
 }
 
 /**

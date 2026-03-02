@@ -174,7 +174,7 @@ Aucune donnée ne provient de sources partisanes. Les analyses (IFRAP, Cour des 
 
 | Priorité | Feature | Effort |
 |----------|---------|--------|
-| HAUTE | Simulateur "Combien Nicolas Paye" (`/simulateur`) | 2-3 jours |
+| HAUTE | Simulateur "Combien Nicolas Paie" (`/simulateur`) | 2-3 jours |
 | P1 | SEO : sitemap, canonical, JSON-LD | 1 jour |
 | P2 | Light mode (next-themes) | ~13h |
 | P2 | Infobulles acronymes (JSON + `<Acronym>`) | ~4,5h |
