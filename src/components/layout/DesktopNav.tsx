@@ -22,7 +22,7 @@ const navLinks = [
   { href: '/feed/hot', label: 'Feed' },
   { href: '/submit', label: 'Signaler' },
   { href: '/chiffres', label: 'Chiffres' },
-  // { href: '/leaderboard', label: 'Classement' }, // contributions anonymes
+  { href: '/simulateur', label: 'Simulateur' },
   { href: '/contribuer', label: 'Contribuer' },
 ];
 
