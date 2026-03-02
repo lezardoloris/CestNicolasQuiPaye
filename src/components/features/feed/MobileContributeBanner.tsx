@@ -36,7 +36,7 @@ const CONTRIBUTIONS: {
 
 export function MobileContributeBanner() {
   return (
-    <div className="mb-2 px-4 lg:hidden">
+    <div className="py-3 px-4 lg:hidden">
       <div className="scrollbar-hide -mx-4 flex gap-2.5 overflow-x-auto px-4 pb-1">
         {CONTRIBUTIONS.map((item) => {
           const Icon = item.icon;
