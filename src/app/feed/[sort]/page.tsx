@@ -4,8 +4,8 @@ import { TopTimeFilter } from '@/components/features/feed/TopTimeFilter';
 import { HeroSection } from '@/components/features/feed/HeroSection';
 import { FeedPageClient } from '@/components/features/feed/FeedPageClient';
 import { MiniLeaderboard } from '@/components/features/leaderboard/MiniLeaderboard';
-import { GamificationTeaser } from '@/components/features/gamification/GamificationTeaser';
-import { SignupCTA } from '@/components/features/auth/SignupCTA';
+import { LevelUpTeaser } from '@/components/features/gamification/LevelUpTeaser';
+import { SidebarGamification } from '@/components/features/gamification/SidebarGamification';
 
 import { getSubmissions } from '@/lib/api/submissions';
 import { getPlatformStats } from '@/lib/api/stats';
@@ -94,6 +94,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
         <DesktopSidebar>
           {pendingCount > 0 && <PendingReviewCard count={pendingCount} />}
           <MiniLeaderboard entries={leaderboard} variant="sidebar" />
+          {isLoggedOut && <SidebarGamification />}
         </DesktopSidebar>
 
         {/* Feed column — Twitter-style center column with vertical borders */}
@@ -118,12 +119,7 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
 
         {/* Right sidebar — swaps to submission preview on card click */}
         <FeedRightSidebar>
-          {isLoggedOut && (
-            <>
-              <GamificationTeaser />
-              <SignupCTA />
-            </>
-          )}
+          {!isLoggedOut && <LevelUpTeaser />}
         </FeedRightSidebar>
       </div>
     </main>
