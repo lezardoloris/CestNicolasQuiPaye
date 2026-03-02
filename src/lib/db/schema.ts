@@ -43,7 +43,7 @@ export const users = pgTable('users', {
   role: userRole('role').notNull().default('user'),
   twitterId: varchar('twitter_id', { length: 255 }).unique(),
   twitterHandle: varchar('twitter_handle', { length: 50 }),
-  githubId: varchar('github_id', { length: 255 }).unique(),
+  githubId: varchar('github_id', { length: 255 }),
   githubUsername: varchar('github_username', { length: 50 }),
   avatarUrl: text('avatar_url'),
   bio: text('bio'),
