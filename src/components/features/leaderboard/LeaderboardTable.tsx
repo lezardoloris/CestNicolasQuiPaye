@@ -31,7 +31,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
             <th className="px-4 py-3">Contributeur</th>
             <th className="px-4 py-3 text-center hidden sm:table-cell">Niveau</th>
             <th className="px-4 py-3 text-right">XP</th>
-            <th className="px-4 py-3 text-center hidden md:table-cell">Serie</th>
+            <th className="px-4 py-3 text-center hidden md:table-cell">Série</th>
             <th className="px-4 py-3 text-right hidden md:table-cell">Signalements</th>
           </tr>
         </thead>
@@ -46,16 +46,12 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
               </td>
               <td className="px-4 py-3">
                 <div className="flex items-center gap-2">
-                  {entry.avatarUrl ? (
+                  {entry.avatarUrl && (
                     <img
                       src={entry.avatarUrl}
                       alt=""
                       className="size-7 rounded-full"
                     />
-                  ) : (
-                    <div className="flex size-7 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
-                      {entry.displayName.charAt(0).toUpperCase()}
-                    </div>
                   )}
                   <span className="font-medium text-text-primary truncate max-w-[150px] sm:max-w-[200px]">
                     {entry.displayName}

@@ -28,7 +28,7 @@ export function LeaderboardPageClient() {
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-black tracking-tight text-text-primary md:text-4xl">
           <Trophy className="inline-block size-8 text-chainsaw-red mr-2 -mt-1" aria-hidden="true" />
-          La Tronconneuse d&apos;Or
+          La Tronçonneuse d&apos;Or
         </h1>
         <p className="text-sm text-text-muted max-w-lg mx-auto">
           Classement des citoyens les plus actifs dans la traque aux gaspillages.
@@ -56,7 +56,7 @@ export function LeaderboardPageClient() {
         <div className="py-16 text-center">
           <p className="text-lg text-text-muted">Aucun contributeur pour le moment.</p>
           <p className="mt-2 text-sm text-text-muted">
-            Soyez le premier a soumettre un signalement !
+            Soyez le premier à soumettre un signalement !
           </p>
         </div>
       ) : (
@@ -80,7 +80,7 @@ export function LeaderboardPageClient() {
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
                   +50
                 </span>
-                <span>Signalement publie</span>
+                <span>Signalement publié</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-chainsaw-red/10 text-xs font-bold text-chainsaw-red">
@@ -110,7 +110,7 @@ export function LeaderboardPageClient() {
                 <span className="inline-flex size-8 items-center justify-center rounded-full bg-surface-elevated text-xs font-bold text-text-muted">
                   +2
                 </span>
-                <span>Vote donne ou recu</span>
+                <span>Vote donné ou reçu</span>
               </div>
             </div>
           </div>

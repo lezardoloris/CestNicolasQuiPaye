@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Trophy, Zap, Flame } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { LeaderboardEntry } from '@/lib/api/leaderboard';
 
 interface MiniLeaderboardProps {
@@ -7,23 +8,54 @@ interface MiniLeaderboardProps {
   variant?: 'sidebar' | 'inline';
 }
 
-function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) return <span className="text-lg">🥇</span>;
-  if (rank === 2) return <span className="text-lg">🥈</span>;
-  if (rank === 3) return <span className="text-lg">🥉</span>;
-  return <span className="text-text-secondary text-sm font-medium">#{rank}</span>;
-}
+const RANK_MEDALS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
 function LeaderboardRow({ entry }: { entry: LeaderboardEntry }) {
+  const isTop3 = entry.rank <= 3;
+
   return (
-    <div className="flex items-center gap-2 py-2">
-      <RankBadge rank={entry.rank} />
-      <div className="bg-drapeau-rouge/10 text-drapeau-rouge flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold">
-        {entry.displayName.charAt(0).toUpperCase()}
-      </div>
+    <div
+      className={cn(
+        'relative flex items-center gap-3 rounded-lg px-3 py-2.5',
+        entry.rank === 1 && 'bg-chainsaw-red/6',
+        isTop3 && 'border-l-2',
+        entry.rank === 1 && 'border-l-amber-400',
+        entry.rank === 2 && 'border-l-gray-400',
+        entry.rank === 3 && 'border-l-amber-600',
+      )}
+    >
+      {/* Rank */}
+      <span
+        className={cn(
+          'flex h-6 w-6 shrink-0 items-center justify-center text-sm',
+          isTop3 ? 'text-base' : 'text-xs font-bold text-text-muted',
+        )}
+      >
+        {RANK_MEDALS[entry.rank] ?? `#${entry.rank}`}
+      </span>
+
+      {/* Name & meta */}
       <div className="min-w-0 flex-1">
-        <p className="text-text-primary truncate text-xs font-medium">{entry.displayName}</p>
-        <div className="text-text-secondary flex items-center gap-1.5 text-[10px]">
+        <div className="flex items-baseline justify-between gap-2">
+          <p
+            className={cn(
+              'truncate text-xs font-semibold',
+              isTop3 ? 'text-text-primary' : 'text-text-secondary',
+            )}
+          >
+            {entry.displayName}
+          </p>
+          <span
+            className={cn(
+              'shrink-0 text-xs tabular-nums font-bold',
+              isTop3 ? 'text-chainsaw-red' : 'text-text-muted',
+            )}
+          >
+            {entry.totalXp.toLocaleString('fr-FR')}
+            <span className="ml-0.5 text-[10px] font-medium text-text-muted">XP</span>
+          </span>
+        </div>
+        <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-text-muted">
           <span className="flex items-center gap-0.5">
             <Zap className="h-2.5 w-2.5 text-amber-500" />
             Niv.{entry.level}
@@ -34,7 +66,6 @@ function LeaderboardRow({ entry }: { entry: LeaderboardEntry }) {
               {entry.streak}j
             </span>
           )}
-          <span className="ml-auto tabular-nums font-medium">{entry.totalXp.toLocaleString('fr-FR')} XP</span>
         </div>
       </div>
     </div>
@@ -43,16 +74,17 @@ function LeaderboardRow({ entry }: { entry: LeaderboardEntry }) {
 
 function InlineCard({ entry }: { entry: LeaderboardEntry }) {
   return (
-    <div className="bg-surface-primary border-border-default flex min-w-[140px] shrink-0 flex-col items-center gap-1 rounded-xl border p-3">
-      <RankBadge rank={entry.rank} />
-      <div className="bg-drapeau-rouge/10 text-drapeau-rouge flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold">
-        {entry.displayName.charAt(0).toUpperCase()}
-      </div>
-      <p className="text-text-primary max-w-[120px] truncate text-xs font-medium">
+    <div className="bg-surface-primary border-border-default flex min-w-[130px] shrink-0 flex-col items-center gap-1.5 rounded-xl border p-3">
+      <span className="text-2xl">{RANK_MEDALS[entry.rank] ?? `#${entry.rank}`}</span>
+      <p className="text-text-primary max-w-[120px] truncate text-xs font-semibold">
         {entry.displayName}
       </p>
-      <span className="text-text-secondary flex items-center gap-0.5 text-xs">
-        <Zap className="h-3 w-3 text-amber-500" />
+      <span className="text-chainsaw-red text-sm font-bold tabular-nums">
+        {entry.totalXp.toLocaleString('fr-FR')}
+        <span className="ml-0.5 text-[10px] font-medium text-text-muted">XP</span>
+      </span>
+      <span className="text-text-muted flex items-center gap-0.5 text-[10px]">
+        <Zap className="h-2.5 w-2.5 text-amber-500" />
         Niv. {entry.level}
       </span>
     </div>
@@ -98,7 +130,7 @@ export function MiniLeaderboard({ entries, variant = 'sidebar' }: MiniLeaderboar
         <Trophy className="h-5 w-5 text-amber-500" />
         <h2 className="text-text-primary text-sm font-semibold">Classement</h2>
       </div>
-      <div className="divide-border-default divide-y">
+      <div className="space-y-0.5">
         {entries.map((entry) => (
           <LeaderboardRow key={entry.rank} entry={entry} />
         ))}

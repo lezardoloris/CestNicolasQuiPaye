@@ -65,14 +65,9 @@ export function PodiumCards({ top3 }: PodiumCardsProps) {
                 )}
               />
             ) : (
-              <div
-                className={cn(
-                  'flex items-center justify-center rounded-full bg-chainsaw-red/10 font-bold text-chainsaw-red border-2',
-                  entry.rank === 1 ? 'size-16 text-xl border-chainsaw-red' : 'size-12 text-lg border-border-default',
-                )}
-              >
-                {entry.displayName.charAt(0).toUpperCase()}
-              </div>
+              <span className={cn(entry.rank === 1 ? 'text-5xl' : 'text-4xl')}>
+                {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : '🥉'}
+              </span>
             )}
 
             <div className="text-center">
