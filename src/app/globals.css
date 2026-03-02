@@ -137,6 +137,7 @@
 @layer base {
   html {
     overflow-x: hidden;
+    scroll-padding-top: 7.5rem;
   }
   * {
     @apply border-border outline-ring/50;
@@ -185,4 +186,44 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ─── Print Styles ─────────────────────────────────────────────── */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+  nav,
+  .sticky,
+  .fixed,
+  button[aria-label="Retour en haut"],
+  footer {
+    display: none !important;
+  }
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+  .border-border-default {
+    border-color: #ccc !important;
+  }
+  .bg-surface-secondary,
+  .bg-surface-primary\/50 {
+    background: #f9f9f9 !important;
+  }
+  .text-chainsaw-red {
+    color: #c62828 !important;
+  }
+  .text-text-primary {
+    color: black !important;
+  }
+  .text-text-secondary,
+  .text-text-muted {
+    color: #555 !important;
+  }
+  section {
+    break-inside: avoid;
+  }
 }
