@@ -85,13 +85,14 @@ export default async function FeedPage({ params, searchParams }: FeedPageProps) 
       ? (timeWindow as 'today' | 'week' | 'month' | 'all')
       : 'week';
 
-  const [submissions, stats, leaderboard, session, pendingCount, activeCategories] =
+  const session = await auth();
+
+  const [submissions, stats, leaderboard, pendingCount, activeCategories] =
     await Promise.all([
       getSubmissions({ sort, timeWindow: validTimeWindow }),
       getPlatformStats(),
       getTopLeaderboard(5),
-      auth(),
-      getPendingSubmissionCount(),
+      getPendingSubmissionCount(session?.user?.id),
       getActiveCategories(),
     ]);
 
