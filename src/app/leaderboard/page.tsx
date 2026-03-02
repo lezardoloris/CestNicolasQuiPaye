@@ -6,9 +6,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: `Classement - La Tronconneuse d'Or - ${SITE_NAME}`,
+  title: 'Classement — La Tronçonneuse d\'Or',
   description:
-    'Le classement des contributeurs les plus actifs. Soumettez des signalements, votez, ajoutez des sources et grimpez au classement pour decrocher la Tronconneuse d\'Or.',
+    'Le classement des contributeurs les plus actifs. Soumettez des signalements, votez, ajoutez des sources et grimpez au classement pour décrocher la Tronçonneuse d\'Or.',
 };
 
 export default function LeaderboardPage() {

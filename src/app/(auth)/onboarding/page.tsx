@@ -15,6 +15,8 @@ import {
 
 export const metadata: Metadata = {
   title: 'Bienvenue',
+  description:
+    'Configurez votre profil et découvrez comment contribuer à la transparence des finances publiques.',
 };
 
 export default async function OnboardingPage() {

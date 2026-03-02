@@ -8,7 +8,7 @@ import { getDenominators } from '@/lib/api/denominators';
 export const metadata: Metadata = {
   title: 'Méthodologie de calcul',
   description:
-    'Explication détaillée de chaque formule et source de données utilisée dans les calculs Coût pour Nicolas.',
+    'Formules de calcul, sources officielles et méthodologie transparente. Chaque chiffre est vérifiable et contestable.',
 };
 
 export const revalidate = 3600; // ISR: 1 hour

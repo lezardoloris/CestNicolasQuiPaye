@@ -3,9 +3,9 @@ import { FeatureProposalForm } from '@/components/features/feature-voting/Featur
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Propositions de fonctionnalites',
+  title: 'Propositions de fonctionnalités',
   description:
-    'Votez pour les prochaines fonctionnalites de C\'est Nicolas Qui Paie ou proposez vos propres idees.',
+    'Votez pour les prochaines fonctionnalités de C\'est Nicolas Qui Paie ou proposez vos propres idées.',
 };
 
 export default function FeaturesPage() {
@@ -21,8 +21,8 @@ export default function FeaturesPage() {
             Propositions
           </h1>
           <p className="mt-2 text-sm text-text-secondary">
-            Votez pour les fonctionnalites que vous souhaitez voir sur C'est Nicolas Qui Paie ou
-            proposez vos propres idees.
+            Votez pour les fonctionnalités que vous souhaitez voir sur C'est Nicolas Qui Paie ou
+            proposez vos propres idées.
           </p>
         </div>
         <FeatureProposalForm />

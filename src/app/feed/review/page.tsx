@@ -5,7 +5,7 @@ import { ValidationQueue } from '@/components/features/submissions/ValidationQue
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Validation communautaire - C\'est Nicolas Qui Paie',
+  title: 'Validation communautaire',
   description: 'Validez les signalements soumis par la communauté.',
 };
 

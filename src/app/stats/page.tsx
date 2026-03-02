@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 300; // 5 minutes ISR
 
 export const metadata: Metadata = {
-  title: `Statistiques - ${SITE_NAME}`,
+  title: 'Statistiques',
   description:
     'Le compteur global des dépenses publiques signalées. Visualisez les gaspillages par catégorie, montant et évolution dans le temps.',
 };

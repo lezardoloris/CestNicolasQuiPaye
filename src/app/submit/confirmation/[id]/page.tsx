@@ -4,8 +4,8 @@ import { CheckCircle, ArrowLeft, Shield, Users, FileCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: 'Signalement soumis',
-  description: 'Votre signalement a été soumis avec succès.',
+  title: 'Signalement envoyé',
+  description: 'Votre signalement a été envoyé et sera vérifié par la communauté.',
 };
 
 interface ConfirmationPageProps {

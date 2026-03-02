@@ -7,7 +7,7 @@ import { getCachedDenominators } from '@/lib/api/cost-cache';
 export const metadata: Metadata = {
   title: 'Statut des données',
   description:
-    'Transparence des données utilisées pour les calculs Coût pour Nicolas. Sources officielles, dates de mise à jour et fraîcheur des données.',
+    'Transparence des données utilisées pour les calculs. Sources officielles, dates de mise à jour et fraîcheur.',
 };
 
 export const revalidate = 3600; // ISR: 1 hour

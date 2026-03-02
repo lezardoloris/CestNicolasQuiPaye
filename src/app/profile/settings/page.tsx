@@ -10,6 +10,8 @@ import { Separator } from '@/components/ui/separator';
 
 export const metadata: Metadata = {
   title: 'Paramètres du profil',
+  description:
+    'Modifiez votre nom d\'affichage, vos préférences de confidentialité et paramètres de compte.',
 };
 
 export default async function ProfileSettingsPage() {

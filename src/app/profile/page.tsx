@@ -9,6 +9,8 @@ import { Settings } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Mon profil',
+  description:
+    'Consultez vos signalements, votes et badges. Suivez votre progression.',
 };
 
 export default async function ProfilePage() {
