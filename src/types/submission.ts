@@ -21,6 +21,9 @@ export interface SubmissionCardData {
   authorStreak?: number | null;
   solutionCount?: number;
   topSolutionBody?: string | null;
+  fourPosTotalCount?: number;
+  consensusType?: string | null;
+  maturityLevel?: number;
 }
 
 export interface SubmissionDetailData extends SubmissionCardData {

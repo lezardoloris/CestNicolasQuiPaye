@@ -11,6 +11,7 @@ import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
 import { SolutionSection } from '@/components/features/solutions/SolutionSection';
 import { VoteProminentButtons } from '@/components/features/voting/VoteProminentButtons';
+import { FourPositionVoting } from '@/components/features/voting/FourPositionVoting';
 import { X, MessageSquare, ExternalLink, ArrowRight, Flame } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
@@ -121,6 +122,11 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
               down: submission.downvoteCount,
             }}
           />
+        </div>
+
+        {/* 4-Position voting — compact */}
+        <div className="mt-2">
+          <FourPositionVoting submissionId={submission.id} variant="compact" />
         </div>
 
         {/* Description — truncated */}

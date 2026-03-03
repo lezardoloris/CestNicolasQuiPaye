@@ -59,6 +59,10 @@ export const rateLimiters = {
     Ratelimit.slidingWindow(100, '1m'),
     'ratelimit:public-api',
   ),
+  anonymousVote: createRateLimiter(
+    Ratelimit.slidingWindow(20, '1h'),
+    'ratelimit:anonymous-vote',
+  ),
 };
 
 /**

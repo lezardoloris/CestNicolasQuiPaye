@@ -12,6 +12,10 @@ import { SolutionSection } from '@/components/features/solutions/SolutionSection
 import { SourceList } from '@/components/features/sources/SourceList';
 import { CommunityNoteSection } from '@/components/features/notes/CommunityNoteSection';
 import { CriteriaVoteSection } from '@/components/features/voting/CriteriaVoteSection';
+import { FourPositionVoting } from '@/components/features/voting/FourPositionVoting';
+import { MaturitySection } from '@/components/features/maturity/MaturitySection';
+import { AiContextCard } from '@/components/features/ai-context/AiContextCard';
+import { ArgumentSection } from '@/components/features/arguments/ArgumentSection';
 import { auth } from '@/lib/auth';
 import { isValidUUID } from '@/lib/utils/validation';
 import { hashIp } from '@/lib/utils/ip-hash';
@@ -110,6 +114,19 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
         currentUserId={session?.user?.id}
       />
 
+      {/* Maturity progress */}
+      <div className="mt-4">
+        <MaturitySection
+          submissionId={submission.id}
+          serverLevel={submission.maturityLevel}
+        />
+      </div>
+
+      {/* AI Context (budget scaffolding) */}
+      <div className="mt-4">
+        <AiContextCard submissionId={submission.id} />
+      </div>
+
       {/* Share and Flag actions */}
       <div className="mt-6 flex items-center gap-3">
         <ShareButton
@@ -130,8 +147,19 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
         />
       </div>
 
+      {/* 4-Position Voting */}
+      <section className="mt-6" aria-label="Votre position">
+        <div className="rounded-xl border border-border-default bg-surface-primary p-5">
+          <h2 className="mb-3 text-lg font-bold text-text-primary">Quelle est votre position ?</h2>
+          <FourPositionVoting submissionId={submission.id} />
+        </div>
+      </section>
+
       {/* Criteria Vote (multi-axis evaluation) */}
       <CriteriaVoteSection submissionId={submission.id} />
+
+      {/* Arguments Pour / Contre */}
+      <ArgumentSection submissionId={submission.id} />
 
       {/* Sources & Verification */}
       <div className="mt-8">

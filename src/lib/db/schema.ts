@@ -32,6 +32,15 @@ export const submissionStatus = pgEnum('submission_status', [
 ]);
 export const importSourceEnum = pgEnum('import_source', ['decp', 'plf_budget', 'subventions']);
 export const importStatusEnum = pgEnum('import_status', ['running', 'completed', 'failed']);
+export const votingPosition = pgEnum('voting_position', [
+  'essentiel',
+  'justifie_ameliorable',
+  'discutable',
+  'injustifie',
+]);
+export const argumentType = pgEnum('argument_type', ['pour', 'contre']);
+export const aiContextSource = pgEnum('ai_context_source', ['template', 'llm', 'admin']);
+export const aiContextStatus = pgEnum('ai_context_status', ['draft', 'approved', 'rejected']);
 
 // ─── Users ──────────────────────────────────────────────────────────
 export const users = pgTable('users', {
@@ -134,6 +143,17 @@ export const submissions = pgTable('submissions', {
   // ─── Open Data import fields ───
   externalId: varchar('external_id', { length: 255 }),
   importSource: importSourceEnum('import_source'),
+  // ─── 4-Position vote denormalized counts ───
+  fourPosEssentielCount: integer('four_pos_essentiel_count').notNull().default(0),
+  fourPosJustifieCount: integer('four_pos_justifie_count').notNull().default(0),
+  fourPosDiscutableCount: integer('four_pos_discutable_count').notNull().default(0),
+  fourPosInjustifieCount: integer('four_pos_injustifie_count').notNull().default(0),
+  fourPosTotalCount: integer('four_pos_total_count').notNull().default(0),
+  consensusType: varchar('consensus_type', { length: 30 }),
+  // ─── Maturity system ───
+  maturityLevel: integer('maturity_level').notNull().default(1),
+  maturityPct: integer('maturity_pct').notNull().default(0),
+  maturityUpdatedAt: timestamp('maturity_updated_at'),
   // ─── Community validation weights ───
   approveWeight: integer('approve_weight').notNull().default(0),
   rejectWeight: integer('reject_weight').notNull().default(0),
@@ -153,6 +173,7 @@ export const votes = pgTable(
       .notNull()
       .references(() => submissions.id, { onDelete: 'cascade' }),
     voteType: voteType('vote_type').notNull(),
+    superseded: boolean('superseded').notNull().default(false),
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (table) => [uniqueIndex('votes_user_submission_idx').on(table.userId, table.submissionId)],
@@ -225,6 +246,54 @@ export const ipCriteriaVotes = pgTable(
   ],
 );
 
+// ─── 4-Position Votes (v2: Authenticated) ────────────────────────
+export const fourPositionVotes = pgTable(
+  'four_position_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    position: votingPosition('position').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('four_pos_votes_user_submission_idx').on(
+      table.userId,
+      table.submissionId,
+    ),
+    index('idx_four_pos_votes_submission').on(table.submissionId),
+  ],
+);
+
+// ─── 4-Position IP Votes (v2: Anonymous) ─────────────────────────
+export const ipFourPositionVotes = pgTable(
+  'ip_four_position_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ipHash: varchar('ip_hash', { length: 64 }).notNull(),
+    salt: varchar('salt', { length: 64 }).notNull(),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    position: votingPosition('position').notNull(),
+    isMigrated: boolean('is_migrated').notNull().default(false),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('ip_four_pos_votes_hash_submission_idx').on(
+      table.ipHash,
+      table.submissionId,
+    ),
+    index('idx_ip_four_pos_votes_submission').on(table.submissionId),
+  ],
+);
+
 // ─── Solutions ──────────────────────────────────────────────────────
 export const solutions = pgTable(
   'solutions',
@@ -265,6 +334,48 @@ export const solutionVotes = pgTable(
     uniqueIndex('solution_votes_ip_idx').on(table.ipHash, table.solutionId),
     index('idx_solution_votes_solution').on(table.solutionId),
   ]
+);
+
+// ─── Arguments (Pour / Contre) ──────────────────────────────────────
+export const submissionArguments = pgTable(
+  'submission_arguments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    submissionId: uuid('submission_id')
+      .notNull()
+      .references(() => submissions.id, { onDelete: 'cascade' }),
+    authorId: uuid('author_id').references(() => users.id, { onDelete: 'set null' }),
+    authorDisplay: varchar('author_display', { length: 100 }).notNull().default('Citoyen Anonyme'),
+    type: argumentType('type').notNull(),
+    body: text('body').notNull(),
+    upvoteCount: integer('upvote_count').notNull().default(0),
+    downvoteCount: integer('downvote_count').notNull().default(0),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (table) => [
+    index('idx_arguments_submission').on(table.submissionId),
+    index('idx_arguments_type').on(table.submissionId, table.type),
+  ],
+);
+
+export const argumentVotes = pgTable(
+  'argument_votes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    argumentId: uuid('argument_id')
+      .notNull()
+      .references(() => submissionArguments.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
+    ipHash: varchar('ip_hash', { length: 64 }),
+    voteType: voteType('vote_type').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('argument_votes_user_idx').on(table.userId, table.argumentId),
+    uniqueIndex('argument_votes_ip_idx').on(table.ipHash, table.argumentId),
+    index('idx_argument_votes_argument').on(table.argumentId),
+  ],
 );
 
 // ─── Comments ───────────────────────────────────────────────────────
@@ -311,6 +422,8 @@ export const submissionsRelations = relations(submissions, ({ one, many }) => ({
   ipVotes: many(ipVotes),
   criteriaVotes: many(criteriaVotes),
   ipCriteriaVotes: many(ipCriteriaVotes),
+  fourPositionVotes: many(fourPositionVotes),
+  ipFourPositionVotes: many(ipFourPositionVotes),
   comments: many(comments),
   solutions: many(solutions),
   sources: many(submissionSources),
@@ -366,6 +479,24 @@ export const criteriaVotesRelations = relations(criteriaVotes, ({ one }) => ({
 export const ipCriteriaVotesRelations = relations(ipCriteriaVotes, ({ one }) => ({
   submission: one(submissions, {
     fields: [ipCriteriaVotes.submissionId],
+    references: [submissions.id],
+  }),
+}));
+
+export const fourPositionVotesRelations = relations(fourPositionVotes, ({ one }) => ({
+  user: one(users, {
+    fields: [fourPositionVotes.userId],
+    references: [users.id],
+  }),
+  submission: one(submissions, {
+    fields: [fourPositionVotes.submissionId],
+    references: [submissions.id],
+  }),
+}));
+
+export const ipFourPositionVotesRelations = relations(ipFourPositionVotes, ({ one }) => ({
+  submission: one(submissions, {
+    fields: [ipFourPositionVotes.submissionId],
     references: [submissions.id],
   }),
 }));
@@ -620,6 +751,7 @@ export const submissionSources = pgTable(
     title: varchar('title', { length: 300 }).notNull(),
     sourceType: sourceType('source_type').notNull().default('other'),
     addedBy: uuid('added_by').references(() => users.id, { onDelete: 'set null' }),
+    ipHash: varchar('ip_hash', { length: 64 }),
     validationCount: integer('validation_count').notNull().default(0),
     invalidationCount: integer('invalidation_count').notNull().default(0),
     createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -878,6 +1010,8 @@ export const xpActionType = pgEnum('xp_action_type', [
   'admin_manual',
   'clawback',
   'criteria_vote',
+  'argument_proposed',
+  'argument_upvoted',
 ]);
 
 export const xpEvents = pgTable(
@@ -1032,6 +1166,36 @@ export const communityValidationsRelations = relations(communityValidations, ({ 
   }),
 }));
 
+// ─── AI Context (scaffolding) ─────────────────────────────────────
+export const aiContexts = pgTable('ai_contexts', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  submissionId: uuid('submission_id')
+    .notNull()
+    .references(() => submissions.id, { onDelete: 'cascade' })
+    .unique(),
+  budgetContext: text('budget_context'),
+  costComparison: text('cost_comparison'),
+  relatedFacts: jsonb('related_facts').$type<string[]>(),
+  summary: text('summary'),
+  source: aiContextSource('source').notNull().default('template'),
+  status: aiContextStatus('status').notNull().default('draft'),
+  approvedBy: uuid('approved_by').references(() => users.id),
+  approvedAt: timestamp('approved_at'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const aiContextsRelations = relations(aiContexts, ({ one }) => ({
+  submission: one(submissions, {
+    fields: [aiContexts.submissionId],
+    references: [submissions.id],
+  }),
+  approver: one(users, {
+    fields: [aiContexts.approvedBy],
+    references: [users.id],
+  }),
+}));
+
 // ─── Data Imports (Open Data tracking) ────────────────────────────
 export const dataImports = pgTable('data_imports', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -1065,6 +1229,9 @@ export type IpVote = typeof ipVotes.$inferSelect;
 export type NewIpVote = typeof ipVotes.$inferInsert;
 export type Solution = typeof solutions.$inferSelect;
 export type NewSolution = typeof solutions.$inferInsert;
+export type AiContext = typeof aiContexts.$inferSelect;
+export type SubmissionArgument = typeof submissionArguments.$inferSelect;
+export type ArgumentVote = typeof argumentVotes.$inferSelect;
 export type SolutionVote = typeof solutionVotes.$inferSelect;
 export type NewSolutionVote = typeof solutionVotes.$inferInsert;
 export type SubmissionSource = typeof submissionSources.$inferSelect;
@@ -1086,3 +1253,7 @@ export type CriteriaVote = typeof criteriaVotes.$inferSelect;
 export type NewCriteriaVote = typeof criteriaVotes.$inferInsert;
 export type IpCriteriaVote = typeof ipCriteriaVotes.$inferSelect;
 export type NewIpCriteriaVote = typeof ipCriteriaVotes.$inferInsert;
+export type FourPositionVote = typeof fourPositionVotes.$inferSelect;
+export type NewFourPositionVote = typeof fourPositionVotes.$inferInsert;
+export type IpFourPositionVote = typeof ipFourPositionVotes.$inferSelect;
+export type NewIpFourPositionVote = typeof ipFourPositionVotes.$inferInsert;

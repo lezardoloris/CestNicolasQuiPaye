@@ -2,10 +2,11 @@ import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { submissionSources } from '@/lib/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { addSourceSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
+import { getClientIp as getClientIpFromRequest, hashIpWithDailySalt } from '@/lib/utils/ip-hash';
 
 /**
  * GET /api/submissions/[id]/sources
@@ -59,6 +60,33 @@ export async function POST(
   }
 
   const addedBy = session?.user?.id ?? null;
+  let ipHash: string | null = null;
+
+  // Anonymous source dedup: limit 1 anonymous source per IP per submission
+  if (!addedBy) {
+    const rawIp = getClientIpFromRequest(request);
+    const { hash } = hashIpWithDailySalt(rawIp);
+    ipHash = hash;
+
+    const [existingAnon] = await db
+      .select({ id: submissionSources.id })
+      .from(submissionSources)
+      .where(
+        and(
+          eq(submissionSources.submissionId, submissionId),
+          eq(submissionSources.ipHash, hash),
+        ),
+      )
+      .limit(1);
+
+    if (existingAnon) {
+      return apiError(
+        'CONFLICT',
+        'Vous avez déjà ajouté une source. Créez un compte pour en ajouter davantage !',
+        409,
+      );
+    }
+  }
 
   try {
     const [source] = await db
@@ -69,6 +97,7 @@ export async function POST(
         title: parsed.data.title,
         sourceType: parsed.data.sourceType,
         addedBy,
+        ipHash,
       })
       .returning();
 
@@ -99,6 +128,11 @@ export async function POST(
         }
       }
     }
+
+    // Recalculate maturity
+    import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+      recalculateMaturity(submissionId).catch(() => {}),
+    );
 
     return apiSuccess({ ...source, xp }, {}, 201);
   } catch (error: unknown) {

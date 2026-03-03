@@ -17,8 +17,10 @@ import { TopSolutionPreview } from '@/components/features/solutions/TopSolutionP
 import { MessageSquare, Flame, Lightbulb, BarChart3 } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
 import { getCategoryBudgetFact } from '@/lib/constants/category-budget-context';
+import { MaturityBadge } from '@/components/features/maturity/MaturityBadge';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import type { SubmissionCardData } from '@/types/submission';
+import type { MaturityLevel } from '@/types/maturity';
 
 interface SubmissionCardProps {
   submission: SubmissionCardData;
@@ -90,6 +92,9 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
             sourceUrl={submission.sourceUrl}
             sourceCount={submission.sourceCount}
           />
+          {submission.maturityLevel && submission.maturityLevel >= 1 && (
+            <MaturityBadge level={submission.maturityLevel as MaturityLevel} compact />
+          )}
         </div>
 
         {/* Row 2: title */}

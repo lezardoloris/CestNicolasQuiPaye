@@ -36,6 +36,8 @@ export const XP_TABLE: Record<XpActionType, XpActionConfig> = {
   admin_manual: { xp: 0, maxPerDay: null, label: 'Attribution manuelle' },
   clawback: { xp: 0, maxPerDay: null, label: 'Récupération XP' },
   criteria_vote: { xp: 3, maxPerDay: 30, label: 'Évaluation détaillée' },
+  argument_proposed: { xp: 10, maxPerDay: 10, label: 'Argument proposé' },
+  argument_upvoted: { xp: 3, maxPerDay: null, label: 'Argument upvoté' },
 };
 
 // ─── Level Thresholds ───────────────────────────────────────────────

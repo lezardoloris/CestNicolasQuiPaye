@@ -43,6 +43,14 @@ export async function POST(
     const userId = session?.user?.id ?? null;
     const ipHash = !userId ? getHashedIp(request) : null;
 
+    // Look up submissionId for maturity recalculation
+    const [sourceRow] = await db
+      .select({ submissionId: submissionSources.submissionId })
+      .from(submissionSources)
+      .where(eq(submissionSources.id, sourceId))
+      .limit(1);
+    const submissionIdForMaturity = sourceRow?.submissionId;
+
     // Find existing validation
     const whereClause = userId
       ? and(eq(sourceValidations.userId, userId), eq(sourceValidations.sourceId, sourceId))
@@ -69,6 +77,11 @@ export async function POST(
             invalidationCount: sql`${submissionSources.invalidationCount} - 1`,
           }).where(eq(submissionSources.id, sourceId));
         }
+        if (submissionIdForMaturity) {
+          import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+            recalculateMaturity(submissionIdForMaturity).catch(() => {}),
+          );
+        }
         return apiSuccess({ userValidation: null });
       } else {
         // Switch direction
@@ -85,6 +98,11 @@ export async function POST(
             validationCount: sql`${submissionSources.validationCount} - 1`,
             invalidationCount: sql`${submissionSources.invalidationCount} + 1`,
           }).where(eq(submissionSources.id, sourceId));
+        }
+        if (submissionIdForMaturity) {
+          import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+            recalculateMaturity(submissionIdForMaturity).catch(() => {}),
+          );
         }
         return apiSuccess({ userValidation: isValid });
       }
@@ -113,6 +131,11 @@ export async function POST(
         await db.update(submissionSources).set({
           invalidationCount: sql`${submissionSources.invalidationCount} + 1`,
         }).where(eq(submissionSources.id, sourceId));
+      }
+      if (submissionIdForMaturity) {
+        import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+          recalculateMaturity(submissionIdForMaturity).catch(() => {}),
+        );
       }
       return apiSuccess({ userValidation: isValid });
     }

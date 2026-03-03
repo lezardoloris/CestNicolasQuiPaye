@@ -197,6 +197,11 @@ export async function POST(
     const xpResult = await awardXp(session.user.id!, 'comment_posted', newComment.id, 'comment');
     xp = formatXpResponse(xpResult);
 
+    // Recalculate maturity
+    import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+      recalculateMaturity(id).catch(() => {}),
+    );
+
     return apiSuccess({ ...newComment, xp }, {}, 201);
   } catch {
     return apiError('INTERNAL_ERROR', 'Erreur interne', 500);

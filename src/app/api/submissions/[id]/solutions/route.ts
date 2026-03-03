@@ -80,5 +80,10 @@ export async function POST(
     xp = formatXpResponse(xpResult);
   }
 
+  // Recalculate maturity
+  import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
+    recalculateMaturity(submissionId).catch(() => {}),
+  );
+
   return apiSuccess({ ...solution, xp }, {}, 201);
 }

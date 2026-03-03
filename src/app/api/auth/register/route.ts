@@ -5,6 +5,8 @@ import { registerSchema } from '@/lib/validators/auth';
 import { generateAnonymousId } from '@/lib/db/helpers';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
+import { migrateAnonymousVotes } from '@/lib/api/anonymous-migration';
+import { getClientIp as getRawClientIp } from '@/lib/utils/ip-hash';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
@@ -55,11 +57,28 @@ export async function POST(request: NextRequest) {
       })
       .returning({ id: users.id, email: users.email, anonymousId: users.anonymousId });
 
+    // Migrate anonymous 4-position votes to the new account
+    const rawIp = getRawClientIp(request);
+    let migratedVotes = 0;
+    try {
+      migratedVotes = await migrateAnonymousVotes(newUser.id, rawIp);
+
+      // Award conversion bonus XP if votes were migrated
+      if (migratedVotes > 0) {
+        const { awardXp } = await import('@/lib/gamification/xp-engine');
+        await awardXp(newUser.id, 'vote_cast', newUser.id, 'user');
+      }
+    } catch (migrationError) {
+      // Migration failure should not block registration
+      console.error('Anonymous vote migration error:', migrationError);
+    }
+
     return apiSuccess(
       {
         id: newUser.id,
         email: newUser.email,
         anonymousId: newUser.anonymousId,
+        migratedVotes,
       },
       {},
       201,

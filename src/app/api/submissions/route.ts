@@ -101,6 +101,11 @@ export async function POST(request: NextRequest) {
       }).onConflictDoNothing();
     }
 
+    // Fire-and-forget: generate AI context from budget templates
+    import('@/lib/api/ai-context').then(({ ensureAiContext }) =>
+      ensureAiContext(submission.id).catch(() => {}),
+    );
+
     return apiSuccess(submission, {}, 201);
   } catch (error) {
     console.error('Submission creation error:', error);

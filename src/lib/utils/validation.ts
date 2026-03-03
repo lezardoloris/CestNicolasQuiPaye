@@ -73,6 +73,31 @@ export const CRITERION_LABELS: Record<string, string> = {
   alternative: 'Existe-t-il une alternative moins coûteuse ?',
 };
 
+// ─── 4-Position Vote Validation (v2) ────────────────────────────
+
+export const VOTING_POSITIONS = [
+  'essentiel',
+  'justifie_ameliorable',
+  'discutable',
+  'injustifie',
+] as const;
+export type VotingPosition = (typeof VOTING_POSITIONS)[number];
+
+export const VOTING_POSITION_LABELS: Record<VotingPosition, string> = {
+  essentiel: 'Essentiel',
+  justifie_ameliorable: 'Justifié mais améliorable',
+  discutable: 'Discutable',
+  injustifie: 'Injustifié',
+};
+
+export const fourPositionVoteSchema = z.object({
+  position: z.enum(VOTING_POSITIONS, {
+    message: 'Position de vote invalide',
+  }),
+});
+
+export type FourPositionVoteInput = z.infer<typeof fourPositionVoteSchema>;
+
 // ─── Sort Validation ──────────────────────────────────────────────
 
 export const VALID_SORTS = ['hot', 'new', 'top', 'budget_desc', 'budget_asc'] as const;
@@ -324,6 +349,18 @@ export const editSolutionSchema = z.object({
 });
 
 export type EditSolutionData = z.infer<typeof editSolutionSchema>;
+
+// ─── Argument Validation ─────────────────────────────────────────
+export const createArgumentSchema = z.object({
+  body: z
+    .string()
+    .min(10, 'L\'argument doit contenir au moins 10 caractères')
+    .max(2000, 'L\'argument ne doit pas dépasser 2000 caractères')
+    .transform((val) => val.trim()),
+  type: z.enum(['pour', 'contre']),
+});
+
+export type CreateArgumentData = z.infer<typeof createArgumentSchema>;
 
 // ─── Adjustment Suggestion Validation ────────────────────────────
 export const createAdjustmentSchema = z.object({

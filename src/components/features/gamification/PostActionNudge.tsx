@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Lightbulb, Share2, ArrowUpDown, X } from 'lucide-react';
+import { BookOpen, Lightbulb, Scale, Share2, ArrowUpDown, X } from 'lucide-react';
 import { XpRewardBadge } from './XpRewardBadge';
 
-type NudgeAction = 'source_added' | 'note_written' | 'solution_proposed' | 'comment_posted';
+type NudgeAction = 'source_added' | 'note_written' | 'solution_proposed' | 'comment_posted' | 'argument_proposed';
 
 interface PostActionNudgeProps {
   action: NudgeAction;
@@ -15,7 +15,7 @@ interface PostActionNudgeProps {
 
 const NUDGE_CONFIG: Record<NudgeAction, {
   text: string;
-  xpAction: 'community_note_written' | 'solution_proposed' | 'share' | 'solution_upvoted';
+  xpAction: 'community_note_written' | 'solution_proposed' | 'share' | 'solution_upvoted' | 'argument_proposed';
   icon: typeof BookOpen;
   scrollTo?: string;
 }> = {
@@ -41,6 +41,12 @@ const NUDGE_CONFIG: Record<NudgeAction, {
     xpAction: 'solution_upvoted',
     icon: ArrowUpDown,
     scrollTo: 'solutions',
+  },
+  argument_proposed: {
+    text: 'Ajoutez un argument pour ou contre',
+    xpAction: 'argument_proposed',
+    icon: Scale,
+    scrollTo: 'arguments',
   },
 };
 
