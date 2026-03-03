@@ -31,7 +31,7 @@ export const viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'C\'est Nicolas Qui Paie - La communauté open source pour tronçonner les dépenses publiques',
+    default: 'C\'est Nicolas Qui Paie - Auditez, débattez et améliorez les dépenses publiques',
     template: '%s | C\'est Nicolas Qui Paie',
   },
   description:
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
         url: '/og-default.png',
         width: 1200,
         height: 630,
-        alt: 'C\'est Nicolas Qui Paie - La communauté open source pour tronçonner les dépenses publiques',
+        alt: 'C\'est Nicolas Qui Paie - Auditez, débattez et améliorez les dépenses publiques',
       },
     ],
   },
@@ -75,6 +75,10 @@ export default function RootLayout({
           </a>
           <DesktopNav />
           <MobileHeader />
+          {/* Positioning banner */}
+          <div className="border-b border-border-default bg-surface-secondary/50 px-4 py-1.5 text-center text-[12px] font-medium tracking-wide text-text-muted lg:hidden">
+            Le site où les Français auditent, débattent et améliorent les dépenses publiques
+          </div>
           <div className="lg:mx-auto lg:flex lg:max-w-[1380px] lg:gap-6 lg:px-6 lg:pt-4">
             <DesktopSidebar />
             <div className="min-h-[calc(100dvh-3rem)] min-w-0 flex-1 pb-20 md:min-h-screen md:pb-0 lg:min-h-screen">

@@ -51,7 +51,7 @@ export default function DesktopNav() {
           priority
         />
         <span className="text-[0.6rem] leading-tight tracking-wide text-text-muted pl-0.5">
-          Tronçonnons les dépenses publiques
+          Auditez, débattez et améliorez les dépenses publiques
         </span>
       </Link>
 

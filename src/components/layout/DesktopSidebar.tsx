@@ -52,6 +52,9 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
             className="h-7 w-auto invert dark:invert-0"
             priority
           />
+          <span className="mt-0.5 text-[10px] leading-tight tracking-wide text-text-muted">
+            Auditez, débattez et améliorez les dépenses publiques
+          </span>
         </Link>
 
         <nav className="space-y-1">
