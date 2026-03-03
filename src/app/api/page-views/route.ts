@@ -1,10 +1,28 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { pageViews } from '@/lib/db/schema';
+import { sql } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { pageViewSchema } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
 import { sanitizeReferrer } from '@/lib/utils/share';
+
+export async function GET(request: NextRequest): Promise<Response> {
+  const ip = getClientIp(request.headers);
+  const rateLimited = await checkRateLimit('api', ip);
+  if (rateLimited) {
+    return apiError('RATE_LIMITED', rateLimited, 429);
+  }
+
+  try {
+    const [result] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(pageViews);
+    return apiSuccess({ totalViews: Number(result.count) });
+  } catch {
+    return apiError('INTERNAL_ERROR', 'Erreur interne', 500);
+  }
+}
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request.headers);
