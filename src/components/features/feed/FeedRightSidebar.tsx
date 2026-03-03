@@ -15,7 +15,7 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
 
   return (
     <>
-      {/* Desktop: default sidebar widgets (hidden when preview is open) */}
+      {/* Default sidebar widgets (hidden when preview is open) */}
       {!selectedSubmission && (
         <aside className="hidden w-[340px] shrink-0 lg:block">
           <div className="sticky top-4">
@@ -24,23 +24,25 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
         </aside>
       )}
 
-      {/* Desktop: fixed 75vw panel from the right */}
-      {selectedSubmission && (
-        <div className="fixed inset-y-0 right-0 z-40 hidden w-[75vw] pt-16 lg:block">
-          <div className="h-full p-4 pl-0">
-            <SubmissionPreview submission={selectedSubmission} />
-          </div>
-        </div>
-      )}
-
-      {/* Mobile: full-screen Sheet */}
-      {selectedSubmission && (
-        <Sheet open onOpenChange={(open) => { if (!open) clearSelectedSubmission(); }}>
-          <SheetContent side="right" className="w-full p-0 sm:max-w-full" showCloseButton={false}>
-            <SubmissionPreview submission={selectedSubmission} />
-          </SheetContent>
-        </Sheet>
-      )}
+      {/* Slide-over panel: full-screen on mobile, 75vw on desktop */}
+      <Sheet
+        open={!!selectedSubmission}
+        onOpenChange={(open) => {
+          if (!open) clearSelectedSubmission();
+        }}
+      >
+        <SheetContent
+          side="right"
+          className="w-full p-0 sm:max-w-full lg:max-w-[75vw] lg:pt-0"
+          showCloseButton={false}
+        >
+          {selectedSubmission && (
+            <div className="h-full lg:p-4 lg:pl-0">
+              <SubmissionPreview submission={selectedSubmission} />
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </>
   );
 }

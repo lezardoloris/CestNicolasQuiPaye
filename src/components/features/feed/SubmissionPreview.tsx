@@ -37,7 +37,7 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
   })();
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col rounded-2xl border border-border-default bg-surface-primary">
+    <div className="flex h-full flex-col bg-surface-primary lg:h-[calc(100vh-4rem)] lg:rounded-2xl lg:border lg:border-border-default">
       {/* Header */}
       <div className="flex shrink-0 items-center justify-between border-b border-border-default px-5 py-2.5">
         <span className="text-xs font-medium text-text-muted">Aperçu</span>
