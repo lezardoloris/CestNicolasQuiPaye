@@ -14,6 +14,8 @@ export async function ensureAiContext(submissionId: string): Promise<{
   costComparison: string | null;
   relatedFacts: string[] | null;
   summary: string | null;
+  voteSummary: string | null;
+  solutionSummary: string | null;
   source: string;
 }> {
   // Check if already generated
@@ -29,6 +31,8 @@ export async function ensureAiContext(submissionId: string): Promise<{
       costComparison: existing.costComparison,
       relatedFacts: existing.relatedFacts,
       summary: existing.summary,
+      voteSummary: existing.voteSummary,
+      solutionSummary: existing.solutionSummary,
       source: existing.source,
     };
   }
@@ -98,6 +102,8 @@ export async function ensureAiContext(submissionId: string): Promise<{
     costComparison: inserted.costComparison,
     relatedFacts: inserted.relatedFacts,
     summary: inserted.summary,
+    voteSummary: inserted.voteSummary,
+    solutionSummary: inserted.solutionSummary,
     source: inserted.source,
   };
 }

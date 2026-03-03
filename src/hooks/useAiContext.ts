@@ -7,6 +7,8 @@ interface AiContextData {
   costComparison: string | null;
   relatedFacts: string[] | null;
   summary: string | null;
+  voteSummary: string | null;
+  solutionSummary: string | null;
   source: string;
 }
 

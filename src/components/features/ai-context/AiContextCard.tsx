@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAiContext } from '@/hooks/useAiContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { BarChart3, ChevronDown, Lightbulb, Sparkles } from 'lucide-react';
 
 interface AiContextCardProps {
   submissionId: string;
@@ -54,6 +54,32 @@ export function AiContextCard({ submissionId }: AiContextCardProps) {
       {context.summary && (
         <div className="mt-3 rounded-lg border-l-2 border-blue-400 bg-white/60 p-3 dark:bg-white/5">
           <p className="text-sm italic text-text-secondary">{context.summary}</p>
+        </div>
+      )}
+
+      {/* Vote summary (when available) */}
+      {context.voteSummary && (
+        <div className="mt-3 rounded-lg border-l-2 border-purple-400 bg-white/60 p-3 dark:bg-white/5">
+          <div className="mb-1 flex items-center gap-1.5">
+            <BarChart3 className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+            <p className="text-xs font-medium text-purple-700 dark:text-purple-400">
+              Résumé des votes
+            </p>
+          </div>
+          <p className="text-sm text-text-secondary">{context.voteSummary}</p>
+        </div>
+      )}
+
+      {/* Solution summary (when available) */}
+      {context.solutionSummary && (
+        <div className="mt-3 rounded-lg border-l-2 border-amber-400 bg-white/60 p-3 dark:bg-white/5">
+          <div className="mb-1 flex items-center gap-1.5">
+            <Lightbulb className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+            <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
+              Résumé des solutions
+            </p>
+          </div>
+          <p className="text-sm text-text-secondary">{context.solutionSummary}</p>
         </div>
       )}
 

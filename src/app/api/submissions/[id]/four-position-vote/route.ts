@@ -48,7 +48,7 @@ export async function POST(
   try {
     // Verify submission exists
     const [submission] = await db
-      .select({ id: submissions.id })
+      .select({ id: submissions.id, title: submissions.title, consensusType: submissions.consensusType })
       .from(submissions)
       .where(eq(submissions.id, submissionId))
       .limit(1);
@@ -159,6 +159,21 @@ export async function POST(
     import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
       recalculateMaturity(submissionId).catch(() => {}),
     );
+
+    // Fire-and-forget: enrich AI vote summary at thresholds or on consensus change
+    const VOTE_THRESHOLDS = [10, 25, 50, 100];
+    const previousConsensus = submission.consensusType;
+    const consensusChanged = previousConsensus !== null && previousConsensus !== consensus.type;
+    if (VOTE_THRESHOLDS.includes(distribution.total) || consensusChanged) {
+      import('@/lib/api/ai-enrich')
+        .then(({ enrichVoteSummary }) =>
+          enrichVoteSummary(submissionId, submission.title, {
+            ...distribution,
+            consensusType: consensus.type,
+          }),
+        )
+        .catch(() => {});
+    }
 
     return apiSuccess({
       position,

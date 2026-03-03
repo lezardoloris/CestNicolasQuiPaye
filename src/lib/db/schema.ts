@@ -1177,6 +1177,8 @@ export const aiContexts = pgTable('ai_contexts', {
   costComparison: text('cost_comparison'),
   relatedFacts: jsonb('related_facts').$type<string[]>(),
   summary: text('summary'),
+  voteSummary: text('vote_summary'),
+  solutionSummary: text('solution_summary'),
   source: aiContextSource('source').notNull().default('template'),
   status: aiContextStatus('status').notNull().default('draft'),
   approvedBy: uuid('approved_by').references(() => users.id),

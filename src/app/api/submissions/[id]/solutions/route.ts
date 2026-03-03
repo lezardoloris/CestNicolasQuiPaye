@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { solutions } from '@/lib/db/schema';
-import { eq, desc, isNull, and } from 'drizzle-orm';
+import { solutions, submissions } from '@/lib/db/schema';
+import { eq, desc, isNull, and, sql } from 'drizzle-orm';
 import { apiSuccess, apiError } from '@/lib/api/response';
 import { createSolutionSchema, isValidUUID } from '@/lib/utils/validation';
 import { checkRateLimit, getClientIp } from '@/lib/api/rate-limit';
@@ -84,6 +84,33 @@ export async function POST(
   import('@/lib/api/maturity').then(({ recalculateMaturity }) =>
     recalculateMaturity(submissionId).catch(() => {}),
   );
+
+  // Fire-and-forget: enrich AI solution summary at thresholds (3, 5, 10)
+  const SOLUTION_THRESHOLDS = [3, 5, 10];
+  db.select({ count: sql<number>`count(*)::int` })
+    .from(solutions)
+    .where(and(eq(solutions.submissionId, submissionId), isNull(solutions.deletedAt)))
+    .then(async ([{ count }]) => {
+      if (!SOLUTION_THRESHOLDS.includes(count)) return;
+      const [sub] = await db
+        .select({ title: submissions.title })
+        .from(submissions)
+        .where(eq(submissions.id, submissionId))
+        .limit(1);
+      if (!sub) return;
+      const allSolutions = await db
+        .select({
+          body: solutions.body,
+          authorDisplay: solutions.authorDisplay,
+          upvoteCount: solutions.upvoteCount,
+        })
+        .from(solutions)
+        .where(and(eq(solutions.submissionId, submissionId), isNull(solutions.deletedAt)))
+        .orderBy(desc(solutions.upvoteCount));
+      const { enrichSolutionSummary } = await import('@/lib/api/ai-enrich');
+      await enrichSolutionSummary(submissionId, sub.title, allSolutions);
+    })
+    .catch(() => {});
 
   return apiSuccess({ ...solution, xp }, {}, 201);
 }
