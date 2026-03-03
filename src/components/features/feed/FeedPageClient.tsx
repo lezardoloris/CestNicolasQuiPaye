@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FeedSortTabs } from '@/components/features/feed/FeedSortTabs';
 import { CategoryFilter } from '@/components/features/feed/CategoryFilter';
 import { FeedList } from '@/components/features/feed/FeedList';
 import type { FeedResponse } from '@/types/submission';
@@ -17,6 +18,7 @@ export function FeedPageClient({ initialData, sort, timeWindow, activeCategories
 
     return (
         <>
+            <FeedSortTabs activeSort={sort} />
             <CategoryFilter
                 activeCategory={activeCategory}
                 onCategoryChange={setActiveCategory}

@@ -21,7 +21,7 @@ import type { Metadata } from 'next';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  return [{ sort: 'hot' }, { sort: 'new' }, { sort: 'top' }];
+  return [{ sort: 'hot' }, { sort: 'new' }, { sort: 'top' }, { sort: 'budget_desc' }, { sort: 'budget_asc' }];
 }
 
 const SORT_META: Record<string, { title: string; description: string }> = {
@@ -39,6 +39,16 @@ const SORT_META: Record<string, { title: string; description: string }> = {
     title: 'Top',
     description:
       'Les gaspillages publics les plus votés de tous les temps sur C\'est Nicolas Qui Paie.',
+  },
+  budget_desc: {
+    title: 'Budget \u25BC',
+    description:
+      'Les dépenses publiques classées du plus coûteux au moins coûteux.',
+  },
+  budget_asc: {
+    title: 'Budget \u25B2',
+    description:
+      'Les dépenses publiques classées du moins coûteux au plus coûteux.',
   },
 };
 

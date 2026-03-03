@@ -42,7 +42,7 @@ export type CostCalculationRequest = z.infer<
 // ─── Feed Query Validation ────────────────────────────────────────
 
 export const feedQuerySchema = z.object({
-  sort: z.enum(['hot', 'new', 'top']).default('hot'),
+  sort: z.enum(['hot', 'new', 'top', 'budget_desc', 'budget_asc']).default('hot'),
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
   timeWindow: z.enum(['today', 'week', 'month', 'all']).default('week'),
@@ -75,7 +75,7 @@ export const CRITERION_LABELS: Record<string, string> = {
 
 // ─── Sort Validation ──────────────────────────────────────────────
 
-export const VALID_SORTS = ['hot', 'new', 'top'] as const;
+export const VALID_SORTS = ['hot', 'new', 'top', 'budget_desc', 'budget_asc'] as const;
 export type SortType = (typeof VALID_SORTS)[number];
 
 export function isValidSort(sort: string): sort is SortType {
@@ -283,6 +283,21 @@ export const createCommunityNoteSchema = z.object({
 
 export type CreateCommunityNoteData = z.infer<typeof createCommunityNoteSchema>;
 
+export const editCommunityNoteSchema = z.object({
+  body: z
+    .string()
+    .min(10, 'La note doit contenir au moins 10 caracteres')
+    .max(500, 'La note ne doit pas depasser 500 caracteres')
+    .transform((val) => val.trim()),
+  sourceUrl: z
+    .string()
+    .url('URL invalide')
+    .optional()
+    .or(z.literal('')),
+});
+
+export type EditCommunityNoteData = z.infer<typeof editCommunityNoteSchema>;
+
 export const communityNoteVoteSchema = z.object({
   isUseful: z.boolean(),
 });
@@ -299,6 +314,16 @@ export const createSolutionSchema = z.object({
 });
 
 export type CreateSolutionData = z.infer<typeof createSolutionSchema>;
+
+export const editSolutionSchema = z.object({
+  body: z
+    .string()
+    .min(10, 'La solution doit contenir au moins 10 caracteres')
+    .max(2000, 'La solution ne doit pas depasser 2000 caracteres')
+    .transform((val) => val.trim()),
+});
+
+export type EditSolutionData = z.infer<typeof editSolutionSchema>;
 
 // ─── Adjustment Suggestion Validation ────────────────────────────
 export const createAdjustmentSchema = z.object({

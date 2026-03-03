@@ -6,6 +6,7 @@ import { useXpResponse } from '@/hooks/useXpResponse';
 interface Solution {
   id: string;
   submissionId: string;
+  authorId: string | null;
   authorDisplay: string;
   body: string;
   upvoteCount: number;
@@ -46,6 +47,46 @@ export function useSolutions(submissionId: string) {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({
+      solutionId,
+      data,
+    }: {
+      solutionId: string;
+      data: { body: string };
+    }) => {
+      const res = await fetch(`/api/solutions/${solutionId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error?.message ?? 'Erreur');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['solutions', submissionId] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (solutionId: string) => {
+      const res = await fetch(`/api/solutions/${solutionId}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error?.message ?? 'Erreur');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['solutions', submissionId] });
+    },
+  });
+
   const voteMutation = useMutation({
     mutationFn: async ({
       solutionId,
@@ -73,6 +114,10 @@ export function useSolutions(submissionId: string) {
     isLoading: query.isLoading,
     createSolution: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
+    updateSolution: updateMutation.mutateAsync,
+    isUpdating: updateMutation.isPending,
+    deleteSolution: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
     voteSolution: voteMutation.mutate,
     isVoting: voteMutation.isPending,
   };

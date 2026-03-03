@@ -127,7 +127,7 @@ export default function VotesList({ userId }: VotesListProps) {
                 )}
                 <div className="flex-1 min-w-0">
                   <Link
-                    href={`/s/${vote.submissionId}/${vote.submissionSlug}`}
+                    href={`/s/${vote.submissionId}`}
                     className="font-medium text-text-primary hover:text-chainsaw-red transition-colors line-clamp-1"
                   >
                     {vote.submissionTitle}
