@@ -36,7 +36,7 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
       {/* Mobile: full-screen Sheet */}
       {selectedSubmission && (
         <Sheet open onOpenChange={(open) => { if (!open) clearSelectedSubmission(); }}>
-          <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-full" showCloseButton={false}>
+          <SheetContent side="right" className="w-full p-0 sm:max-w-full" showCloseButton={false}>
             <SubmissionPreview submission={selectedSubmission} />
           </SheetContent>
         </Sheet>

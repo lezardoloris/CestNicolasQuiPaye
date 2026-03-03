@@ -10,10 +10,10 @@ import {
 import { ShareButton } from '@/components/features/sharing/ShareButton';
 import { PinnedNote } from '@/components/features/notes/PinnedNote';
 import { SolutionSection } from '@/components/features/solutions/SolutionSection';
-import { CommentSection } from '@/components/features/comments/CommentSection';
 import { VoteProminentButtons } from '@/components/features/voting/VoteProminentButtons';
 import { FourPositionVoting } from '@/components/features/voting/FourPositionVoting';
-import { X, ExternalLink, ArrowRight, Flame } from 'lucide-react';
+import { AiContextCompact } from '@/components/features/ai-context/AiContextCompact';
+import { X, ExternalLink, ArrowRight, Flame, MessageSquare } from 'lucide-react';
 import { getCategoryDef } from '@/lib/constants/categories';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import type { SubmissionCardData } from '@/types/submission';
@@ -37,9 +37,9 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
   })();
 
   return (
-    <div className="max-h-[calc(100vh-4rem)] overflow-y-auto rounded-2xl border border-border-default bg-surface-primary">
+    <div className="flex h-[calc(100vh-4rem)] flex-col rounded-2xl border border-border-default bg-surface-primary">
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface-primary/95 px-5 py-2.5 backdrop-blur-sm">
+      <div className="flex shrink-0 items-center justify-between border-b border-border-default px-5 py-2.5">
         <span className="text-xs font-medium text-text-muted">Aperçu</span>
         <button
           onClick={clearSelectedSubmission}
@@ -50,7 +50,8 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
         </button>
       </div>
 
-      <div className="px-5 py-4">
+      {/* Info block — fixed height */}
+      <div className="shrink-0 border-b border-border-default px-5 py-3">
         {/* Metadata */}
         <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
           {category && (
@@ -91,13 +92,11 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
           )}
         </div>
 
-        {/* Title */}
-        <h3 className="mt-2 text-lg font-bold leading-snug text-text-primary">
+        {/* Title + Cost */}
+        <h3 className="mt-1.5 text-lg font-bold leading-snug text-text-primary">
           {submission.title}
         </h3>
-
-        {/* Cost */}
-        <div className="mt-2 flex items-center gap-2.5">
+        <div className="mt-1 flex items-center gap-2.5">
           <span
             className={cn(
               'text-base font-bold tabular-nums',
@@ -114,71 +113,76 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
           )}
         </div>
 
-        {/* Description */}
+        {/* Description — clamped */}
         {submission.description && (
-          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary line-clamp-2">
             {submission.description}
           </p>
         )}
+      </div>
 
-        {/* Pinned community note */}
-        {submission.pinnedNoteBody && (
-          <div className="mt-3">
+      {/* Two-column grid — fills remaining space */}
+      <div className="flex min-h-0 flex-1 divide-x divide-border-default">
+        {/* Left: Context + Votes */}
+        <div className="flex w-1/2 flex-col gap-3 overflow-y-auto p-4">
+          {/* AI Context */}
+          <AiContextCompact submissionId={submission.id} />
+
+          {/* Pinned community note */}
+          {submission.pinnedNoteBody && (
             <PinnedNote body={submission.pinnedNoteBody} />
-          </div>
+          )}
+
+          {/* Voting */}
+          <VoteProminentButtons
+            submissionId={submission.id}
+            serverCounts={{
+              up: submission.upvoteCount,
+              down: submission.downvoteCount,
+            }}
+          />
+          <FourPositionVoting submissionId={submission.id} variant="compact" />
+        </div>
+
+        {/* Right: Solutions */}
+        <div className="w-1/2 overflow-y-auto p-4">
+          <SolutionSection submissionId={submission.id} />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex shrink-0 items-center gap-2 border-t border-border-default px-5 py-2.5">
+        <ShareButton
+          submissionId={submission.id}
+          title={submission.title}
+          costPerTaxpayer={
+            submission.costPerTaxpayer
+              ? parseFloat(submission.costPerTaxpayer)
+              : undefined
+          }
+          variant="compact"
+          className="h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-2.5 py-1 text-xs font-medium text-text-muted shadow-none hover:bg-surface-elevated hover:text-text-secondary"
+        />
+
+        {submission.commentCount > 0 && (
+          <Link
+            href={`/s/${submission.id}#comments`}
+            className="inline-flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-primary"
+          >
+            <MessageSquare className="size-3" />
+            {submission.commentCount} commentaire{submission.commentCount > 1 ? 's' : ''}
+          </Link>
         )}
 
-        {/* ─── Two-column: Votes | Solutions + Comments ─── */}
-        <div className="mt-5 grid grid-cols-1 gap-5 border-t border-border-default pt-5 lg:grid-cols-2">
-          {/* Left: Voting */}
-          <div className="space-y-4">
-            <VoteProminentButtons
-              submissionId={submission.id}
-              serverCounts={{
-                up: submission.upvoteCount,
-                down: submission.downvoteCount,
-              }}
-            />
-            <FourPositionVoting submissionId={submission.id} variant="full" />
-          </div>
+        <span className="flex-1" />
 
-          {/* Right: Solutions + Comments */}
-          <div className="space-y-5 border-t border-border-default pt-4 lg:border-t-0 lg:border-l lg:border-border-default lg:pt-0 lg:pl-5">
-            <SolutionSection submissionId={submission.id} />
-
-            <div className="border-t border-border-default pt-4">
-              <CommentSection
-                submissionId={submission.id}
-                commentCount={submission.commentCount}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Footer: share + full page link */}
-        <div className="mt-4 flex items-center gap-2 border-t border-border-default pt-3">
-          <ShareButton
-            submissionId={submission.id}
-            title={submission.title}
-            costPerTaxpayer={
-              submission.costPerTaxpayer
-                ? parseFloat(submission.costPerTaxpayer)
-                : undefined
-            }
-            variant="compact"
-            className="h-auto min-h-0 min-w-0 rounded-full border-none bg-transparent px-2.5 py-1 text-xs font-medium text-text-muted shadow-none hover:bg-surface-elevated hover:text-text-secondary"
-          />
-
-          <span className="flex-1" />
-
-          <Link
-            href={`/s/${submission.id}`}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary"
-          >
-            Voir la page complète
-            <ArrowRight className="size-3.5" />
-          </Link>
-        </div>
+        <Link
+          href={`/s/${submission.id}`}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-secondary px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary"
+        >
+          Voir la page complète
+          <ArrowRight className="size-3.5" />
+        </Link>
       </div>
     </div>
   );
