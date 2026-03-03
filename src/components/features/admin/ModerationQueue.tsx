@@ -1,41 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  CheckCircle,
-  XCircle,
-  Pencil,
-  Trash2,
-  ExternalLink,
-  Loader2,
-} from 'lucide-react';
-import { formatRelativeTime, formatEUR } from '@/lib/utils/format';
-import { EditSubmissionDialog } from '@/components/features/submissions/EditSubmissionDialog';
-import { toast } from 'sonner';
-
-interface SubmissionItem {
-  id: string;
-  title: string;
-  description: string;
-  amount: string;
-  sourceUrl: string;
-  authorDisplay: string;
-  moderationStatus: string;
-  ministryTag: string | null;
-  createdAt: string;
-}
+import { CheckCircle } from 'lucide-react';
+import { ModerationCard } from '@/components/features/admin/ModerationCard';
+import { ModerationDetailPanel } from '@/components/features/admin/ModerationDetailPanel';
+import { cn } from '@/lib/utils';
+import type { ModerationCardSubmission } from '@/components/features/admin/ModerationCard';
 
 interface ModerationQueueProps {
   isAdmin: boolean;
 }
 
 export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -44,9 +24,28 @@ export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
       const res = await fetch('/api/admin/submissions?moderationStatus=pending&limit=50');
       if (!res.ok) throw new Error('Erreur de chargement');
       const json = await res.json();
-      return json.data as SubmissionItem[];
+      return json.data as ModerationCardSubmission[];
     },
   });
+
+  const handleActionComplete = useCallback(
+    (submissionId: string) => {
+      queryClient.invalidateQueries({ queryKey: ['moderation-queue'] });
+      queryClient.invalidateQueries({ queryKey: ['moderation-detail', submissionId] });
+      setSelectedId(null);
+    },
+    [queryClient]
+  );
+
+  // Close panel on Escape
+  useEffect(() => {
+    if (!selectedId) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedId(null);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedId]);
 
   if (isLoading) {
     return (
@@ -72,239 +71,64 @@ export function ModerationQueue({ isAdmin }: ModerationQueueProps) {
         <CardContent className="py-12 text-center">
           <CheckCircle className="mx-auto h-12 w-12 text-success" aria-hidden="true" />
           <p className="mt-4 text-lg font-medium text-text-primary">
-            File de modération vide
+            File de moderation vide
           </p>
           <p className="mt-1 text-sm text-text-muted">
-            Toutes les soumissions ont été traitées.
+            Toutes les soumissions ont ete traitees.
           </p>
         </CardContent>
       </Card>
     );
   }
 
+  const isPanelOpen = selectedId !== null;
+
   return (
-    <div className="space-y-4" role="list" aria-label="File de modération">
-      {items.map((item) => (
-        <ModerationCard
-          key={item.id}
-          submission={item}
-          isAdmin={isAdmin}
-          onActionComplete={() => {
-            queryClient.invalidateQueries({ queryKey: ['moderation-queue'] });
-          }}
-        />
-      ))}
+    <div
+      className={cn(
+        'grid transition-all duration-300',
+        isPanelOpen ? 'md:grid-cols-[2fr_3fr] md:gap-4' : 'grid-cols-1'
+      )}
+    >
+      {/* Card list pane */}
+      <div
+        className="space-y-3 overflow-y-auto"
+        role="list"
+        aria-label="File de moderation"
+      >
+        {items.map((item) => (
+          <ModerationCard
+            key={item.id}
+            submission={item}
+            isSelected={selectedId === item.id}
+            onClick={() => setSelectedId(selectedId === item.id ? null : item.id)}
+          />
+        ))}
+      </div>
+
+      {/* Detail panel pane (desktop: inline, mobile: Sheet) */}
+      {isPanelOpen && (
+        <div className="sticky top-4 hidden h-[calc(100vh-6rem)] overflow-hidden rounded-xl border border-border-default bg-surface-elevated shadow-lg md:block">
+          <ModerationDetailPanel
+            submissionId={selectedId}
+            isAdmin={isAdmin}
+            onClose={() => setSelectedId(null)}
+            onActionComplete={handleActionComplete}
+          />
+        </div>
+      )}
+
+      {/* Mobile: panel renders its own Sheet */}
+      {isPanelOpen && (
+        <div className="md:hidden">
+          <ModerationDetailPanel
+            submissionId={selectedId}
+            isAdmin={isAdmin}
+            onClose={() => setSelectedId(null)}
+            onActionComplete={handleActionComplete}
+          />
+        </div>
+      )}
     </div>
-  );
-}
-
-function ModerationCard({
-  submission,
-  isAdmin,
-  onActionComplete,
-}: {
-  submission: SubmissionItem;
-  isAdmin: boolean;
-  onActionComplete: () => void;
-}) {
-  const [reason, setReason] = useState('');
-  const [expandedAction, setExpandedAction] = useState<string | null>(null);
-  const [editOpen, setEditOpen] = useState(false);
-
-  const mutation = useMutation({
-    mutationFn: async ({ action, reason }: { action: string; reason?: string }) => {
-      const res = await fetch(`/api/admin/submissions/${submission.id}/moderate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, reason: reason || undefined }),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err?.error?.message || 'Erreur de modération');
-      }
-      return res.json();
-    },
-    onSuccess: (_data, variables) => {
-      const labels: Record<string, string> = {
-        approve: 'Soumission approuvée',
-        reject: 'Soumission rejetée',
-        request_edit: 'Modification demandée',
-        remove: 'Soumission retirée',
-      };
-      toast.success(labels[variables.action] || 'Action effectuée');
-      onActionComplete();
-    },
-    onError: (err: Error) => {
-      toast.error(err.message);
-    },
-  });
-
-  const handleAction = (action: string) => {
-    if (['reject', 'request_edit', 'remove'].includes(action)) {
-      if (!reason.trim()) {
-        setExpandedAction(action);
-        return;
-      }
-    }
-    mutation.mutate({ action, reason: reason.trim() || undefined });
-    setReason('');
-    setExpandedAction(null);
-  };
-
-  return (
-    <Card className="bg-surface-elevated border-border/50" role="listitem">
-      <CardContent className="space-y-4">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="font-medium text-text-primary">{submission.title}</h3>
-            <div className="mt-1 flex items-center gap-2 text-xs text-text-muted">
-              <span>{submission.authorDisplay}</span>
-              <span aria-hidden="true">-</span>
-              <span>{formatRelativeTime(submission.createdAt)}</span>
-              <span aria-hidden="true">-</span>
-              <span className="font-semibold text-chainsaw-red">
-                {formatEUR(submission.amount)}
-              </span>
-            </div>
-          </div>
-          <Badge variant="secondary" className="shrink-0">
-            {submission.moderationStatus}
-          </Badge>
-        </div>
-
-        {/* Description */}
-        <p className="text-sm text-text-secondary line-clamp-3">
-          {submission.description}
-        </p>
-
-        {/* Source verification */}
-        <div className="rounded-md border border-border-default/50 bg-surface-secondary p-3">
-          <p className="mb-1 text-xs font-medium text-text-muted">
-            Source à vérifier
-          </p>
-          <a
-            href={submission.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-info hover:underline break-all"
-            aria-label="Ouvrir la source dans un nouvel onglet"
-          >
-            <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            {submission.sourceUrl}
-          </a>
-        </div>
-
-        {/* Reason input (when expanded) */}
-        {expandedAction && (
-          <div className="space-y-2">
-            <Textarea
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Raison de cette action..."
-              rows={2}
-              maxLength={500}
-              aria-label="Raison de modération"
-              autoFocus
-            />
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                onClick={() => handleAction(expandedAction)}
-                disabled={!reason.trim() || mutation.isPending}
-                className="min-h-10"
-                aria-label="Confirmer l'action"
-              >
-                {mutation.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                ) : (
-                  'Confirmer'
-                )}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  setExpandedAction(null);
-                  setReason('');
-                }}
-                className="min-h-10"
-                aria-label="Annuler"
-              >
-                Annuler
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Action buttons */}
-        {!expandedAction && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            <Button
-              size="sm"
-              onClick={() => handleAction('approve')}
-              disabled={mutation.isPending}
-              className="min-h-10 gap-1.5 bg-success hover:bg-success/90"
-              aria-label="Approuver cette soumission"
-            >
-              <CheckCircle className="h-4 w-4" aria-hidden="true" />
-              Approuver
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => handleAction('reject')}
-              disabled={mutation.isPending}
-              className="min-h-10 gap-1.5"
-              aria-label="Rejeter cette soumission"
-            >
-              <XCircle className="h-4 w-4" aria-hidden="true" />
-              Rejeter
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setEditOpen(true)}
-              disabled={mutation.isPending}
-              className="min-h-10 gap-1.5"
-              aria-label="Modifier cette soumission"
-            >
-              <Pencil className="h-4 w-4" aria-hidden="true" />
-              Modifier
-            </Button>
-            {isAdmin && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleAction('remove')}
-                disabled={mutation.isPending}
-                className="min-h-10 gap-1.5 text-destructive hover:text-destructive"
-                aria-label="Retirer cette soumission"
-              >
-                <Trash2 className="h-4 w-4" aria-hidden="true" />
-                Retirer
-              </Button>
-            )}
-          </div>
-        )}
-
-        {/* Edit dialog */}
-        <EditSubmissionDialog
-          submission={{
-            id: submission.id,
-            title: submission.title,
-            description: submission.description,
-            sourceUrl: submission.sourceUrl,
-            amount: submission.amount,
-            ministryTag: submission.ministryTag,
-          }}
-          open={editOpen}
-          onOpenChange={(open) => {
-            setEditOpen(open);
-            if (!open) onActionComplete();
-          }}
-        />
-      </CardContent>
-    </Card>
   );
 }
