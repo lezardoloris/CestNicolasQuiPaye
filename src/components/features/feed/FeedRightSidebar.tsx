@@ -21,7 +21,7 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
       <aside
         className={cn(
           'hidden shrink-0 transition-all duration-300 ease-in-out lg:block',
-          isPreviewOpen ? 'w-[55%]' : 'w-[340px]'
+          isPreviewOpen ? 'w-[75%]' : 'w-[340px]'
         )}
       >
         <div className="sticky top-4">
@@ -36,10 +36,8 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
       {/* Mobile: full-screen Sheet */}
       {selectedSubmission && (
         <Sheet open onOpenChange={(open) => { if (!open) clearSelectedSubmission(); }}>
-          <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-full">
-            <div className="pt-10">
-              <SubmissionPreview submission={selectedSubmission} />
-            </div>
+          <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-full" showCloseButton={false}>
+            <SubmissionPreview submission={selectedSubmission} />
           </SheetContent>
         </Sheet>
       )}
