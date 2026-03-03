@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import { SubmissionPreview } from '@/components/features/feed/SubmissionPreview';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 
 interface FeedRightSidebarProps {
   children: ReactNode;
@@ -36,6 +36,7 @@ export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
           className="w-full p-0 sm:max-w-full lg:max-w-[75vw] lg:pt-0"
           showCloseButton={false}
         >
+          <SheetTitle className="sr-only">Détail de la dépense</SheetTitle>
           {selectedSubmission && (
             <div className="h-full lg:p-4 lg:pl-0">
               <SubmissionPreview submission={selectedSubmission} />

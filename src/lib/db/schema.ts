@@ -1198,6 +1198,109 @@ export const aiContextsRelations = relations(aiContexts, ({ one }) => ({
   }),
 }));
 
+// ─── Notifications ────────────────────────────────────────────────
+export const notificationType = pgEnum('notification_type', [
+  'submission_approved',
+  'submission_rejected',
+  'submission_flagged',
+  'vote_milestone',
+  'comment_reply',
+  'level_up',
+  'badge_earned',
+  'streak_warning',
+  'streak_milestone',
+  'community_note_pinned',
+  'solution_added',
+  'weekly_digest',
+  'admin_broadcast',
+]);
+
+export const notifications = pgTable(
+  'notifications',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: notificationType('type').notNull(),
+    title: varchar('title', { length: 200 }).notNull(),
+    body: text('body'),
+    data: jsonb('data').$type<Record<string, unknown>>(),
+    actionUrl: varchar('action_url', { length: 500 }),
+    read: boolean('read').notNull().default(false),
+    emailSent: boolean('email_sent').notNull().default(false),
+    pushSent: boolean('push_sent').notNull().default(false),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    index('idx_notifications_user_read').on(table.userId, table.read, table.createdAt),
+    index('idx_notifications_user_type').on(table.userId, table.type, table.createdAt),
+  ],
+);
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+}));
+
+export const notificationPreferences = pgTable('notification_preferences', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' })
+    .unique(),
+  emailEnabled: boolean('email_enabled').notNull().default(true),
+  pushEnabled: boolean('push_enabled').notNull().default(false),
+  emailModeration: boolean('email_moderation').notNull().default(true),
+  emailStreaks: boolean('email_streaks').notNull().default(true),
+  emailDigest: boolean('email_digest').notNull().default(true),
+  emailMilestones: boolean('email_milestones').notNull().default(true),
+  emailCommunity: boolean('email_community').notNull().default(false),
+  pushStreaks: boolean('push_streaks').notNull().default(false),
+  pushModeration: boolean('push_moderation').notNull().default(false),
+  pushCommunity: boolean('push_community').notNull().default(false),
+  quietHoursStart: varchar('quiet_hours_start', { length: 5 }).notNull().default('22:00'),
+  quietHoursEnd: varchar('quiet_hours_end', { length: 5 }).notNull().default('08:00'),
+  digestDay: varchar('digest_day', { length: 10 }).notNull().default('monday'),
+  unsubscribeToken: varchar('unsubscribe_token', { length: 64 }).notNull().unique(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const notificationPreferencesRelations = relations(notificationPreferences, ({ one }) => ({
+  user: one(users, {
+    fields: [notificationPreferences.userId],
+    references: [users.id],
+  }),
+}));
+
+export const pushSubscriptions = pgTable(
+  'push_subscriptions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    endpoint: text('endpoint').notNull(),
+    p256dh: text('p256dh').notNull(),
+    auth: text('auth').notNull(),
+    userAgent: varchar('user_agent', { length: 500 }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('idx_push_subscriptions_user_endpoint').on(table.userId, table.endpoint),
+    index('idx_push_subscriptions_user').on(table.userId),
+  ],
+);
+
+export const pushSubscriptionsRelations = relations(pushSubscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [pushSubscriptions.userId],
+    references: [users.id],
+  }),
+}));
+
 // ─── Data Imports (Open Data tracking) ────────────────────────────
 export const dataImports = pgTable('data_imports', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -1259,3 +1362,7 @@ export type FourPositionVote = typeof fourPositionVotes.$inferSelect;
 export type NewFourPositionVote = typeof fourPositionVotes.$inferInsert;
 export type IpFourPositionVote = typeof ipFourPositionVotes.$inferSelect;
 export type NewIpFourPositionVote = typeof ipFourPositionVotes.$inferInsert;
+export type Notification = typeof notifications.$inferSelect;
+export type NewNotification = typeof notifications.$inferInsert;
+export type NotificationPreference = typeof notificationPreferences.$inferSelect;
+export type PushSubscription = typeof pushSubscriptions.$inferSelect;

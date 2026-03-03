@@ -38,11 +38,8 @@ export function SubmissionCard({ submission, index = 0 }: SubmissionCardProps) {
   const handleCardClick = (e: React.MouseEvent) => {
     // Let ctrl/meta/middle clicks navigate normally (open in new tab)
     if (e.ctrlKey || e.metaKey || e.button === 1) return;
-    // Only intercept on lg+ screens where sidebar preview exists
-    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-      e.preventDefault();
-      setSelectedSubmission(submission);
-    }
+    e.preventDefault();
+    setSelectedSubmission(submission);
   };
 
   return (

@@ -11,11 +11,13 @@ export interface SubmissionCardData {
   commentCount: number;
   hotScore: string;
   status: string;
+  authorId: string | null;
   authorDisplay: string;
   createdAt: Date | string;
   costToNicolasResults: CostToNicolasResults | null;
   ministryTag: string | null;
   sourceCount?: number;
+  noteCount?: number;
   pinnedNoteBody?: string | null;
   authorLevel?: number | null;
   authorStreak?: number | null;
@@ -27,7 +29,6 @@ export interface SubmissionCardData {
 }
 
 export interface SubmissionDetailData extends SubmissionCardData {
-  authorId: string | null;
   consequenceText: string | null;
   tweetUrl: string | null;
   ogImageUrl: string | null;

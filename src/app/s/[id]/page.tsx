@@ -1,27 +1,12 @@
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { getSubmissionById } from '@/lib/api/submission-detail';
-import { SubmissionDetail } from '@/components/features/submissions/SubmissionDetail';
-import { ConsequenceCard } from '@/components/features/consequences/ConsequenceCard';
-import { ConsequenceLoader } from '@/components/features/consequences/ConsequenceLoader';
-import { ShareButton } from '@/components/features/sharing/ShareButton';
-import { CommentSection } from '@/components/features/comments/CommentSection';
-import { FlagButton } from '@/components/features/submissions/FlagButton';
-import { CompletenessBar } from '@/components/features/submissions/CompletenessBar';
-import { SolutionSection } from '@/components/features/solutions/SolutionSection';
-import { SourceList } from '@/components/features/sources/SourceList';
-import { CommunityNoteSection } from '@/components/features/notes/CommunityNoteSection';
-import { CriteriaVoteSection } from '@/components/features/voting/CriteriaVoteSection';
-import { FourPositionVoting } from '@/components/features/voting/FourPositionVoting';
-import { MaturitySection } from '@/components/features/maturity/MaturitySection';
-import { AiContextCard } from '@/components/features/ai-context/AiContextCard';
-import { ArgumentSection } from '@/components/features/arguments/ArgumentSection';
-import { auth } from '@/lib/auth';
+import { SubmissionFullContent } from '@/components/features/submissions/SubmissionFullContent';
 import { isValidUUID } from '@/lib/utils/validation';
-import { hashIp } from '@/lib/utils/ip-hash';
 import { SITE_URL, SITE_NAME, TWITTER_HANDLE } from '@/lib/metadata';
 import type { Metadata } from 'next';
-import type { CostToNicolasResults } from '@/types/submission';
+import type { SubmissionCardData, CostToNicolasResults } from '@/types/submission';
 
 export const revalidate = 300; // 5 minutes ISR
 
@@ -87,112 +72,47 @@ export default async function SubmissionPage({ params }: SubmissionPageProps) {
     notFound();
   }
 
-  const session = await auth();
-  const headersList = await headers();
-  const clientIp = headersList.get('x-forwarded-for')?.split(',')[0]?.trim()
-    ?? headersList.get('x-real-ip')
-    ?? '127.0.0.1';
-  const ipHash = !session?.user?.id ? hashIp(clientIp) : undefined;
-  const submission = await getSubmissionById(
-    id,
-    session?.user?.id,
-    ipHash,
-    (session?.user as { role?: string } | undefined)?.role,
-  );
+  const submission = await getSubmissionById(id);
 
   if (!submission) {
     notFound();
   }
 
-  // Parse costToNicolasResults JSONB
-  const costToNicolasResults = submission.costToNicolasResults as CostToNicolasResults | null;
+  // Map server data to SubmissionCardData shape for the shared content component
+  const cardData: SubmissionCardData = {
+    id: submission.id,
+    title: submission.title,
+    slug: submission.slug,
+    description: submission.description,
+    sourceUrl: submission.sourceUrl,
+    amount: submission.amount,
+    costPerTaxpayer: submission.costPerTaxpayer,
+    upvoteCount: submission.upvoteCount,
+    downvoteCount: submission.downvoteCount,
+    commentCount: submission.commentCount,
+    hotScore: submission.hotScore,
+    status: submission.status,
+    authorId: submission.authorId,
+    authorDisplay: submission.authorDisplay,
+    createdAt: submission.createdAt,
+    costToNicolasResults: submission.costToNicolasResults as CostToNicolasResults | null,
+    ministryTag: submission.ministryTag,
+    sourceCount: submission.sourceCount,
+    noteCount: submission.noteCount,
+    solutionCount: submission.solutionCount,
+    maturityLevel: submission.maturityLevel,
+  };
 
   return (
     <main id="main-content" className="mx-auto max-w-3xl px-4 py-8 pb-20 md:pb-8">
-      <SubmissionDetail
-        submission={submission}
-        currentUserId={session?.user?.id}
-      />
-
-      {/* Maturity progress */}
-      <div className="mt-4">
-        <MaturitySection
-          submissionId={submission.id}
-          serverLevel={submission.maturityLevel}
-        />
-      </div>
-
-      {/* AI Context (budget scaffolding) */}
-      <div className="mt-4">
-        <AiContextCard submissionId={submission.id} />
-      </div>
-
-      {/* Share and Flag actions */}
-      <div className="mt-6 flex items-center gap-3">
-        <ShareButton
-          submissionId={submission.id}
-          title={submission.title}
-          costPerTaxpayer={submission.costPerTaxpayer ? parseFloat(submission.costPerTaxpayer) : undefined}
-        />
-        <FlagButton submissionId={submission.id} />
-      </div>
-
-      {/* Completeness indicator */}
-      <div className="mt-4">
-        <CompletenessBar
-          sourceCount={submission.sourceCount}
-          noteCount={submission.noteCount}
-          solutionCount={submission.solutionCount}
-          voteCount={submission.upvoteCount + submission.downvoteCount}
-        />
-      </div>
-
-      {/* 4-Position Voting */}
-      <section className="mt-6" aria-label="Votre position">
-        <div className="rounded-xl border border-border-default bg-surface-primary p-5">
-          <h2 className="mb-3 text-lg font-bold text-text-primary">Quelle est votre position ?</h2>
-          <FourPositionVoting submissionId={submission.id} />
-        </div>
-      </section>
-
-      {/* Criteria Vote (multi-axis evaluation) */}
-      <CriteriaVoteSection submissionId={submission.id} />
-
-      {/* Arguments Pour / Contre */}
-      <ArgumentSection submissionId={submission.id} />
-
-      {/* Sources & Verification */}
-      <div className="mt-8">
-        <SourceList submissionId={submission.id} />
-      </div>
-
-      {/* Community Notes */}
-      <div className="mt-8">
-        <CommunityNoteSection submissionId={submission.id} />
-      </div>
-
-      {/* Cost to Nicolas section */}
-      {submission.costCalculation ? (
-        <ConsequenceCard data={submission.costCalculation} />
-      ) : costToNicolasResults ? (
-        <ConsequenceCard jsonData={costToNicolasResults} />
-      ) : (
-        <ConsequenceLoader
-          submissionId={submission.id}
-          amount={submission.amount}
-        />
-      )}
-
-      {/* Solutions section */}
-      <SolutionSection submissionId={submission.id} />
-
-      {/* Comments section */}
-      <section className="mt-8" aria-label="Commentaires">
-        <CommentSection
-          submissionId={submission.id}
-          commentCount={submission.commentCount}
-        />
-      </section>
+      <Link
+        href="/feed/hot"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
+      >
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+        Retour au fil
+      </Link>
+      <SubmissionFullContent submission={cardData} />
     </main>
   );
 }

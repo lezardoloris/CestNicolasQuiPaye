@@ -92,6 +92,7 @@ function makeSubmission(
     commentCount: 7,
     hotScore: '42.5',
     status: 'approved',
+    authorId: 'user-123',
     authorDisplay: 'JeanDupont',
     createdAt: '2026-03-01T12:00:00Z',
     costToNicolasResults: null,
