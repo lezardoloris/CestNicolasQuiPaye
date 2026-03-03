@@ -27,7 +27,6 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
   const costPerTaxpayer = submission.costPerTaxpayer;
   const isExtreme = costPerTaxpayer ? parseFloat(costPerTaxpayer) >= 10 : false;
 
-  // Extract domain from source URL
   const sourceDomain = (() => {
     try {
       return new URL(submission.sourceUrl).hostname.replace('www.', '');
@@ -38,30 +37,30 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
 
   return (
     <div className="max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border-default bg-surface-primary">
-      {/* Header: close button */}
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface-primary/95 px-3 py-1.5 backdrop-blur-sm">
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border-default bg-surface-primary/95 px-4 py-2 backdrop-blur-sm">
         <span className="text-xs font-medium text-text-muted">Aperçu</span>
         <button
           onClick={clearSelectedSubmission}
-          className="rounded-full p-1 text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-primary"
+          className="rounded-full p-1.5 text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-primary"
           aria-label="Fermer l'aperçu"
         >
-          <X className="size-3.5" />
+          <X className="size-4" />
         </button>
       </div>
 
-      <div className="px-3 py-2">
-        {/* Metadata + title combined */}
-        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-text-muted">
+      <div className="px-4 py-3">
+        {/* Metadata */}
+        <div className="flex flex-wrap items-center gap-1.5 text-xs text-text-muted">
           {category && (
             <span
               className={cn(
-                'inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-3',
+                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-4',
                 category.color,
                 category.bgColor,
               )}
             >
-              <category.icon className="size-2.5" aria-hidden="true" />
+              <category.icon className="size-3" aria-hidden="true" />
               {category.label}
             </span>
           )}
@@ -84,72 +83,72 @@ export function SubmissionPreview({ submission }: SubmissionPreviewProps) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 transition-colors hover:text-text-primary"
               >
-                <ExternalLink className="size-2.5" />
+                <ExternalLink className="size-3" />
                 {sourceDomain}
               </a>
             </>
           )}
         </div>
 
-        <h3 className="mt-1 text-[15px] font-bold leading-snug text-text-primary">
+        {/* Title */}
+        <h3 className="mt-1.5 text-base font-bold leading-snug text-text-primary">
           {submission.title}
         </h3>
 
-        {/* Cost — inline compact */}
+        {/* Cost */}
         <div className="mt-1.5 flex items-center gap-2">
           <span
             className={cn(
-              'text-[13px] font-bold tabular-nums',
+              'text-sm font-bold tabular-nums',
               isExtreme ? 'text-chainsaw-red' : 'text-chainsaw-red/90',
             )}
           >
-            {isExtreme && <Flame className="mr-0.5 inline size-3" aria-hidden="true" />}
+            {isExtreme && <Flame className="mr-0.5 inline size-3.5" aria-hidden="true" />}
             {formatCompactEUR(Number(submission.amount))}
           </span>
           {costPerTaxpayer && (
-            <span className="text-[12px] font-medium tabular-nums text-text-muted">
+            <span className="text-xs font-medium tabular-nums text-text-muted">
               ({formatEURPrecise(costPerTaxpayer)}/citoyen)
             </span>
           )}
         </div>
 
-        {/* Vote buttons — compact */}
-        <div className="mt-2">
-          <VoteProminentButtons
-            submissionId={submission.id}
-            serverCounts={{
-              up: submission.upvoteCount,
-              down: submission.downvoteCount,
-            }}
-          />
-        </div>
-
-        {/* 4-Position voting — compact */}
-        <div className="mt-2">
-          <FourPositionVoting submissionId={submission.id} variant="compact" />
-        </div>
-
-        {/* Description — truncated */}
+        {/* Description */}
         {submission.description && (
-          <p className="mt-2 line-clamp-3 text-[13px] leading-relaxed text-text-secondary">
+          <p className="mt-2 text-sm leading-relaxed text-text-secondary">
             {submission.description}
           </p>
         )}
 
         {/* Pinned community note */}
         {submission.pinnedNoteBody && (
-          <div className="mt-2">
+          <div className="mt-3">
             <PinnedNote body={submission.pinnedNoteBody} />
           </div>
         )}
 
-        {/* Solutions — inline */}
-        <div className="mt-2 border-t border-border-default pt-1">
-          <SolutionSection submissionId={submission.id} />
+        {/* ─── Two-column layout: Votes | Solutions ─── */}
+        <div className="mt-4 grid grid-cols-1 gap-4 border-t border-border-default pt-4 md:grid-cols-2">
+          {/* Left: Voting */}
+          <div className="space-y-3">
+            <VoteProminentButtons
+              submissionId={submission.id}
+              serverCounts={{
+                up: submission.upvoteCount,
+                down: submission.downvoteCount,
+              }}
+            />
+            <FourPositionVoting submissionId={submission.id} variant="compact" />
+          </div>
+
+          {/* Right: Solutions */}
+          <div className="min-h-0 border-t border-border-default pt-3 md:border-t-0 md:border-l md:border-border-default md:pt-0 md:pl-4">
+            <SolutionSection submissionId={submission.id} />
+          </div>
         </div>
 
         {/* Action bar */}
-        <div className="mt-2 flex items-center gap-1 border-t border-border-default pt-2">
+        <div className="mt-3 flex items-center gap-1 border-t border-border-default pt-2">
           <Link
             href={`/s/${submission.id}#commentaires`}
             className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-surface-elevated hover:text-text-secondary"
