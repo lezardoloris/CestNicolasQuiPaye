@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 import { useFeedPreviewStore } from '@/stores/feed-preview-store';
 import { SubmissionPreview } from '@/components/features/feed/SubmissionPreview';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
 
 interface FeedRightSidebarProps {
   children: ReactNode;
@@ -13,25 +12,26 @@ interface FeedRightSidebarProps {
 export function FeedRightSidebar({ children }: FeedRightSidebarProps) {
   const selectedSubmission = useFeedPreviewStore((s) => s.selectedSubmission);
   const clearSelectedSubmission = useFeedPreviewStore((s) => s.clearSelectedSubmission);
-  const isPreviewOpen = !!selectedSubmission;
 
   return (
     <>
-      {/* Desktop: sidebar that expands into a wide panel */}
-      <aside
-        className={cn(
-          'hidden shrink-0 transition-all duration-300 ease-in-out lg:block',
-          isPreviewOpen ? 'w-[75%]' : 'w-[340px]'
-        )}
-      >
-        <div className="sticky top-4">
-          {selectedSubmission ? (
-            <SubmissionPreview submission={selectedSubmission} />
-          ) : (
+      {/* Desktop: default sidebar widgets (hidden when preview is open) */}
+      {!selectedSubmission && (
+        <aside className="hidden w-[340px] shrink-0 lg:block">
+          <div className="sticky top-4">
             <div className="space-y-4">{children}</div>
-          )}
+          </div>
+        </aside>
+      )}
+
+      {/* Desktop: fixed 75vw panel from the right */}
+      {selectedSubmission && (
+        <div className="fixed inset-y-0 right-0 z-40 hidden w-[75vw] pt-16 lg:block">
+          <div className="h-full p-4 pl-0">
+            <SubmissionPreview submission={selectedSubmission} />
+          </div>
         </div>
-      </aside>
+      )}
 
       {/* Mobile: full-screen Sheet */}
       {selectedSubmission && (
