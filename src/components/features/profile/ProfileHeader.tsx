@@ -106,41 +106,53 @@ export default function ProfileHeader({
           )}
 
           <div className="flex flex-wrap gap-2 mt-0.5">
-            <Badge
-              variant="outline"
-              className="gap-1 border-border-default text-text-secondary"
-            >
-              <FileText className="size-3" />
-              {profile.submissionCount} signalement{profile.submissionCount !== 1 ? 's' : ''}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="gap-1 border-border-default text-text-secondary"
-            >
-              <ArrowUpDown className="size-3" />
-              {profile.voteCount} vote{profile.voteCount !== 1 ? 's' : ''}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="gap-1 border-border-default text-text-secondary"
-            >
-              <BookOpen className="size-3" />
-              {profile.noteCount} note{profile.noteCount !== 1 ? 's' : ''}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="gap-1 border-border-default text-text-secondary"
-            >
-              <Lightbulb className="size-3" />
-              {profile.solutionCount} solution{profile.solutionCount !== 1 ? 's' : ''}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="gap-1 border-border-default text-text-secondary"
-            >
-              <MessageSquare className="size-3" />
-              {profile.commentCount} commentaire{profile.commentCount !== 1 ? 's' : ''}
-            </Badge>
+            <a href="#submissions">
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary cursor-pointer hover:border-chainsaw-red/40 hover:text-chainsaw-red transition-colors"
+              >
+                <FileText className="size-3" />
+                {profile.submissionCount} signalement{profile.submissionCount !== 1 ? 's' : ''}
+              </Badge>
+            </a>
+            {isOwnProfile && (
+              <a href="#votes">
+                <Badge
+                  variant="outline"
+                  className="gap-1 border-border-default text-text-secondary cursor-pointer hover:border-chainsaw-red/40 hover:text-chainsaw-red transition-colors"
+                >
+                  <ArrowUpDown className="size-3" />
+                  {profile.voteCount} vote{profile.voteCount !== 1 ? 's' : ''}
+                </Badge>
+              </a>
+            )}
+            <a href="#notes">
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary cursor-pointer hover:border-chainsaw-red/40 hover:text-chainsaw-red transition-colors"
+              >
+                <BookOpen className="size-3" />
+                {profile.noteCount} note{profile.noteCount !== 1 ? 's' : ''}
+              </Badge>
+            </a>
+            <a href="#solutions">
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary cursor-pointer hover:border-chainsaw-red/40 hover:text-chainsaw-red transition-colors"
+              >
+                <Lightbulb className="size-3" />
+                {profile.solutionCount} solution{profile.solutionCount !== 1 ? 's' : ''}
+              </Badge>
+            </a>
+            <a href="#comments">
+              <Badge
+                variant="outline"
+                className="gap-1 border-border-default text-text-secondary cursor-pointer hover:border-chainsaw-red/40 hover:text-chainsaw-red transition-colors"
+              >
+                <MessageSquare className="size-3" />
+                {profile.commentCount} commentaire{profile.commentCount !== 1 ? 's' : ''}
+              </Badge>
+            </a>
             {profile.sourceCount > 0 && (
               <Badge
                 variant="outline"

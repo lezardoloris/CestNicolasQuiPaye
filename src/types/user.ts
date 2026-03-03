@@ -56,3 +56,31 @@ export interface UserVote {
   submissionScore: number;
   votedAt: string;
 }
+
+export interface UserNote {
+  id: string;
+  submissionId: string;
+  submissionTitle: string;
+  body: string;
+  sourceUrl: string | null;
+  isPinned: number;
+  createdAt: string;
+}
+
+export interface UserSolution {
+  id: string;
+  submissionId: string;
+  submissionTitle: string;
+  body: string;
+  upvoteCount: number;
+  downvoteCount: number;
+  createdAt: string;
+}
+
+export interface UserComment {
+  id: string;
+  submissionId: string;
+  submissionTitle: string;
+  body: string;
+  createdAt: string;
+}
