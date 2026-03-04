@@ -5,7 +5,7 @@ import { resolveDisplayName, maskEmail } from '@/lib/utils/user-display';
 import { calculateKarma, getKarmaTier } from '@/lib/utils/karma';
 import { getLevelProgress } from '@/lib/gamification/xp-config';
 import { userBadges, badgeDefinitions } from '@/lib/db/schema';
-import type { UserProfile, UserSubmission, UserVote } from '@/types/user';
+import type { UserProfile, UserSubmission, UserVote, UserNote, UserSolution, UserComment } from '@/types/user';
 
 export async function getUserById(userId: string) {
   return db.query.users.findFirst({
@@ -261,6 +261,173 @@ export async function getUserVotedSubmissions(
     };
   } catch {
     // Table may not exist yet
+    return { items: [], hasMore: false };
+  }
+}
+
+export async function getUserNotes(
+  userId: string,
+  cursor?: string,
+  limit = 20,
+): Promise<{ items: UserNote[]; hasMore: boolean; nextCursor?: string }> {
+  try {
+    const conditions = [
+      eq(communityNotes.authorId, userId),
+      isNull(communityNotes.deletedAt),
+    ];
+
+    if (cursor) {
+      const cursorNote = await db.query.communityNotes.findFirst({
+        where: eq(communityNotes.id, cursor),
+      });
+      if (cursorNote) {
+        conditions.push(lt(communityNotes.createdAt, cursorNote.createdAt));
+      }
+    }
+
+    const items = await db
+      .select({
+        id: communityNotes.id,
+        submissionId: submissions.id,
+        submissionTitle: submissions.title,
+        body: communityNotes.body,
+        sourceUrl: communityNotes.sourceUrl,
+        isPinned: communityNotes.isPinned,
+        createdAt: communityNotes.createdAt,
+      })
+      .from(communityNotes)
+      .innerJoin(submissions, eq(communityNotes.submissionId, submissions.id))
+      .where(and(...conditions))
+      .orderBy(desc(communityNotes.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = items.length > limit;
+    const result = items.slice(0, limit);
+
+    return {
+      items: result.map((n) => ({
+        id: n.id,
+        submissionId: n.submissionId,
+        submissionTitle: n.submissionTitle,
+        body: n.body,
+        sourceUrl: n.sourceUrl,
+        isPinned: n.isPinned,
+        createdAt: n.createdAt.toISOString(),
+      })),
+      hasMore,
+      nextCursor: hasMore ? result[result.length - 1]?.id : undefined,
+    };
+  } catch {
+    return { items: [], hasMore: false };
+  }
+}
+
+export async function getUserSolutions(
+  userId: string,
+  cursor?: string,
+  limit = 20,
+): Promise<{ items: UserSolution[]; hasMore: boolean; nextCursor?: string }> {
+  try {
+    const conditions = [
+      eq(solutions.authorId, userId),
+      isNull(solutions.deletedAt),
+    ];
+
+    if (cursor) {
+      const cursorSol = await db.query.solutions.findFirst({
+        where: eq(solutions.id, cursor),
+      });
+      if (cursorSol) {
+        conditions.push(lt(solutions.createdAt, cursorSol.createdAt));
+      }
+    }
+
+    const items = await db
+      .select({
+        id: solutions.id,
+        submissionId: submissions.id,
+        submissionTitle: submissions.title,
+        body: solutions.body,
+        upvoteCount: solutions.upvoteCount,
+        downvoteCount: solutions.downvoteCount,
+        createdAt: solutions.createdAt,
+      })
+      .from(solutions)
+      .innerJoin(submissions, eq(solutions.submissionId, submissions.id))
+      .where(and(...conditions))
+      .orderBy(desc(solutions.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = items.length > limit;
+    const result = items.slice(0, limit);
+
+    return {
+      items: result.map((s) => ({
+        id: s.id,
+        submissionId: s.submissionId,
+        submissionTitle: s.submissionTitle,
+        body: s.body,
+        upvoteCount: s.upvoteCount,
+        downvoteCount: s.downvoteCount,
+        createdAt: s.createdAt.toISOString(),
+      })),
+      hasMore,
+      nextCursor: hasMore ? result[result.length - 1]?.id : undefined,
+    };
+  } catch {
+    return { items: [], hasMore: false };
+  }
+}
+
+export async function getUserComments(
+  userId: string,
+  cursor?: string,
+  limit = 20,
+): Promise<{ items: UserComment[]; hasMore: boolean; nextCursor?: string }> {
+  try {
+    const conditions = [
+      eq(comments.authorId, userId),
+      isNull(comments.deletedAt),
+    ];
+
+    if (cursor) {
+      const cursorComment = await db.query.comments.findFirst({
+        where: eq(comments.id, cursor),
+      });
+      if (cursorComment) {
+        conditions.push(lt(comments.createdAt, cursorComment.createdAt));
+      }
+    }
+
+    const items = await db
+      .select({
+        id: comments.id,
+        submissionId: submissions.id,
+        submissionTitle: submissions.title,
+        body: comments.body,
+        createdAt: comments.createdAt,
+      })
+      .from(comments)
+      .innerJoin(submissions, eq(comments.submissionId, submissions.id))
+      .where(and(...conditions))
+      .orderBy(desc(comments.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = items.length > limit;
+    const result = items.slice(0, limit);
+
+    return {
+      items: result.map((c) => ({
+        id: c.id,
+        submissionId: c.submissionId,
+        submissionTitle: c.submissionTitle,
+        body: c.body,
+        createdAt: c.createdAt.toISOString(),
+      })),
+      hasMore,
+      nextCursor: hasMore ? result[result.length - 1]?.id : undefined,
+    };
+  } catch {
     return { items: [], hasMore: false };
   }
 }

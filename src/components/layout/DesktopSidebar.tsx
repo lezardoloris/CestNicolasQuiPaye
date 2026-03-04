@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { resolveDisplayName } from '@/lib/utils/user-display';
 import { XpProgressBar } from '@/components/features/gamification/XpProgressBar';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import { VisitorCounter } from '@/components/layout/VisitorCounter';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -145,8 +146,9 @@ export function DesktopSidebar({ children }: DesktopSidebarProps) {
           </Link>
         )}
 
-        <div className="flex justify-center pt-2">
+        <div className="flex flex-col items-center gap-1.5 pt-2">
           <ThemeToggle />
+          <VisitorCounter />
         </div>
       </div>
     </aside>
