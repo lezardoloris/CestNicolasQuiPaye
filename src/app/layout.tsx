@@ -11,6 +11,7 @@ import { DesktopSidebar } from '@/components/layout/DesktopSidebar';
 import WelcomePromptWrapper from '@/components/features/auth/WelcomePromptWrapper';
 import FlashMessage from '@/components/features/common/FlashMessage';
 import { GamificationProvider } from '@/components/features/gamification/GamificationProvider';
+import { PageViewTracker } from '@/components/layout/PageViewTracker';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -86,6 +87,7 @@ export default function RootLayout({
           <WelcomePromptWrapper />
           <FlashMessage />
           <GamificationProvider />
+          <PageViewTracker />
         </Providers>
       </body>
     </html>

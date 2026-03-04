@@ -19,10 +19,16 @@ export default function ProfileTabs({ userId, isOwnProfile }: ProfileTabsProps) 
   const [activeTab, setActiveTab] = useState('submissions');
 
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (VALID_TABS.includes(hash as (typeof VALID_TABS)[number])) {
-      setActiveTab(hash);
-    }
+    const syncHash = () => {
+      const hash = window.location.hash.slice(1);
+      if (VALID_TABS.includes(hash as (typeof VALID_TABS)[number])) {
+        setActiveTab(hash);
+      }
+    };
+
+    syncHash();
+    window.addEventListener('hashchange', syncHash);
+    return () => window.removeEventListener('hashchange', syncHash);
   }, []);
 
   const handleTabChange = (value: string) => {
